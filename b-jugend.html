@@ -6,16 +6,62 @@
   <title>HSG Rü/Bau/Kö - wB-Jugend Spielplan</title>
   <link rel="manifest" href="manifest.json" />
   <style>
-    body { font-family: sans-serif; margin:0; padding:1rem; text-align:center; }
-    header { background:#100E8C; color:white; padding:1rem; }
-    iframe { width:100%; height:600px; border:none; }
+    body { 
+      font-family: sans-serif; 
+      margin:0; 
+      padding:1rem; 
+      text-align:center; 
+      background:#ffffff; 
+      color:#000000; 
+    }
+
+    header { 
+      background:#ff00a0; /* Neonpink */
+      color:#ffffff; 
+      padding:1rem; 
+    }
+
+    /* Widget Styling */
+    #handball-spielplan {
+      background-color: #ffffff; 
+      padding: 10px;
+      border-radius: 8px;
+      border: 2px solid #ff00a0; 
+    }
+
+    #handball-spielplan h3 {
+      color: #ff00a0; 
+      font-weight: bold;
+    }
+
+    #handball-spielplan table thead {
+      background-color: #ff00a0; 
+      color: #ffffff; 
+    }
+
+    #handball-spielplan table tbody tr:nth-child(even) {
+      background-color: #f9f9f9; 
+    }
+
+    #handball-spielplan table tbody tr:hover {
+      background-color: #ffe6f5; 
+    }
+
+    #handball-spielplan a {
+      color: #ff00a0; 
+      font-weight: bold;
+      text-decoration: none;
+    }
+    #handball-spielplan a:hover {
+      text-decoration: underline;
+    }
   </style>
 </head>
 <body>
   <header><h1>weibliche B-Jugend</h1></header>
   <p><a href="index.html">⬅ Zurück zur Startseite</a></p>
 
-  <!-- Handball.net Widget -->
+  <!-- Handball.net Widget Script -->
   <script>
     (function(e,t,n,r,i,s,o){
       e[i]=e[i]||function(){(e[i].q=e[i].q||[]).push(arguments)};
@@ -28,13 +74,13 @@
   </script>
 
   <div id='handball-tabelle'></div>
-  
+
   <script> 
     _hb({ widget: 'tabelle', teamId: 'nuliga.hhv.1693626', container: 'handball-tabelle' }) 
   </script>
 
-  <div id='handball-spielplan'></div>
-
+  <div id="handball-spielplan"></div>
+  
   <script>
     _hb({ widget: 'spielplan', teamId: 'nuliga.hhv.1693626', container: 'handball-spielplan' })
   </script>
