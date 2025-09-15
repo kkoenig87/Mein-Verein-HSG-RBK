@@ -25,6 +25,44 @@
       s.src=r;
       o.parentNode.insertBefore(s,o);
     })(window,document,"script",'https://www.handball.net/widgets/embed/v1.js',"_hb");
+
+     /* Hintergrund allgemein */
+  #handball-spielplan {
+    background-color: #fffaf5; /* sehr helles Beige/Weiß */
+    padding: 10px;
+    border-radius: 8px;
+  }
+
+  /* Überschriften */
+  #handball-spielplan h3 {
+    color: #800000; /* Vereins-Bordeaux */
+    font-weight: bold;
+  }
+
+  /* Tabellenkopf */
+  #handball-spielplan table thead {
+    background-color: #800000; /* Vereinsfarbe */
+    color: white;
+  }
+
+  /* Tabellenzeilen */
+  #handball-spielplan table tbody tr:nth-child(even) {
+    background-color: #f2f2f2;
+  }
+
+  #handball-spielplan table tbody tr:hover {
+    background-color: #ffe6e6; /* leichter Rotton beim Hover */
+  }
+
+  /* Links */
+  #handball-spielplan a {
+    color: #800000;
+    text-decoration: none;
+  }
+  #handball-spielplan a:hover {
+    text-decoration: underline;
+  }
+    
   </script>
 
   <div id='handball-spielplan'></div>
