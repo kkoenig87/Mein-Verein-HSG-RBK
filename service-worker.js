@@ -27,7 +27,7 @@ self.addEventListener("push", event => {
   const data = event.data.json();
   const options = {
     body: data.body,
-    icon: "/Mannschaft.JPG", // Icon für die Notification
-    badge: "/Mannschaft.JPG"
+    icon: "/Mannschaft.png", // Icon für die Notification
+    badge: "/Mannschaft.png"
   };
   event.waitUntil(self.registration.showNotification(data.title, options))
