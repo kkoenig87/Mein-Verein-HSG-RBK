@@ -6,7 +6,7 @@ const urlsToCache = [
   "/b-jugend.html",
   "/news.html",
   "/style.css", // falls du eine eigene CSS-Datei hast
-  "/Mannschaft.JPG"
+  "/Mannschaft.png"
 ];
 
 self.addEventListener("install", event => {
