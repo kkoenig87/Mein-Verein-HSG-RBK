@@ -41,7 +41,7 @@
       text-align:center;
     }
 
-header {
+  header {
   background:#ff00a0; 
   color:#fff; 
   padding:1rem;
@@ -49,16 +49,16 @@ header {
   justify-content:center;   /* Mitte */
   align-items:center;
   position:relative;        /* erlaubt absolute Positionierung vom Button */
-}
-header h1 { 
+    }
+  header h1 { 
   margin:0; 
   font-size:1.5rem; 
   text-align:center; 
   flex:1;                   /* H1 nimmt volle Breite ein */
-}
+    }
 
-/* Burger-Icon fixieren */
-.menu-toggle {
+  /* Burger-Icon fixieren */
+  .menu-toggle {
   font-size:1.8rem;
   cursor:pointer;
   background:none;
@@ -66,10 +66,10 @@ header h1 {
   color:#fff;
   position:absolute; 
   right:1rem;               /* am rechten Rand fixiert */
-}
+    }
 
-/* Sidebar */
-.sidebar {
+  /* Sidebar */
+  .sidebar {
   position:fixed;
   top:0; right:-250px;
   width:250px; height:100%;
@@ -78,30 +78,42 @@ header h1 {
   transition:right 0.3s ease;
   padding-top:2rem;
   z-index:1000;
-}
-.sidebar.active { right:0; }
+    }
+  .sidebar.active { right:0; }
 
-.sidebar a {
+  .sidebar a {
   display:block;
   padding:1rem;
   color:#fff;
   text-decoration:none;
   font-weight:bold;
-}
-.sidebar a:hover {
+    }
+  .sidebar a:hover {
   background:#ff00a0;
-}
+    }
 
-/* Overlay */
-.overlay {
+  /* Overlay */
+  .overlay {
   position:fixed;
   top:0; left:0;
   width:100%; height:100%;
   background:rgba(0,0,0,0.5);
   display:none;
   z-index:500;
-}
-.overlay.active { display:block; }
+    }
+  .overlay.active { display:block; }
+
+  .hero {
+  text-align:center;
+  margin:1rem 0;
+    }
+
+  .team-photo {
+  max-width:90%;   /* skaliert Bild auf 90% der Bildschirmbreite */
+  height:auto;     /* behält Seitenverhältnis bei */
+  border-radius:10px;  /* abgerundete Ecken (optional) */
+  box-shadow:0 4px 12px rgba(0,0,0,0.2); /* leichter Schatten */
+    }
     
   </style>
 </head>
