@@ -9,60 +9,122 @@
     body { 
       font-family: sans-serif; 
       margin:0; 
-      padding:1rem; 
-      text-align:center; 
+      padding:0; 
       background:#ffffff; 
       color:#000000; 
     }
 
-    header { 
-      background:#ff00a0; /* Neonpink */
-      color:#ffffff; 
-      padding:1rem; 
+    header {
+      background:#ff00a0;
+      color:#ffffff;
+      padding:1rem;
+      text-align:center;
     }
 
-    /* Widget Styling */
+    nav {
+      display:flex;
+      justify-content:center;
+      gap:1rem;
+      background:#000000; /* Schwarz */
+      padding:0.5rem;
+    }
+
+    nav a {
+      color:#ffffff; 
+      text-decoration:none;
+      font-weight:bold;
+      padding:0.5rem 1rem;
+      border-radius:5px;
+      transition: background 0.3s;
+    }
+
+    nav a:hover {
+      background:#ff00a0; 
+      color:#ffffff;
+    }
+
+    section {
+      padding:1rem;
+      text-align:center;
+    }
     #handball-spielplan {
-      background-color: #ffffff; 
+      background-color: #ffffff; /* weiß */
       padding: 10px;
       border-radius: 8px;
-      border: 2px solid #ff00a0; 
+      border: 2px solid #ff00a0; /* Rahmen in Neonpink */
     }
-
-    #handball-spielplan h3 {
-      color: #ff00a0; 
+     #handball-spielplan h3 {
+      color: #ff00a0; /* Neonpink */
       font-weight: bold;
     }
-
     #handball-spielplan table thead {
-      background-color: #ff00a0; 
-      color: #8fce00; 
+      background-color: #ff00a0; /* Neonpink Kopfzeile */
+      color: #ffffff; /* weiße Schrift */
     }
-
     #handball-spielplan table tbody tr:nth-child(even) {
-      background-color: #f9f9f9; 
+      background-color: #f9f9f9; /* leichtes Grau für bessere Lesbarkeit */
     }
-
     #handball-spielplan table tbody tr:hover {
-      background-color: #ffe6f5; 
+      background-color: #ffe6f5; /* sanftes Pink beim Hover */
     }
-
     #handball-spielplan a {
-      color: #ff00a0; 
+      color: #000000; /* Links in Neonpink */
       font-weight: bold;
       text-decoration: none;
     }
     #handball-spielplan a:hover {
       text-decoration: underline;
     }
+    
+    #handball-tabelle {
+      background-color: #ffffff; /* weiß */
+      padding: 10px;
+      border-radius: 8px;
+      border: 2px solid #ff00a0; /* Rahmen in Neonpink */
+    }
+     #handball-tabelle h3 {
+      color: #ff00a0; /* Neonpink */
+      font-weight: bold;
+    }
+    #handball-tabelle table thead {
+      background-color: #ff00a0; /* Neonpink Kopfzeile */
+      color: #ffffff; /* weiße Schrift */
+    }
+    #handball-tabelle table tbody tr:nth-child(even) {
+      background-color: #f9f9f9; /* leichtes Grau für bessere Lesbarkeit */
+    }
+    #handball-tabelle table tbody tr:hover {
+      background-color: #ffe6f5; /* sanftes Pink beim Hover */
+    }
+    #handball-tabelle a {
+      color: #000000; /* Links in Neonpink */
+      font-weight: bold;
+      text-decoration: none;
+    }
+    #handball-tabelle a:hover {
+      text-decoration: underline;
+    }
   </style>
 </head>
 <body>
-  <header><h1>weibliche B-Jugend</h1></header>
-  <p><a href="index.html">⬅ Zurück zur Startseite</a></p>
+  <header>
+    <h1>HSG Rüsselsheim / Bauschheim / Königstädten</h1>
+    <p>#NIEOHNEMEINTEAM</p>
+  </header>
 
-  <!-- Handball.net Widget Script -->
-  <script>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="news.html">News</a>
+    <a href="a-jugend.html">wA-Jugend</a>
+    <a href="b-jugend.html">wB-Jugend</a>
+  </nav>
+
+  <section>
+    <h2>wB-Jugend Saison 2025/26 | Bezirksoberliga - Bezirk Darmstadt</h2>
+    <p>HSG Rüsselsheim / Bauschheim / Königstädten</p>
+  </section>
+
+    <script>
     (function(e,t,n,r,i,s,o){
       e[i]=e[i]||function(){(e[i].q=e[i].q||[]).push(arguments)};
       e[i].l=1*new Date;
@@ -78,11 +140,12 @@
   <script> 
     _hb({ widget: 'tabelle', teamId: 'nuliga.hhv.1693626', container: 'handball-tabelle' }) 
   </script>
-
-  <div id="handball-spielplan"></div>
   
-  <script>
-    _hb({ widget: 'spielplan', teamId: 'nuliga.hhv.1693626', container: 'handball-spielplan' })
+  <div id="handball-spielplan"></div>
+
+  <script> 
+    _hb({ widget: 'spielplan', teamId: 'nuliga.hhv.1693626', container: 'handball-spielplan' }) 
   </script>
+  
 </body>
 </html>
