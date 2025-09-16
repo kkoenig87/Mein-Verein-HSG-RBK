@@ -144,6 +144,13 @@
     <img src="Mannschaft.png" alt="Mannschaftsfoto HSG RBK" class="team-photo">
   </section>
 
+  <script>
+  if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.register("sw.js")
+      .then(() => console.log("✅ Service Worker registriert"))
+      .catch(err => console.error("❌ Service Worker Fehler:", err));
+  }
+  </script>
   
   <script>
   const menuBtn = document.querySelector(".menu-toggle");
