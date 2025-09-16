@@ -47,25 +47,98 @@
       padding:1rem;
       text-align:center;
     }
+
+/* Header */
+header {
+  background:#ff00a0; color:#fff; padding:1rem;
+  display:flex; justify-content:space-between; align-items:center;
+}
+header h1 { margin:0; font-size:1.2rem; }
+
+/* Burger-Icon */
+.menu-toggle {
+  font-size:1.8rem;
+  cursor:pointer;
+  background:none;
+  border:none;
+  color:#fff;
+}
+
+/* Sidebar */
+.sidebar {
+  position:fixed;
+  top:0; left:-250px;
+  width:250px; height:100%;
+  background:#000;
+  color:#fff;
+  transition:left 0.3s ease;
+  padding-top:2rem;
+  z-index:1000;
+}
+.sidebar.active { left:0; }
+
+.sidebar a {
+  display:block;
+  padding:1rem;
+  color:#fff;
+  text-decoration:none;
+  font-weight:bold;
+}
+.sidebar a:hover {
+  background:#ff00a0;
+}
+
+/* Overlay */
+.overlay {
+  position:fixed;
+  top:0; left:0;
+  width:100%; height:100%;
+  background:rgba(0,0,0,0.5);
+  display:none;
+  z-index:500;
+}
+.overlay.active { display:block; }
+    
   </style>
 </head>
 <body>
-  <header>
-    <h1>HSG Rüsselsheim / Bauschheim / Königstädten</h1>
-    <p>#NIEOHNEMEINTEAM</p>
-    <p>wA & wB BOL Saison 2025/26</p>
-  </header>
+<header>
+  <h1>HSG Rüsselsheim / Bauschheim / Königstädten</h1>
+  <p>#NIEOHNEMEINTEAM</p>
+  <p>wA & wB BOL Saison 2025/26</p>
+  <button class="menu-toggle">☰</button>
+</header>
 
-  <nav>
-    <a href="index.html">Home</a>
-    <a href="news.html">News</a>
-    <a href="a-jugend.html">wA-Jugend</a>
-    <a href="b-jugend.html">wB-Jugend</a>
-  </nav>
+<div class="sidebar" id="sidebar">
+  <a href="index.html">🏠 Home</a>
+  <a href="a-team.html">👩‍👧 wA-Team</a>
+  <a href="a-tabelle.html">📊 wA-Tabelle/Spielplan</a>
+  <a href="b-team.html">👩‍👧 wB-Team</a>
+  <a href="b-tabelle.html">📊 wB-Tabelle/Spielplan</a>
+  <a href="news.html">📰 News</a>
+</div>
+
+<div class="overlay" id="overlay"></div>
 
   <section>
     <h2>Mädels, willkommen in <b>eurer</b> eigenen Vereins-App!</h2>
     <p>Hier findet ihr Infos zu unseren Mannschaften, aktuellen Spielen und Veranstaltungen.</p>
   </section>
+  
+  <script>
+  const menuBtn = document.querySelector(".menu-toggle");
+  const sidebar = document.getElementById("sidebar");
+  const overlay = document.getElementById("overlay");
+
+  menuBtn.addEventListener("click", () => {
+    sidebar.classList.toggle("active");
+    overlay.classList.toggle("active");
+  });
+
+  overlay.addEventListener("click", () => {
+    sidebar.classList.remove("active");
+    overlay.classList.remove("active");
+  });
+</script>
 </body>
 </html>
