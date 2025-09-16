@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HSG Rü/Bau/Kö - wA-Jugend Spielplan</title>
+  <link rel="manifest" href="manifest.json" />
+  <style>
+    body { 
+      font-family: sans-serif; 
+      margin:0; 
+      padding:0; 
+      background:#ffffff; 
+      color:#000000; 
+    }
+
+    header {
+      background:#ff00a0;
+      color:#ffffff;
+      padding:1rem;
+      text-align:center;
+    }
+
+    nav {
+      display:flex;
+      justify-content:center;
+      gap:1rem;
+      background:#000000; /* Schwarz */
+      padding:0.5rem;
+    }
+
+    nav a {
+      color:#ffffff; 
+      text-decoration:none;
+      font-weight:bold;
+      padding:0.5rem 1rem;
+      border-radius:5px;
+      transition: background 0.3s;
+    }
+
+    nav a:hover {
+      background:#ff00a0; 
+      color:#ffffff;
+    }
+
+    section {
+      padding:1rem;
+      text-align:center;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>HSG Rüsselsheim / Bauschheim / Königstädten</h1>
+    <p>Unsere Vereins-App</p>
+  </header>
+
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="calendar.html">Gesamter Spielplan</a>
+    <a href="a-jugend.html">wA-Jugend</a>
+    <a href="b-jugend.html">wB-Jugend</a>
+  </nav>
+
+  <section>
+    <h2>Willkommen bei der HSG RBK!</h2>
+    <p>Hier findest du Infos zu unseren Mannschaften, aktuellen Spielen und Veranstaltungen.</p>
+  </section>
+  
+  <div id="handball-spielplan"></div>
+
+  <script>
+    (function(e,t,n,r,i,s,o){
+      e[i]=e[i]||function(){(e[i].q=e[i].q||[]).push(arguments)};
+      e[i].l=1*new Date;
+      s=t.createElement(n),o=t.getElementsByTagName(n)[0];
+      s.async=1;
+      s.src=r;
+      o.parentNode.insertBefore(s,o);
+    })(window,document,"script",'https://www.handball.net/widgets/embed/v1.js',"_hb");
+  </script>
+
+  <script>
+    _hb({ widget: 'spielplan', teamId: 'nuliga.hhv.1693609', container: 'handball-spielplan' })
+  </script>
+  
+</body>
+</html>
