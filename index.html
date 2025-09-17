@@ -213,7 +213,7 @@ if ("serviceWorker" in navigator && "PushManager" in window) {
 }
 </script>
 <script>
-function showInAppNotification(title, body, duration = 5000) {
+function showInAppNotification(title, body, duration = 10000) {
   const container = document.getElementById('inAppNotification');
   container.innerHTML = `<strong>${title}</strong><br>${body}`;
   container.style.display = 'block';
@@ -226,7 +226,7 @@ function showInAppNotification(title, body, duration = 5000) {
 
 // Beispiel-Test: Nachricht beim Laden
 document.addEventListener('DOMContentLoaded', () => {
-  showInAppNotification("📢 HSG RBK", "Willkommen in eurer Vereins-App!");
+  showInAppNotification("📢 Nächstes Spiel:", "wB vs. TSV Pfungstadt", "So. 21.09.2025 - Treffpunkt: 16:00 Uhr", "Halle Königstädten");
 });
 </script>
 </body>
