@@ -212,5 +212,22 @@ if ("serviceWorker" in navigator && "PushManager" in window) {
   subscribeUser();
 }
 </script>
+<script>
+function showInAppNotification(title, body, duration = 5000) {
+  const container = document.getElementById('inAppNotification');
+  container.innerHTML = `<strong>${title}</strong><br>${body}`;
+  container.style.display = 'block';
+
+  // Automatisch nach 'duration' ms ausblenden
+  setTimeout(() => {
+    container.style.display = 'none';
+  }, duration);
+}
+
+// Beispiel-Test: Nachricht beim Laden
+document.addEventListener('DOMContentLoaded', () => {
+  showInAppNotification("📢 HSG RBK", "Willkommen in eurer Vereins-App!");
+});
+</script>
 </body>
 </html>
