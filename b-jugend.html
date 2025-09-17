@@ -3,149 +3,56 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>HSG Rü/Bau/Kö - wB-Jugend Spielplan</title>
+  <title>wB-Jugend Tabelle & Spielplan</title>
   <link rel="manifest" href="manifest.json" />
   <style>
-    body { 
-      font-family: sans-serif; 
-      margin:0; 
-      padding:0; 
-      background:#ffffff; 
-      color:#000000; 
-    }
-
-    header {
-      background:#ff00a0;
-      color:#ffffff;
-      padding:1rem;
-      text-align:center;
-    }
-
-    nav {
-      display:flex;
-      justify-content:center;
-      gap:1rem;
-      background:#000000; /* Schwarz */
-      padding:0.5rem;
-    }
-
-    nav a {
-      color:#ffffff; 
-      text-decoration:none;
-      font-weight:bold;
-      padding:0.5rem 1rem;
-      border-radius:5px;
-      transition: background 0.3s;
-    }
-
-    nav a:hover {
-      background:#ff00a0; 
-      color:#ffffff;
-    }
-
-    section {
-      padding:1rem;
-      text-align:center;
-    }
-    #handball-spielplan {
-      background-color: #ffffff; /* weiß */
-      padding: 10px;
-      border-radius: 8px;
-      border: 2px solid #ff00a0; /* Rahmen in Neonpink */
-    }
-     #handball-spielplan h3 {
-      color: #ff00a0; /* Neonpink */
-      font-weight: bold;
-    }
-    #handball-spielplan table thead {
-      background-color: #ff00a0; /* Neonpink Kopfzeile */
-      color: #ffffff; /* weiße Schrift */
-    }
-    #handball-spielplan table tbody tr:nth-child(even) {
-      background-color: #f9f9f9; /* leichtes Grau für bessere Lesbarkeit */
-    }
-    #handball-spielplan table tbody tr:hover {
-      background-color: #ffe6f5; /* sanftes Pink beim Hover */
-    }
-    #handball-spielplan a {
-      color: #000000; /* Links in Neonpink */
-      font-weight: bold;
-      text-decoration: none;
-    }
-    #handball-spielplan a:hover {
-      text-decoration: underline;
-    }
-    
-    #handball-tabelle {
-      background-color: #ffffff; /* weiß */
-      padding: 10px;
-      border-radius: 8px;
-      border: 2px solid #ff00a0; /* Rahmen in Neonpink */
-    }
-     #handball-tabelle h3 {
-      color: #ff00a0; /* Neonpink */
-      font-weight: bold;
-    }
-    #handball-tabelle table thead {
-      background-color: #ff00a0; /* Neonpink Kopfzeile */
-      color: #ffffff; /* weiße Schrift */
-    }
-    #handball-tabelle table tbody tr:nth-child(even) {
-      background-color: #f9f9f9; /* leichtes Grau für bessere Lesbarkeit */
-    }
-    #handball-tabelle table tbody tr:hover {
-      background-color: #ffe6f5; /* sanftes Pink beim Hover */
-    }
-    #handball-tabelle a {
-      color: #000000; /* Links in Neonpink */
-      font-weight: bold;
-      text-decoration: none;
-    }
-    #handball-tabelle a:hover {
-      text-decoration: underline;
-    }
+    body { font-family: sans-serif; margin:0; padding:0; background:#ffffff; color:#000000; }
+    header { background:#ff00a0; color:#fff; padding:1rem; display:flex; justify-content:center; align-items:center; position:relative; }
+    header h1 { margin:0; font-size:1.4rem; text-align:center; flex:1; }
+    .menu-toggle { font-size:1.8rem; cursor:pointer; background:none; border:none; color:#fff; position:absolute; right:1rem; }
+    .sidebar { position:fixed; top:0; right:-250px; width:250px; height:100%; background:rgba(0,0,0,0.8); color:#fff; transition:right 0.3s ease; padding-top:2rem; z-index:1000; }
+    .sidebar.active { right:0; }
+    .sidebar a { display:block; padding:1rem; color:#fff; text-decoration:none; font-weight:bold; }
+    .sidebar a:hover { background:#ff00a0; }
+    .overlay { position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); display:none; z-index:500; }
+    .overlay.active { display:block; }
+    section { padding:1rem; text-align:center; }
+    .widget-container { margin: 2rem auto; max-width: 800px; }
   </style>
+  <script>(function(e,t,n,r,i,s,o){e[i]=e[i]||function(){(e[i].q=e[i].q||[]).push(arguments)},e[i].l=1*new Date;s=t.createElement(n),o=t.getElementsByTagName(n)[0];s.async=1;s.src=r;o.parentNode.insertBefore(s,o)})(window,document,"script",'https://www.handball.net/widgets/embed/v1.js',"_hb");</script>
 </head>
 <body>
-  <header>
-    <h1>HSG Rüsselsheim / Bauschheim / Königstädten</h1>
-    <p>#NIEOHNEMEINTEAM</p>
-  </header>
+<header>
+  <h1>wB-Jugend<br>Tabelle & Spielplan</h1>
+  <button class="menu-toggle">☰</button>
+</header>
 
-  <nav>
-    <a href="index.html">Home</a>
-    <a href="news.html">News</a>
-    <a href="a-jugend.html">wA-Jugend</a>
-    <a href="b-jugend.html">wB-Jugend</a>
-  </nav>
+<div class="sidebar" id="sidebar">
+  <a href="index.html">🏠 Home</a>
+  <a href="a-team.html">👩‍👧 wA-Team</a>
+  <a href="a-jugend.html">📊 wA-Tabelle/Spielplan</a>
+  <a href="b-team.html">👩‍👧 wB-Team</a>
+  <a href="b-jugend.html">📊 wB-Tabelle/Spielplan</a>
+  <a href="news.html">📰 News</a>
+</div>
+<div class="overlay" id="overlay"></div>
 
-  <section>
-    <h2>wB-Jugend Saison 2025/26 | Bezirksoberliga - Bezirk Darmstadt</h2>
-    <p>HSG Rüsselsheim / Bauschheim / Königstädten</p>
-  </section>
+<section>
+  <h2>Aktuelle Tabelle</h2>
+  <div id="handball-tabelle"></div>
+  <script>_hb({ widget: 'tabelle', teamId: 'nuliga.hhv.1693626', container: 'handball-tabelle' })</script>
 
-    <script>
-    (function(e,t,n,r,i,s,o){
-      e[i]=e[i]||function(){(e[i].q=e[i].q||[]).push(arguments)};
-      e[i].l=1*new Date;
-      s=t.createElement(n),o=t.getElementsByTagName(n)[0];
-      s.async=1;
-      s.src=r;
-      o.parentNode.insertBefore(s,o);
-    })(window,document,"script",'https://www.handball.net/widgets/embed/v1.js',"_hb");
-  </script>
-
-  <div id='handball-tabelle'></div>
-
-  <script> 
-    _hb({ widget: 'tabelle', teamId: 'nuliga.hhv.1693626', container: 'handball-tabelle' }) 
-  </script>
-  
+  <h2>Aktueller Spielplan</h2>
   <div id="handball-spielplan"></div>
+  <script>_hb({ widget: 'spielplan', teamId: 'nuliga.hhv.1693626', container: 'handball-spielplan' })</script>
+</section>
 
-  <script> 
-    _hb({ widget: 'spielplan', teamId: 'nuliga.hhv.1693626', container: 'handball-spielplan' }) 
-  </script>
-  
+<script>
+  const menuBtn=document.querySelector(".menu-toggle");
+  const sidebar=document.getElementById("sidebar");
+  const overlay=document.getElementById("overlay");
+  menuBtn.addEventListener("click",()=>{sidebar.classList.toggle("active");overlay.classList.toggle("active");});
+  overlay.addEventListener("click",()=>{sidebar.classList.remove("active");overlay.classList.remove("active");});
+</script>
 </body>
 </html>
