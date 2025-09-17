@@ -1,36 +1,84 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Hallen & Spielorte - HSG RBK</title>
-  <link rel="manifest" href="manifest.json" />
-  <style>
-    body { font-family:sans-serif; margin:0; padding:0; background:#ffffff; color:#000000; }
-    header { background:#ff00a0; color:#fff; padding:1rem; display:flex; justify-content:center; align-items:center; position:relative; }
-    header h1 { margin:0; font-size:1.4rem; text-align:center; flex:1; line-height:1.4; }
-    .menu-toggle { font-size:1.8rem; cursor:pointer; background:none; border:none; color:#fff; position:absolute; right:1rem; }
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Hallen - HSG RBK</title>
+<link rel="manifest" href="manifest.json" />
+<style>
+  body { font-family: sans-serif; margin:0; padding:0; background:#ffffff; color:#000000; }
+  header { background:#ff00a0; color:#fff; padding:1rem; display:flex; justify-content:center; align-items:center; position:relative; }
+  header h1 { margin:0; font-size:1.2rem; text-align:center; flex:1; line-height:1.3; }
+  .menu-toggle { font-size:1.8rem; cursor:pointer; background:none; border:none; color:#fff; position:absolute; right:1rem; }
+  nav, section { text-align:center; }
+  .sidebar { position:fixed; top:0; right:-250px; width:250px; height:100%; background:rgba(0,0,0,0.8); color:#fff; transition:right 0.3s ease; padding-top:2rem; z-index:1000; }
+  .sidebar.active { right:0; }
+  .sidebar a { display:block; padding:1rem; color:#fff; text-decoration:none; font-weight:bold; }
+  .sidebar a:hover { background:#ff00a0; }
+  .overlay { position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); display:none; z-index:500; }
+  .overlay.active { display:block; }
 
-    .sidebar { position:fixed; top:0; right:-250px; width:250px; height:100%; background:rgba(0,0,0,0.8); color:#fff; transition:right 0.3s ease; padding-top:2rem; z-index:1000; }
-    .sidebar.active { right:0; }
-    .sidebar a { display:block; padding:1rem; color:#fff; text-decoration:none; font-weight:bold; }
-    .sidebar a:hover { background:#ff00a0; }
+  section.halle { margin:1rem; padding:1rem; border-radius:10px; box-shadow:0 4px 12px rgba(0,0,0,0.2); background:#ffffff; text-align:center; }
+  section.halle h3 { color:#ff00a0; margin-bottom:0.3rem; font-size:1.1rem; }
+  section.halle p { margin:0.2rem 0; font-size:0.95rem; }
+  .buttons { margin-top:0.5rem; display:flex; justify-content:center; flex-wrap:wrap; gap:0.5rem; }
+  .buttons a { padding:0.6rem 1rem; background:#ff00a0; color:#fff; border-radius:8px; text-decoration:none; font-weight:bold; font-size:1rem; transition: background 0.3s; }
+  .buttons a:hover { background:#e6008f; }
 
-    .overlay { position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); display:none; z-index:500; }
-    .overlay.active { display:block; }
+  h2 { margin-top:2rem; color:#000; font-size:1.2rem; }
 
-    section { padding:1rem; text-align:center; }
-    .map-container { width:95%; max-width:600px; margin:1rem auto; border-radius:10px; overflow:hidden; box-shadow:0 4px 12px rgba(0,0,0,0.2); }
-    iframe { width:100%; height:300px; border:0; }
-
-    @media(max-width:480px){
-      iframe { height:200px; }
-    }
-  </style>
+  @media (max-width: 400px) {
+    .buttons a { font-size:0.9rem; padding:0.5rem 0.8rem; }
+    section.halle h3 { font-size:1rem; }
+    section.halle p { font-size:0.9rem; }
+  }
+</style>
 </head>
 <body>
 <header>
-  <h1>HSG Rü/Bau/Kö <br> Hallen & Spielorte</h1>
+  <h1>Hallen - HSG Rü/Bau/Kö</h1>
+  <button class="menu-toggle">☰</button>
+</header>
+
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Hallen - HSG RBK</title>
+<link rel="manifest" href="manifest.json" />
+<style>
+  body { font-family: sans-serif; margin:0; padding:0; background:#ffffff; color:#000000; }
+  header { background:#ff00a0; color:#fff; padding:1rem; display:flex; justify-content:center; align-items:center; position:relative; }
+  header h1 { margin:0; font-size:1.2rem; text-align:center; flex:1; line-height:1.3; }
+  .menu-toggle { font-size:1.8rem; cursor:pointer; background:none; border:none; color:#fff; position:absolute; right:1rem; }
+  nav, section { text-align:center; }
+  .sidebar { position:fixed; top:0; right:-250px; width:250px; height:100%; background:rgba(0,0,0,0.8); color:#fff; transition:right 0.3s ease; padding-top:2rem; z-index:1000; }
+  .sidebar.active { right:0; }
+  .sidebar a { display:block; padding:1rem; color:#fff; text-decoration:none; font-weight:bold; }
+  .sidebar a:hover { background:#ff00a0; }
+  .overlay { position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); display:none; z-index:500; }
+  .overlay.active { display:block; }
+
+  section.halle { margin:1rem; padding:1rem; border-radius:10px; box-shadow:0 4px 12px rgba(0,0,0,0.2); background:#ffffff; text-align:center; }
+  section.halle h3 { color:#ff00a0; margin-bottom:0.3rem; font-size:1.1rem; }
+  section.halle p { margin:0.2rem 0; font-size:0.95rem; }
+  .buttons { margin-top:0.5rem; display:flex; justify-content:center; flex-wrap:wrap; gap:0.5rem; }
+  .buttons a { padding:0.6rem 1rem; background:#ff00a0; color:#fff; border-radius:8px; text-decoration:none; font-weight:bold; font-size:1rem; transition: background 0.3s; }
+  .buttons a:hover { background:#e6008f; }
+
+  h2 { margin-top:2rem; color:#000; font-size:1.2rem; }
+
+  @media (max-width: 400px) {
+    .buttons a { font-size:0.9rem; padding:0.5rem 0.8rem; }
+    section.halle h3 { font-size:1rem; }
+    section.halle p { font-size:0.9rem; }
+  }
+</style>
+</head>
+<body>
+<header>
+  <h1>Hallen - HSG Rü/Bau/Kö</h1>
   <button class="menu-toggle">☰</button>
 </header>
 
@@ -46,19 +94,206 @@
 <div class="overlay" id="overlay"></div>
 
 <section>
-  <h2>Unsere Spiel- und Trainingshallen</h2>
-  <div class="map-container">
-    <iframe src="https://www.google.com/maps/d/embed?mid=1Xf0lT4XXXexample&hl=de" allowfullscreen></iframe>
-  </div>
-  <p>Adresse, Parkplätze und Halleninformationen.</p>
+  <h2>Eigene Hallen</h2>
+
+  <section class="halle">
+    <h3>Gerhart-Hauptmann-Schule</h3>
+    <p>Im Reis 51, 65428 Königstädten</p>
+    <div class="buttons">
+      <a href="https://maps.apple.com/?q=Im+Reis+51+65428+K%C3%B6nigst%C3%A4dten" target="_blank">Apple Maps</a>
+      <a href="https://www.google.com/maps/search/?api=1&query=Im+Reis+51+65428+K%C3%B6nigst%C3%A4dten" target="_blank">Google Maps</a>
+    </div>
+  </section>
+
+  <section class="halle">
+    <h3>Sporthalle Bauschheim</h3>
+    <p>Am Weinfaß 83, 65428 Bauschheim</p>
+    <div class="buttons">
+      <a href="https://maps.apple.com/?q=Am+Weinfaß+83+65428+Bauschheim" target="_blank">Apple Maps</a>
+      <a href="https://www.google.com/maps/search/?api=1&query=Am+Weinfaß+83+65428+Bauschheim" target="_blank">Google Maps</a>
+    </div>
+  </section>
+</section>
+
+<section>
+  <h2>Auswärtshallen wA</h2>
+
+  <section class="halle">
+    <h3>Günther-Kreisel-Halle</h3>
+    <p>Odenwaldring 3-5, 64380 Roßdorf</p>
+    <div class="buttons">
+      <a href="https://maps.apple.com/?q=Odenwaldring+3-5+64380+Roßdorf" target="_blank">Apple Maps</a>
+      <a href="https://www.google.com/maps/search/?api=1&query=Odenwaldring+3-5+64380+Roßdorf" target="_blank">Google Maps</a>
+    </div>
+  </section>
+
+  <section class="halle">
+    <h3>Fritz-Strauch-Halle Crumstadt</h3>
+    <p>Zum Wiesengrund, 64560 Riedstadt</p>
+    <div class="buttons">
+      <a href="https://maps.apple.com/?q=Zum+Wiesengrund+64560+Riedstadt" target="_blank">Apple Maps</a>
+      <a href="https://www.google.com/maps/search/?api=1&query=Zum+Wiesengrund+64560+Riedstadt" target="_blank">Google Maps</a>
+    </div>
+  </section>
+
+  <section class="halle">
+    <h3>Lichtenberg-Schule Bessungen</h3>
+    <p>Ludwighöhstraße 105, 64285 Darmstadt</p>
+    <div class="buttons">
+      <a href="https://maps.apple.com/?q=Ludwigh%C3%B6hstra%C3%9Fe+105+64285+Darmstadt" target="_blank">Apple Maps</a>
+      <a href="https://www.google.com/maps/search/?api=1&query=Ludwigh%C3%B6hstra%C3%9Fe+105+64285+Darmstadt" target="_blank">Google Maps</a>
+    </div>
+  </section>
+
+  <section class="halle">
+    <h3>Schulzentrum Fürth im Odenwald</h3>
+    <p>Schulstraße, 64658 Fürth im Odenwald</p>
+    <div class="buttons">
+      <a href="https://maps.apple.com/?q=Schulstraße+64658+Fürth+im+Odenwald" target="_blank">Apple Maps</a>
+      <a href="https://www.google.com/maps/search/?api=1&query=Schulstraße+64658+Fürth+im+Odenwald" target="_blank">Google Maps</a>
+    </div>
+  </section>
+</section>
+
+<section>
+  <h2>Auswärtshallen wB</h2>
+
+  <section class="halle">
+    <h3>Geschwister-Scholl-Schule</h3>
+    <p>Eifelstraße 39, 64625 Bensheim</p>
+    <div class="buttons">
+      <a href="https://maps.apple.com/?q=Eifelstraße+39+64625+Bensheim" target="_blank">Apple Maps</a>
+      <a href="https://www.google.com/maps/search/?api=1&query=Eifelstraße+39+64625+Bensheim" target="_blank">Google Maps</a>
+    </div>
+  </section>
+
+  <section class="halle">
+    <h3>Melibokushalle Zwingenberg</h3>
+    <p>Melibokusstraße, 64673 Zwingenberg</p>
+    <div class="buttons">
+      <a href="https://maps.apple.com/?q=Melibokusstraße+64673+Zwingenberg" target="_blank">Apple Maps</a>
+      <a href="https://www.google.com/maps/search/?api=1&query=Melibokusstraße+64673+Zwingenberg" target="_blank">Google Maps</a>
+    </div>
+  </section>
 </section>
 
 <script>
   const menuBtn = document.querySelector(".menu-toggle");
   const sidebar = document.getElementById("sidebar");
   const overlay = document.getElementById("overlay");
-  menuBtn.addEventListener("click", ()=>{ sidebar.classList.toggle("active"); overlay.classList.toggle("active"); });
-  overlay.addEventListener("click", ()=>{ sidebar.classList.remove("active"); overlay.classList.remove("active"); });
+
+  menuBtn.addEventListener("click", () => {
+    sidebar.classList.toggle("active");
+    overlay.classList.toggle("active");
+  });
+
+  overlay.addEventListener("click", () => {
+    sidebar.classList.remove("active");
+    overlay.classList.remove("active");
+  });
+</script>
+</body>
+</html>
+
+
+<section>
+  <h2>Eigene Hallen</h2>
+
+  <section class="halle">
+    <h3>Gerhart-Hauptmann-Schule</h3>
+    <p>Im Reis 51, 65428 Königstädten</p>
+    <div class="buttons">
+      <a href="https://maps.apple.com/?q=Im+Reis+51+65428+K%C3%B6nigst%C3%A4dten" target="_blank">Apple Maps</a>
+      <a href="https://www.google.com/maps/search/?api=1&query=Im+Reis+51+65428+K%C3%B6nigst%C3%A4dten" target="_blank">Google Maps</a>
+    </div>
+  </section>
+
+  <section class="halle">
+    <h3>Sporthalle Bauschheim</h3>
+    <p>Am Weinfaß 83, 65428 Bauschheim</p>
+    <div class="buttons">
+      <a href="https://maps.apple.com/?q=Am+Weinfaß+83+65428+Bauschheim" target="_blank">Apple Maps</a>
+      <a href="https://www.google.com/maps/search/?api=1&query=Am+Weinfaß+83+65428+Bauschheim" target="_blank">Google Maps</a>
+    </div>
+  </section>
+</section>
+
+<section>
+  <h2>Auswärtshallen wA</h2>
+
+  <section class="halle">
+    <h3>Günther-Kreisel-Halle</h3>
+    <p>Odenwaldring 3-5, 64380 Roßdorf</p>
+    <div class="buttons">
+      <a href="https://maps.apple.com/?q=Odenwaldring+3-5+64380+Roßdorf" target="_blank">Apple Maps</a>
+      <a href="https://www.google.com/maps/search/?api=1&query=Odenwaldring+3-5+64380+Roßdorf" target="_blank">Google Maps</a>
+    </div>
+  </section>
+
+  <section class="halle">
+    <h3>Fritz-Strauch-Halle Crumstadt</h3>
+    <p>Zum Wiesengrund, 64560 Riedstadt</p>
+    <div class="buttons">
+      <a href="https://maps.apple.com/?q=Zum+Wiesengrund+64560+Riedstadt" target="_blank">Apple Maps</a>
+      <a href="https://www.google.com/maps/search/?api=1&query=Zum+Wiesengrund+64560+Riedstadt" target="_blank">Google Maps</a>
+    </div>
+  </section>
+
+  <section class="halle">
+    <h3>Lichtenberg-Schule Bessungen</h3>
+    <p>Ludwighöhstraße 105, 64285 Darmstadt</p>
+    <div class="buttons">
+      <a href="https://maps.apple.com/?q=Ludwigh%C3%B6hstra%C3%9Fe+105+64285+Darmstadt" target="_blank">Apple Maps</a>
+      <a href="https://www.google.com/maps/search/?api=1&query=Ludwigh%C3%B6hstra%C3%9Fe+105+64285+Darmstadt" target="_blank">Google Maps</a>
+    </div>
+  </section>
+
+  <section class="halle">
+    <h3>Schulzentrum Fürth im Odenwald</h3>
+    <p>Schulstraße, 64658 Fürth im Odenwald</p>
+    <div class="buttons">
+      <a href="https://maps.apple.com/?q=Schulstraße+64658+Fürth+im+Odenwald" target="_blank">Apple Maps</a>
+      <a href="https://www.google.com/maps/search/?api=1&query=Schulstraße+64658+Fürth+im+Odenwald" target="_blank">Google Maps</a>
+    </div>
+  </section>
+</section>
+
+<section>
+  <h2>Auswärtshallen wB</h2>
+
+  <section class="halle">
+    <h3>Geschwister-Scholl-Schule</h3>
+    <p>Eifelstraße 39, 64625 Bensheim</p>
+    <div class="buttons">
+      <a href="https://maps.apple.com/?q=Eifelstraße+39+64625+Bensheim" target="_blank">Apple Maps</a>
+      <a href="https://www.google.com/maps/search/?api=1&query=Eifelstraße+39+64625+Bensheim" target="_blank">Google Maps</a>
+    </div>
+  </section>
+
+  <section class="halle">
+    <h3>Melibokushalle Zwingenberg</h3>
+    <p>Melibokusstraße, 64673 Zwingenberg</p>
+    <div class="buttons">
+      <a href="https://maps.apple.com/?q=Melibokusstraße+64673+Zwingenberg" target="_blank">Apple Maps</a>
+      <a href="https://www.google.com/maps/search/?api=1&query=Melibokusstraße+64673+Zwingenberg" target="_blank">Google Maps</a>
+    </div>
+  </section>
+</section>
+
+<script>
+  const menuBtn = document.querySelector(".menu-toggle");
+  const sidebar = document.getElementById("sidebar");
+  const overlay = document.getElementById("overlay");
+
+  menuBtn.addEventListener("click", () => {
+    sidebar.classList.toggle("active");
+    overlay.classList.toggle("active");
+  });
+
+  overlay.addEventListener("click", () => {
+    sidebar.classList.remove("active");
+    overlay.classList.remove("active");
+  });
 </script>
 </body>
 </html>
