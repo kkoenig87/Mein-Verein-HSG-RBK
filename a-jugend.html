@@ -92,6 +92,44 @@
 
     @media (max-width: 400px) {
       #handball-tabelle, #handball-spielplan { font-size: 0.9rem; }
+
+      /* Handball.net Widgets Farb-Anpassung */
+#handball-tabelle, #handball-spielplan {
+  font-family: sans-serif;      /* Einheitliche Schrift */
+  color: #ffffff;               /* Weißer Text */
+  background-color: #000000;    /* Schwarzer Hintergrund */
+  border-radius: 10px;
+  padding: 1rem;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  overflow-x: auto;             /* Scrollbar für kleine Bildschirme */
+}
+
+#handball-tabelle table, #handball-spielplan table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+#handball-tabelle th, #handball-tabelle td,
+#handball-spielplan th, #handball-spielplan td {
+  border: 1px solid #ff00a0;   /* Neonpink Rahmen */
+  padding: 0.5rem;
+  text-align: center;
+}
+
+#handball-tabelle th, #handball-spielplan th {
+  background-color: #ff00a0;   /* Neonpink Header */
+  color: #ffffff;
+}
+
+#handball-tabelle tr:nth-child(even), 
+#handball-spielplan tr:nth-child(even) {
+  background-color: #1a1a1a;   /* dunkleres Schwarz für Zeilen */
+}
+
+#handball-tabelle tr:hover, 
+#handball-spielplan tr:hover {
+  background-color: #333333;   /* Hover-Effekt */
+}
     }
   </style>
 </head>
