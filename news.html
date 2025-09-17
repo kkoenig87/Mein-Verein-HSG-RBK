@@ -3,95 +3,126 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>News @ HSG Rü/Bau/Kö</title>
+  <title>News</title>
   <link rel="manifest" href="manifest.json" />
   <style>
-    body { 
-      font-family: sans-serif; 
-      margin:0; 
-      padding:0; 
-      background:#ffffff; 
-      color:#000000; 
-    }
+    body { font-family: sans-serif; margin:0; padding:0; background:#ffffff; color:#000000; }
 
     header {
-      background:#ff00a0; /* Neonpink */
-      color:#ffffff;
+      background:#ff00a0; 
+      color:#fff; 
       padding:1rem;
-      text-align:center;
-    }
-
-    nav {
-      display:flex;
+      display:flex; 
       justify-content:center;
-      gap:1rem;
-      background:#000000; /* Schwarz */
-      padding:0.5rem;
+      align-items:center;
+      position:relative;
+    }
+    header h1 {
+      margin:0;
+      font-size:1.4rem;
+      text-align:center;
+      line-height:1.4;
+      flex:1;
+    }
+    @media (max-width: 400px) {
+      header h1 { font-size:1.1rem; line-height:1.3; }
+    }
+    @media (max-width: 320px) {
+      header h1 { font-size:1rem; line-height:1.2; }
     }
 
-    nav a {
-      color:#ffffff; 
+    .menu-toggle {
+      font-size:1.8rem;
+      cursor:pointer;
+      background:none;
+      border:none;
+      color:#fff;
+      position:absolute;
+      right:1rem;
+    }
+
+    .sidebar {
+      position:fixed;
+      top:0; right:-250px;
+      width:250px; height:100%;
+      background:rgba(0,0,0,0.8);
+      color:#fff;
+      transition:right 0.3s ease;
+      padding-top:2rem;
+      z-index:1000;
+    }
+    .sidebar.active { right:0; }
+
+    .sidebar a {
+      display:block;
+      padding:1rem;
+      color:#fff;
       text-decoration:none;
       font-weight:bold;
-      padding:0.5rem 1rem;
-      border-radius:5px;
-      transition: background 0.3s;
     }
+    .sidebar a:hover { background:#ff00a0; }
 
-    nav a:hover {
-      background:#ff00a0; 
-      color:#ffffff;
+    .overlay {
+      position:fixed;
+      top:0; left:0;
+      width:100%; height:100%;
+      background:rgba(0,0,0,0.5);
+      display:none;
+      z-index:500;
     }
+    .overlay.active { display:block; }
 
-    main {
-      padding:1rem;
-      max-width:800px;
-      margin:auto;
-    }
+    section { padding:1rem; }
 
-    article {
-      border:2px solid #ff00a0;
-      border-radius:8px;
-      padding:1rem;
-      margin-bottom:1rem;
-      background:#fff;
-      text-align:left;
+    .news-item {
+      border-bottom:1px solid #ddd;
+      padding:0.5rem 0;
     }
-
-    article h2 {
-      margin-top:0;
-      color:#ff00a0;
-    }
-
-    article small {
-      color:#555;
-    }
+    .news-item h3 { margin:0.2rem 0; }
+    .news-item p { margin:0.2rem 0; }
   </style>
 </head>
 <body>
-  <header>
-    <h1>News @ HSG Rü/Bau/Kö</h1>
-  </header>
+<header>
+  <h1>Neuigkeiten & News</h1>
+  <button class="menu-toggle">☰</button>
+</header>
 
-  <nav>
-    <a href="index.html">Home</a>
-    <a href="news.html">News</a>
-    <a href="a-jugend.html">wA-Jugend</a>
-    <a href="b-jugend.html">wB-Jugend</a>
-  </nav>
+<div class="sidebar" id="sidebar">
+  <a href="index.html">🏠 Home</a>
+  <a href="a-team.html">👩‍👧 wA-Team</a>
+  <a href="a-jugend.html">📊 wA-Tabelle/Spielplan</a>
+  <a href="b-team.html">👩‍👧 wB-Team</a>
+  <a href="b-jugend.html">📊 wB-Tabelle/Spielplan</a>
+  <a href="news.html">📰 News</a>
+</div>
+<div class="overlay" id="overlay"></div>
 
-  <main>
-    <article>
-      <h2>Neuer Vereins-Flohmarkt erfolgreich!</h2>
-      <small>Veröffentlicht am 01.09.2025</small>
-      <p>Unser Flohmarkt in der Weststadthalle war ein voller Erfolg. Vielen Dank an alle Helferinnen und Helfer sowie die zahlreichen Besucherinnen und Besucher!</p>
-    </article>
+<section>
+  <h2>Aktuelle News</h2>
+  <div class="news-item">
+    <h3>Spielbericht wA-Team</h3>
+    <p>Unsere Mädels haben ein spannendes Spiel gegen TSV Pfungstadt gespielt. Endstand 22:18.</p>
+  </div>
+  <div class="news-item">
+    <h3>Training wB-Team</h3>
+    <p>Das nächste Training findet am Mittwoch um 17:00 Uhr in der Halle Königstädten statt.</p>
+  </div>
+  <!-- Weitere News einfach nach dem gleichen Muster einfügen -->
+</section>
 
-    <article>
-      <h2>Saisonstart der wA-Jugend</h2>
-      <small>Veröffentlicht am 28.08.2025</small>
-      <p>Unsere wA-Jugend startet motiviert in die neue Saison. Wir drücken die Daumen für einen erfolgreichen Auftakt!</p>
-    </article>
-  </main>
+<script>
+  const menuBtn = document.querySelector(".menu-toggle");
+  const sidebar = document.getElementById("sidebar");
+  const overlay = document.getElementById("overlay");
+  menuBtn.addEventListener("click", () => {
+    sidebar.classList.toggle("active");
+    overlay.classList.toggle("active");
+  });
+  overlay.addEventListener("click", () => {
+    sidebar.classList.remove("active");
+    overlay.classList.remove("active");
+  });
+</script>
 </body>
 </html>
