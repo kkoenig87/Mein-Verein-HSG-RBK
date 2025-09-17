@@ -3,27 +3,101 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>wA-Jugend Tabelle & Spielplan</title>
+  <title>wA-Tabelle & Spielplan</title>
   <link rel="manifest" href="manifest.json" />
   <style>
     body { font-family: sans-serif; margin:0; padding:0; background:#ffffff; color:#000000; }
-    header { background:#ff00a0; color:#fff; padding:1rem; display:flex; justify-content:center; align-items:center; position:relative; }
-    header h1 { margin:0; font-size:1.4rem; text-align:center; flex:1; }
-    .menu-toggle { font-size:1.8rem; cursor:pointer; background:none; border:none; color:#fff; position:absolute; right:1rem; }
-    .sidebar { position:fixed; top:0; right:-250px; width:250px; height:100%; background:rgba(0,0,0,0.8); color:#fff; transition:right 0.3s ease; padding-top:2rem; z-index:1000; }
+
+    header {
+      background:#ff00a0; 
+      color:#fff; 
+      padding:1rem;
+      display:flex; 
+      justify-content:center;
+      align-items:center;
+      position:relative;
+    }
+
+    header h1 {
+      margin:0;
+      font-size:1.4rem;
+      text-align:center;
+      line-height:1.4;
+      flex:1;
+    }
+    @media (max-width: 400px) {
+      header h1 { font-size:1.1rem; line-height:1.3; }
+    }
+    @media (max-width: 320px) {
+      header h1 { font-size:1rem; line-height:1.2; }
+    }
+
+    .menu-toggle {
+      font-size:1.8rem;
+      cursor:pointer;
+      background:none;
+      border:none;
+      color:#fff;
+      position:absolute;
+      right:1rem;
+    }
+
+    .sidebar {
+      position:fixed;
+      top:0; right:-250px;
+      width:250px; height:100%;
+      background:rgba(0,0,0,0.8);
+      color:#fff;
+      transition:right 0.3s ease;
+      padding-top:2rem;
+      z-index:1000;
+    }
     .sidebar.active { right:0; }
-    .sidebar a { display:block; padding:1rem; color:#fff; text-decoration:none; font-weight:bold; }
+
+    .sidebar a {
+      display:block;
+      padding:1rem;
+      color:#fff;
+      text-decoration:none;
+      font-weight:bold;
+    }
     .sidebar a:hover { background:#ff00a0; }
-    .overlay { position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); display:none; z-index:500; }
+
+    .overlay {
+      position:fixed;
+      top:0; left:0;
+      width:100%; height:100%;
+      background:rgba(0,0,0,0.5);
+      display:none;
+      z-index:500;
+    }
     .overlay.active { display:block; }
+
     section { padding:1rem; text-align:center; }
-    .widget-container { margin: 2rem auto; max-width: 800px; }
+
+    /* === Handball.net Widget Styles === */
+    .widget-container {
+      margin: 1rem auto;
+      padding: 0 0.5rem;
+      max-width: 100%;
+      overflow-x: auto;
+    }
+
+    #handball-tabelle, #handball-spielplan {
+      width: 100% !important;
+      max-width: 100%;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    @media (max-width: 400px) {
+      #handball-tabelle, #handball-spielplan { font-size: 0.9rem; }
+    }
   </style>
-  <script>(function(e,t,n,r,i,s,o){e[i]=e[i]||function(){(e[i].q=e[i].q||[]).push(arguments)},e[i].l=1*new Date;s=t.createElement(n),o=t.getElementsByTagName(n)[0];s.async=1;s.src=r;o.parentNode.insertBefore(s,o)})(window,document,"script",'https://www.handball.net/widgets/embed/v1.js',"_hb");</script>
 </head>
 <body>
 <header>
-  <h1>wA-Jugend<br>Tabelle & Spielplan</h1>
+  <h1>wA-Jugend<br>Tabelle & Spielplan<br>Saison 2025/26</h1>
   <button class="menu-toggle">☰</button>
 </header>
 
@@ -38,22 +112,42 @@
 <div class="overlay" id="overlay"></div>
 
 <section>
-  <h2>Weibliche A-Jugend - Bezirksoberliga<br>
-      Aktuelle Tabelle </h2>
-  <div id="handball-tabelle"></div>
-  <script>_hb({ widget: 'tabelle', teamId: 'nuliga.hhv.1693609', container: 'handball-tabelle' })</script>
+  <h2>Aktuelle Tabelle</h2>
+  <div class="widget-container">
+    <div id="handball-tabelle"></div>
+  </div>
+</section>
 
-  <h2>Aktueller Spielplan</h2>
-  <div id="handball-spielplan"></div>
-  <script>_hb({ widget: 'spielplan', teamId: 'nuliga.hhv.1693609', container: 'handball-spielplan' })</script>
+<section>
+  <h2>Spielplan</h2>
+  <div class="widget-container">
+    <div id="handball-spielplan"></div>
+  </div>
 </section>
 
 <script>
-  const menuBtn=document.querySelector(".menu-toggle");
-  const sidebar=document.getElementById("sidebar");
-  const overlay=document.getElementById("overlay");
-  menuBtn.addEventListener("click",()=>{sidebar.classList.toggle("active");overlay.classList.toggle("active");});
-  overlay.addEventListener("click",()=>{sidebar.classList.remove("active");overlay.classList.remove("active");});
+  const menuBtn = document.querySelector(".menu-toggle");
+  const sidebar = document.getElementById("sidebar");
+  const overlay = document.getElementById("overlay");
+  menuBtn.addEventListener("click", () => {
+    sidebar.classList.toggle("active");
+    overlay.classList.toggle("active");
+  });
+  overlay.addEventListener("click", () => {
+    sidebar.classList.remove("active");
+    overlay.classList.remove("active");
+  });
 </script>
+
+<!-- Handball.net Script -->
+<script>
+(function(e,t,n,r,i,s,o){e[i]=e[i]||function(){(e[i].q=e[i].q||[]).push(arguments)},
+e[i].l=1*new Date;s=t.createElement(n),o=t.getElementsByTagName(n)[0];
+s.async=1;s.src=r;o.parentNode.insertBefore(s,o)})
+(window,document,"script",'https://www.handball.net/widgets/embed/v1.js',"_hb");
+</script>
+<script>_hb({ widget: 'tabelle', teamId: 'nuliga.hhv.1693609', container: 'handball-tabelle' })</script>
+<script>_hb({ widget: 'spielplan', teamId: 'nuliga.hhv.1693609', container: 'handball-spielplan' })</script>
+
 </body>
 </html>
