@@ -46,7 +46,15 @@
       header h1 { font-size:1.1rem; line-height:1.2; }
       .halle { font-size:0.9rem; }
     }
-
+    /* Leaflet Karte */
+    #hallen-map {
+      height: 400px;           /* Höhe der Karte */
+      width: 100%;
+      margin: 1rem 0;
+      border-radius: 10px;
+      box-shadow:0 4px 12px rgba(0,0,0,0.2);
+    }
+    
   </style>
 </head>
 <body>
@@ -175,6 +183,10 @@
     <a href="https://www.google.com/maps/search/?api=1&query=Ortsstra%C3%9Fe+64646+Heppenheim" target="_blank">Google Maps</a>
   </div>
 </section>
+<section>
+  <h2>Alle Hallen auf der Karte</h2>
+  <div id="hallen-map"></div>
+</section>
 
 <script>
   const menuBtn = document.querySelector(".menu-toggle");
@@ -189,6 +201,37 @@
   overlay.addEventListener("click", () => {
     sidebar.classList.remove("active");
     overlay.classList.remove("active");
+  });
+</script>
+  
+  <!-- Leaflet.js CSS und JS -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+<script>
+  const hallen = [
+    {name: "Günther-Kreisel-Halle", lat: 49.8672, lon: 8.7110},
+    {name: "Fritz-Strauch-Halle Crumstadt", lat: 49.8270, lon: 8.5252},
+    {name: "Gerhart-Hauptmann-Schule", lat: 50.0781, lon: 8.5601},
+    {name: "Sporthalle Bauschheim", lat: 50.0798, lon: 8.5623},
+    {name: "Lichtenberg-Schule Bessungen", lat: 49.8725, lon: 8.6641},
+    {name: "Schulzentrum Fürth im Odenwald", lat: 49.7402, lon: 9.0801},
+    {name: "Melibokushalle Zwingenberg", lat: 49.6375, lon: 8.6360},
+    {name: "Großsporthalle Pfungstadt", lat: 49.8410, lon: 8.6190},
+    {name: "Melibokusschule Alsbach", lat: 49.6561, lon: 8.6460},
+    {name: "Sporthalle Mörfelden-Walldorf", lat: 50.0263, lon: 8.5460},
+    {name: "Mehrzweckhalle Erbach", lat: 49.6800, lon: 8.6260}
+  ];
+
+  const map = L.map('hallen-map').setView([49.9, 8.6], 10); // zentrale Position
+
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; OpenStreetMap contributors'
+  }).addTo(map);
+
+  hallen.forEach(h => {
+    L.marker([h.lat, h.lon]).addTo(map)
+      .bindPopup(`<strong>${h.name}</strong>`);
   });
 </script>
 </body>
