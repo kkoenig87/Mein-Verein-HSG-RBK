@@ -1,98 +1,51 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>wA-Jugend Team</title>
   <link rel="manifest" href="manifest.json" />
   <style>
-    body {
-      font-family: sans-serif;
-      margin:0;
-      padding:0;
-      background:#fff;
-      color:#000;
-    }
-    header {
-      background:#ff00a0;
-      color:#fff;
-      text-align:center;
-      padding:1rem;
-    }
-    nav {
-      display:flex;
-      justify-content:center;
-      gap:1rem;
-      background:#000;
-      padding:0.5rem;
-    }
-    nav a {
-      color:#fff;
-      text-decoration:none;
-      font-weight:bold;
-      padding:0.5rem 1rem;
-      border-radius:5px;
-      transition:background 0.3s;
-    }
-    nav a:hover {
-      background:#ff00a0;
-    }
-    main {
-      max-width:1000px;
-      margin:auto;
-      padding:1rem;
-      display:grid;
-      grid-template-columns:repeat(auto-fill, minmax(220px, 1fr));
-      gap:1rem;
-    }
-    .card {
-      background:#fff;
-      border:2px solid #ff00a0;
-      border-radius:10px;
-      box-shadow:0 2px 6px rgba(0,0,0,0.1);
-      text-align:center;
-      padding:1rem;
-    }
-    .card img {
-      width:100%;
-      border-radius:10px;
-    }
-    .card h2 {
-      margin:0.5rem 0 0;
-      color:#ff00a0;
-    }
-    .card p {
-      margin:0.2rem 0;
-    }
+    body { font-family: sans-serif; margin:0; padding:0; background:#ffffff; color:#000000; }
+    header { background:#ff00a0; color:#fff; padding:1rem; display:flex; justify-content:center; align-items:center; position:relative; }
+    header h1 { margin:0; font-size:1.4rem; text-align:center; flex:1; }
+    .menu-toggle { font-size:1.8rem; cursor:pointer; background:none; border:none; color:#fff; position:absolute; right:1rem; }
+    .sidebar { position:fixed; top:0; right:-250px; width:250px; height:100%; background:rgba(0,0,0,0.8); color:#fff; transition:right 0.3s ease; padding-top:2rem; z-index:1000; }
+    .sidebar.active { right:0; }
+    .sidebar a { display:block; padding:1rem; color:#fff; text-decoration:none; font-weight:bold; }
+    .sidebar a:hover { background:#ff00a0; }
+    .overlay { position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); display:none; z-index:500; }
+    .overlay.active { display:block; }
+    section { padding:1rem; text-align:center; }
   </style>
 </head>
 <body>
-  <header>
-    <h1>wA-Jugend – Team</h1>
-  </header>
+<header>
+  <h1>wA-Jugend<br>Team</h1>
+  <button class="menu-toggle">☰</button>
+</header>
 
-  <nav>
-    <a href="index.html">Home</a>
-    <a href="calendar.html">Spielplan</a>
-    <a href="a-team.html">Team</a>
-    <a href="a-tabelle.html">Tabelle</a>
-    <a href="news.html">News</a>
-  </nav>
+<div class="sidebar" id="sidebar">
+  <a href="index.html">🏠 Home</a>
+  <a href="a-team.html">👩‍👧 wA-Team</a>
+  <a href="a-jugend.html">📊 wA-Tabelle/Spielplan</a>
+  <a href="b-team.html">👩‍👧 wB-Team</a>
+  <a href="b-jugend.html">📊 wB-Tabelle/Spielplan</a>
+  <a href="news.html">📰 News</a>
+</div>
+<div class="overlay" id="overlay"></div>
 
-  <main>
-    <div class="card">
-      <img src="images/platzhalter.jpg" alt="Spielerin">
-      <h2>#7 Anna Müller</h2>
-      <p>Position: Rückraum</p>
-      <p>Funfact: Liebt Pizza 🍕</p>
-    </div>
-    <div class="card">
-      <img src="images/platzhalter.jpg" alt="Spielerin">
-      <h2>#10 Lisa Schmidt</h2>
-      <p>Position: Torwart</p>
-      <p>Funfact: Tanzt vor jedem Spiel 💃</p>
-    </div>
-    <!-- Weitere Spielerinnen einfach hier kopieren -->
-  </main>
+<section>
+  <h2>Unsere wA-Mädels 💪</h2>
+  <p>Hier kannst du Bilder, Steckbriefe und Infos zum Team einfügen.</p>
+</section>
+
+<script>
+  const menuBtn=document.querySelector(".menu-toggle");
+  const sidebar=document.getElementById("sidebar");
+  const overlay=document.getElementById("overlay");
+  menuBtn.addEventListener("click",()=>{sidebar.classList.toggle("active");overlay.classList.toggle("active");});
+  overlay.addEventListener("click",()=>{sidebar.classList.remove("active");overlay.classList.remove("active");});
+</script>
 </body>
 </html>
