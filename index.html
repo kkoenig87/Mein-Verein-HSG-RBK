@@ -226,7 +226,10 @@ function showInAppNotification(title, body, duration = 5000) {
 
 // Beispiel-Test: Nachricht beim Laden
 document.addEventListener('DOMContentLoaded', () => {
-  showInAppNotification("📢 Nächstes Spiel:", "wB vs. TSV Pfungstadt", "So. 21.09.2025 - Treffpunkt: 16:00 Uhr", "Halle Königstädten");
+  showInAppNotification(
+    "📢 Nächstes Spiel:",
+    "wB vs. TSV Pfungstadt\nSo. 21.09.2025 - Treffpunkt: 16:00 Uhr\nHalle Königstädten"
+  );
 });
 </script>
 </body>
