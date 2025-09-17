@@ -3,139 +3,70 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>wA-Tabelle & Spielplan</title>
+  <title>wA Tabelle & Spielplan</title>
   <link rel="manifest" href="manifest.json" />
   <style>
-    body { font-family: sans-serif; margin:0; padding:0; background:#ffffff; color:#000000; }
+    body { 
+      font-family: sans-serif; 
+      margin:0; padding:0; 
+      background:#ffffff; color:#000000; 
+    }
+    nav {
+      display:flex;
+      justify-content:center;
+      gap:1rem;
+      background:#000000;
+      padding:0.5rem;
+    }
+    nav a {
+      color:#ffffff; text-decoration:none; font-weight:bold;
+      padding:0.5rem 1rem; border-radius:5px;
+      transition: background 0.3s;
+    }
+    nav a:hover { background:#ff00a0; color:#fff; }
 
     header {
-      background:#ff00a0; 
-      color:#fff; 
-      padding:1rem;
-      display:flex; 
-      justify-content:center;
-      align-items:center;
-      position:relative;
+      background:#ff00a0; color:#fff; padding:1rem;
+      display:flex; justify-content:center; align-items:center; position:relative;
     }
+    header h1 { margin:0; font-size:1.3rem; text-align:center; line-height:1.4; flex:1; }
 
-    header h1 {
-      margin:0;
-      font-size:1.4rem;
-      text-align:center;
-      line-height:1.4;
-      flex:1;
-    }
-    @media (max-width: 400px) {
-      header h1 { font-size:1.1rem; line-height:1.3; }
-    }
-    @media (max-width: 320px) {
-      header h1 { font-size:1rem; line-height:1.2; }
-    }
+    .menu-toggle { font-size:1.8rem; cursor:pointer; background:none; border:none; color:#fff; position:absolute; right:1rem; }
 
-    .menu-toggle {
-      font-size:1.8rem;
-      cursor:pointer;
-      background:none;
-      border:none;
-      color:#fff;
-      position:absolute;
-      right:1rem;
-    }
-
-    .sidebar {
-      position:fixed;
-      top:0; right:-250px;
-      width:250px; height:100%;
-      background:rgba(0,0,0,0.8);
-      color:#fff;
-      transition:right 0.3s ease;
-      padding-top:2rem;
-      z-index:1000;
-    }
+    .sidebar { position:fixed; top:0; right:-250px; width:250px; height:100%; background:rgba(0,0,0,0.8); color:#fff; transition:right 0.3s ease; padding-top:2rem; z-index:1000; }
     .sidebar.active { right:0; }
-
-    .sidebar a {
-      display:block;
-      padding:1rem;
-      color:#fff;
-      text-decoration:none;
-      font-weight:bold;
-    }
+    .sidebar a { display:block; padding:1rem; color:#fff; text-decoration:none; font-weight:bold; }
     .sidebar a:hover { background:#ff00a0; }
 
-    .overlay {
-      position:fixed;
-      top:0; left:0;
-      width:100%; height:100%;
-      background:rgba(0,0,0,0.5);
-      display:none;
-      z-index:500;
-    }
+    .overlay { position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); display:none; z-index:500; }
     .overlay.active { display:block; }
 
-    section { padding:1rem; text-align:center; }
-
-    /* === Handball.net Widget Styles === */
-    .widget-container {
-      margin: 1rem auto;
-      padding: 0 0.5rem;
-      max-width: 100%;
-      overflow-x: auto;
-    }
-
+    /* Widget Styles */
     #handball-tabelle, #handball-spielplan {
-      width: 100% !important;
-      max-width: 100%;
+      font-family: sans-serif;
+      color: #ffffff;
+      background-color: #000000;
+      border-radius: 10px;
+      padding: 1rem;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
       overflow-x: auto;
-      -webkit-overflow-scrolling: touch;
+      margin: 1rem 0;
     }
-
-    @media (max-width: 400px) {
-      #handball-tabelle, #handball-spielplan { font-size: 0.9rem; }
-
-      /* Handball.net Widgets Farb-Anpassung */
-#handball-tabelle, #handball-spielplan {
-  font-family: sans-serif;      /* Einheitliche Schrift */
-  color: #ffffff;               /* Weißer Text */
-  background-color: #000000;    /* Schwarzer Hintergrund */
-  border-radius: 10px;
-  padding: 1rem;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-  overflow-x: auto;             /* Scrollbar für kleine Bildschirme */
-}
-
-#handball-tabelle table, #handball-spielplan table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-#handball-tabelle th, #handball-tabelle td,
-#handball-spielplan th, #handball-spielplan td {
-  border: 1px solid #ff00a0;   /* Neonpink Rahmen */
-  padding: 0.5rem;
-  text-align: center;
-}
-
-#handball-tabelle th, #handball-spielplan th {
-  background-color: #ff00a0;   /* Neonpink Header */
-  color: #ffffff;
-}
-
-#handball-tabelle tr:nth-child(even), 
-#handball-spielplan tr:nth-child(even) {
-  background-color: #1a1a1a;   /* dunkleres Schwarz für Zeilen */
-}
-
-#handball-tabelle tr:hover, 
-#handball-spielplan tr:hover {
-  background-color: #333333;   /* Hover-Effekt */
-}
+    #handball-tabelle table, #handball-spielplan table { width:100%; border-collapse: collapse; }
+    #handball-tabelle th, #handball-tabelle td,
+    #handball-spielplan th, #handball-spielplan td {
+      border: 1px solid #ff00a0; padding:0.5rem; text-align:center;
     }
+    #handball-tabelle th, #handball-spielplan th { background-color:#ff00a0; color:#fff; }
+    #handball-tabelle tr:nth-child(even), #handball-spielplan tr:nth-child(even) { background-color:#1a1a1a; }
+    #handball-tabelle tr:hover, #handball-spielplan tr:hover { background-color:#333333; }
+
+    .team-photo { max-width:90%; height:auto; border-radius:10px; box-shadow:0 4px 12px rgba(0,0,0,0.2); margin:1rem auto; display:block; }
   </style>
 </head>
 <body>
 <header>
-  <h1>wA-Jugend<br>Tabelle & Spielplan<br>Saison 2025/26</h1>
+  <h1>wA BOL Saison 2025/26</h1>
   <button class="menu-toggle">☰</button>
 </header>
 
@@ -150,23 +81,26 @@
 <div class="overlay" id="overlay"></div>
 
 <section>
-  <h2>Aktuelle Tabelle</h2>
-  <div class="widget-container">
-    <div id="handball-tabelle"></div>
-  </div>
+  <img src="wA-Team.png" alt="wA Teamfoto" class="team-photo">
 </section>
 
-<section>
-  <h2>Spielplan</h2>
-  <div class="widget-container">
-    <div id="handball-spielplan"></div>
-  </div>
-</section>
+<!-- Tabelle -->
+<div id="handball-tabelle"></div>
+<!-- Spielplan -->
+<div id="handball-spielplan"></div>
 
+<script src="https://www.handball.net/widgets/embed/v1.js"></script>
 <script>
+  // Tabelle wA
+  _hb({ widget: 'tabelle', teamId: 'nuliga.hhv.1693609', container: 'handball-tabelle' });
+  // Spielplan wA
+  _hb({ widget: 'spielplan', teamId: 'nuliga.hhv.1693609', container: 'handball-spielplan' });
+
+  // Sidebar Toggle
   const menuBtn = document.querySelector(".menu-toggle");
   const sidebar = document.getElementById("sidebar");
   const overlay = document.getElementById("overlay");
+
   menuBtn.addEventListener("click", () => {
     sidebar.classList.toggle("active");
     overlay.classList.toggle("active");
@@ -176,16 +110,5 @@
     overlay.classList.remove("active");
   });
 </script>
-
-<!-- Handball.net Script -->
-<script>
-(function(e,t,n,r,i,s,o){e[i]=e[i]||function(){(e[i].q=e[i].q||[]).push(arguments)},
-e[i].l=1*new Date;s=t.createElement(n),o=t.getElementsByTagName(n)[0];
-s.async=1;s.src=r;o.parentNode.insertBefore(s,o)})
-(window,document,"script",'https://www.handball.net/widgets/embed/v1.js',"_hb");
-</script>
-<script>_hb({ widget: 'tabelle', teamId: 'nuliga.hhv.1693609', container: 'handball-tabelle' })</script>
-<script>_hb({ widget: 'spielplan', teamId: 'nuliga.hhv.1693609', container: 'handball-spielplan' })</script>
-
 </body>
 </html>
