@@ -1,17 +1,17 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Fanshop - HSG RBK</title>
   <link rel="manifest" href="manifest.json" />
   <style>
-    body { font-family:sans-serif; margin:0; padding:0; background:#ffffff; color:#000000; }
+    body { font-family: sans-serif; margin:0; padding:0; background:#fff; color:#000; }
     header { background:#ff00a0; color:#fff; padding:1rem; display:flex; justify-content:center; align-items:center; position:relative; }
-    header h1 { margin:0; font-size:1.4rem; text-align:center; flex:1; line-height:1.4; }
+    header h1 { margin:0; font-size:1.3rem; text-align:center; flex:1; line-height:1.4; }
     .menu-toggle { font-size:1.8rem; cursor:pointer; background:none; border:none; color:#fff; position:absolute; right:1rem; }
 
-    .sidebar { position:fixed; top:0; right:-250px; width:250px; height:100%; background:rgba(0,0,0,0.8); color:#fff; transition:right 0.3s ease; padding-top:2rem; z-index:1000; }
+    .sidebar { position:fixed; top:0; right:-250px; width:250px; height:100%; background:rgba(0,0,0,0.9); color:#fff; transition:right 0.3s ease; padding-top:2rem; z-index:1000; }
     .sidebar.active { right:0; }
     .sidebar a { display:block; padding:1rem; color:#fff; text-decoration:none; font-weight:bold; }
     .sidebar a:hover { background:#ff00a0; }
@@ -19,17 +19,19 @@
     .overlay { position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); display:none; z-index:500; }
     .overlay.active { display:block; }
 
-    section { padding:1rem; text-align:center; }
+    section { padding:1rem; }
+    .product { border:1px solid #ddd; padding:1rem; margin-bottom:1rem; border-radius:8px; text-align:center; }
+    .product img { max-width:200px; border-radius:8px; }
+    .cart { border:1px solid #ddd; padding:1rem; border-radius:8px; margin-top:1rem; }
+    .cart h3 { margin-top:0; }
+    .cart ul { list-style:none; padding:0; }
+    .cart li { margin-bottom:0.5rem; }
 
-    .product { border:1px solid #ddd; border-radius:10px; padding:1rem; margin:1rem auto; max-width:300px; box-shadow:0 4px 10px rgba(0,0,0,0.2); }
-    .product img { max-width:100%; border-radius:8px; }
-    .cart { border:1px solid #ddd; border-radius:10px; padding:1rem; margin:1rem auto; max-width:400px; background:#f9f9f9; text-align:left; }
-    .cart h2 { text-align:center; }
-    button { background:#ff00a0; color:#fff; border:none; padding:0.6rem 1rem; border-radius:8px; cursor:pointer; margin-top:0.5rem; }
-    button:hover { background:#e6008c; }
-    form { text-align:left; max-width:400px; margin:1rem auto; background:#f9f9f9; padding:1rem; border-radius:10px; box-shadow:0 4px 10px rgba(0,0,0,0.2); }
-    form label { font-weight:bold; }
-    form input, form textarea, form select { width:100%; padding:0.5rem; margin-top:0.3rem; margin-bottom:1rem; border-radius:5px; border:1px solid #ccc; }
+    form { margin-top:1rem; }
+    form label { display:block; margin:0.5rem 0 0.2rem; }
+    form input, form select { width:100%; padding:0.5rem; border:1px solid #ccc; border-radius:5px; }
+    form button { margin-top:1rem; padding:0.7rem; background:#ff00a0; color:#fff; border:none; border-radius:5px; cursor:pointer; width:100%; }
+    form button:hover { background:#e6008f; }
   </style>
 </head>
 <body>
@@ -46,13 +48,12 @@
   <a href="hallen.html">🏟️ Hallen</a>
   <a href="sponsoren.html">🤝 Sponsoren</a>
   <a href="news.html">📰 News</a>
-  <a href="fanshop.html">🛍️ Fanshop</a>
+  <a href="fanshop.html">🛒 Fanshop</a>
 </div>
 <div class="overlay" id="overlay"></div>
 
 <section>
   <h2>Unsere Fanartikel</h2>
-
   <div class="product">
     <img src="trikot.png" alt="Fantrikot">
     <h3>HSG Fantrikot</h3>
@@ -67,38 +68,33 @@
     </select>
     <label for="quantity">Menge:</label>
     <input type="number" id="quantity" value="1" min="1">
-    <button onclick="addToCart('HSG Fantrikot', 39.90)">In den Warenkorb</button>
+    <button type="button" onclick="addToCart('HSG Fantrikot', 39.90)">In den Warenkorb</button>
   </div>
 </section>
 
-<section class="cart" id="cart">
-  <h2>🛒 Warenkorb</h2>
+<section class="cart">
+  <h3>🛒 Warenkorb</h3>
   <ul id="cartItems"></ul>
   <p><strong>Gesamt: <span id="total">0.00</span> €</strong></p>
 </section>
 
 <section>
-  <h2>Bestellung abschließen</h2>
-  <form id="orderForm" onsubmit="sendOrder(event)">
+  <h3>Bestellerdaten</h3>
+  <form id="orderForm">
     <label for="name">Name:</label>
-    <input type="text" id="name" name="name" required>
-
+    <input type="text" id="name" required>
     <label for="address">Adresse:</label>
-    <textarea id="address" name="address" rows="3" required></textarea>
-
+    <input type="text" id="address" required>
     <label for="phone">Telefonnummer:</label>
-    <input type="tel" id="phone" name="phone" required>
-
+    <input type="text" id="phone" required>
     <label for="email">E-Mail:</label>
-    <input type="email" id="email" name="email" required>
-
-    <label for="delivery">Lieferoption:</label>
-    <select id="delivery" name="delivery" required>
-      <option value="Abholung">Abholung (kostenlos)</option>
+    <input type="email" id="email" required>
+    <label for="delivery">Lieferart:</label>
+    <select id="delivery" required onchange="updateCart()">
+      <option value="Abholung">Abholung</option>
       <option value="DHL">Versand per DHL (+7,90 €)</option>
     </select>
-
-    <button type="submit">✅ Bestellung absenden</button>
+    <button type="submit">Bestellung absenden</button>
   </form>
 </section>
 
@@ -106,34 +102,38 @@
   const menuBtn = document.querySelector(".menu-toggle");
   const sidebar = document.getElementById("sidebar");
   const overlay = document.getElementById("overlay");
+
   menuBtn.addEventListener("click", ()=>{ sidebar.classList.toggle("active"); overlay.classList.toggle("active"); });
   overlay.addEventListener("click", ()=>{ sidebar.classList.remove("active"); overlay.classList.remove("active"); });
 
-  let cart = JSON.parse(localStorage.getItem("cart")) || [];
-  function addToCart(name, price) {
+  let cart = [];
+
+  function addToCart(product, price) {
     const size = document.getElementById("size").value;
     const quantity = parseInt(document.getElementById("quantity").value);
-    cart.push({name, price, size, quantity});
-    localStorage.setItem("cart", JSON.stringify(cart));
+    cart.push({ product, size, quantity, price });
     updateCart();
   }
 
   function updateCart() {
     const cartItems = document.getElementById("cartItems");
-    const total = document.getElementById("total");
     cartItems.innerHTML = "";
-    let sum = 0;
-    cart.forEach((item, index) => {
+    let total = 0;
+    cart.forEach(item => {
       const li = document.createElement("li");
-      li.textContent = `${item.name} (Größe: ${item.size}, Menge: ${item.quantity}) - ${(item.price*item.quantity).toFixed(2)} €`;
+      li.textContent = `${item.quantity}x ${item.product} (Größe ${item.size}) - ${(item.price*item.quantity).toFixed(2)} €`;
       cartItems.appendChild(li);
-      sum += item.price * item.quantity;
+      total += item.price * item.quantity;
     });
-    total.textContent = sum.toFixed(2);
+    // DHL Versandkosten
+    const delivery = document.getElementById("delivery")?.value;
+    if(delivery === "DHL"){ total += 7.90; }
+    document.getElementById("total").textContent = total.toFixed(2);
   }
 
-  function sendOrder(event) {
-    event.preventDefault();
+  document.getElementById("orderForm").addEventListener("submit", function(e){
+    e.preventDefault();
+    if(cart.length === 0){ alert("Bitte lege zuerst einen Artikel in den Warenkorb."); return; }
 
     const name = document.getElementById("name").value;
     const address = document.getElementById("address").value;
@@ -141,4 +141,17 @@
     const email = document.getElementById("email").value;
     const delivery = document.getElementById("delivery").value;
 
-    let cartDetails = cart.map(item => `${item.name} (Größe: ${item.size}, Menge: ${item.quantity}, Preis: ${(item.price*item.quantity).to*
+    let orderDetails = "Bestellung:\n\n";
+    cart.forEach(item=>{
+      orderDetails += `${item.quantity}x ${item.product} (Größe ${item.size}) - ${(item.price*item.quantity).toFixed(2)} €\n`;
+    });
+    if(delivery === "DHL"){ orderDetails += `\n+ Versand DHL: 7,90 €\n`; }
+    orderDetails += `\nGesamt: ${document.getElementById("total").textContent} €\n\n`;
+    orderDetails += `Kundendaten:\nName: ${name}\nAdresse: ${address}\nTelefon: ${phone}\nE-Mail: ${email}\nLieferart: ${delivery}`;
+
+    const mailto = `mailto:kaiuwe.koenig@web.de?subject=Neue Bestellung Fanshop&body=${encodeURIComponent(orderDetails)}`;
+    window.location.href = mailto;
+  });
+</script>
+</body>
+</html>
