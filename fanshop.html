@@ -153,3 +153,63 @@
     });
 
     const versand = document.getElementById("versand").value;
+    if (versand === "dhl") {
+      total += 7.90;
+      const li = document.createElement("li");
+      li.textContent = "Versand (DHL) - 7,90 €";
+      cartList.appendChild(li);
+    }
+
+    cartTotal.textContent = total.toFixed(2).replace(".", ",");
+  }
+
+  document.getElementById("versand").addEventListener("change", updateCart);
+
+  function checkout() {
+    const name = document.getElementById("name").value;
+    const adresse = document.getElementById("adresse").value;
+    const telefon = document.getElementById("telefon").value;
+    const mail = document.getElementById("mail").value;
+    const versand = document.getElementById("versand").value;
+
+    let total = 0;
+    let artikelText = cart.map(item =>
+      "- " + item.name + (item.size ? " ("+item.size+")" : "") + " - " + item.price.toFixed(2).replace(".", ",") + " €"
+    ).join("\n");
+
+    cart.forEach(item => total += item.price);
+
+    if (versand === "dhl") {
+      total += 7.90;
+      artikelText += "\n- Versand (DHL) - 7,90 €";
+    }
+
+    const orderDetails = `Bestellung von ${name}
+Adresse: ${adresse}
+Telefon: ${telefon}
+E-Mail: ${mail}
+Versand: ${versand === "dhl" ? "DHL (7,90 €)" : "Abholung"}
+Artikel:
+${artikelText}
+Gesamt: ${total.toFixed(2).replace(".", ",")} €`;
+
+    window.location.href = "mailto:kaiuwe.koenig@web.de?subject=Fanshop Bestellung&body=" + encodeURIComponent(orderDetails);
+  }
+
+  const lightbox = document.getElementById("lightbox");
+  const lightboxImg = document.getElementById("lightbox-img");
+
+  document.querySelectorAll(".product img").forEach(img => {
+    img.addEventListener("click", () => {
+      lightbox.style.display = "flex";
+      lightboxImg.src = img.src;
+    });
+  });
+
+  lightbox.addEventListener("click", () => {
+    lightbox.style.display = "none";
+    lightboxImg.src = "";
+  });
+</script>
+</body>
+</html>
