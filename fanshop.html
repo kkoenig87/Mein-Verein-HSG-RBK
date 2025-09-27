@@ -15,42 +15,29 @@
     .sidebar.active { right:0; }
     .sidebar a { display:block; padding:1rem; color:#fff; text-decoration:none; font-weight:bold; }
     .sidebar a:hover { background:#ff00a0; }
+
     .overlay { position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); display:none; z-index:500; }
     .overlay.active { display:block; }
 
     section { padding:1rem; }
-    .product { border:1px solid #ddd; border-radius:10px; padding:1rem; margin:1rem 0; box-shadow:0 4px 10px rgba(0,0,0,0.1); background:#fff; }
-    .product h2 { margin-top:0; text-align:center; }
-    .product img { max-width:150px; border-radius:8px; cursor:pointer; transition:transform 0.3s; }
-    .product img:hover { transform:scale(1.05); }
+    .products { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:1rem; }
+    .product { border:1px solid #ccc; border-radius:8px; padding:1rem; text-align:center; }
+    .product img { max-width:100%; height:auto; border-radius:8px; cursor:pointer; }
+    .product h3 { margin:0.5rem 0; }
+    .product select, .product button { margin-top:0.5rem; padding:0.4rem; }
 
-    .cart { border-top:2px solid #ff00a0; margin-top:2rem; padding-top:1rem; }
-    .cart h2 { text-align:center; }
-    .cart ul { list-style:none; padding:0; }
-    .cart li { margin:0.5rem 0; }
+    #cart { margin-top:2rem; border-top:2px solid #ff00a0; padding-top:1rem; }
+    #cart h2 { margin-bottom:0.5rem; }
+    #cart ul { list-style:none; padding:0; }
+    #cart li { margin:0.3rem 0; }
 
-    input, select { margin:0.3rem 0; padding:0.5rem; width:100%; border:1px solid #ccc; border-radius:5px; }
-    button { background:#ff00a0; color:#fff; border:none; padding:0.7rem 1rem; border-radius:8px; cursor:pointer; transition:background 0.3s; }
-    button:hover { background:#cc0080; }
+    .order-form { margin-top:1.5rem; }
+    .order-form input, .order-form select { width:100%; padding:0.5rem; margin-bottom:0.5rem; }
+    .order-form button { background:#ff00a0; color:#fff; border:none; padding:0.7rem; width:100%; font-size:1rem; cursor:pointer; border-radius:6px; }
 
-    /* Lightbox Style */
-    .lightbox {
-      display: none;
-      position: fixed;
-      z-index: 2000;
-      left: 0; top: 0;
-      width: 100%; height: 100%;
-      background: rgba(0,0,0,0.9);
-      justify-content: center;
-      align-items: center;
-    }
-    .lightbox img {
-      max-width: 90%;
-      max-height: 90%;
-      border-radius: 10px;
-      box-shadow: 0 0 15px rgba(255,255,255,0.4);
-      cursor: zoom-out;
-    }
+    /* Lightbox */
+    #lightbox { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); align-items:center; justify-content:center; z-index:2000; }
+    #lightbox img { max-width:90%; max-height:80%; border-radius:8px; }
   </style>
 </head>
 <body>
@@ -67,72 +54,76 @@
   <a href="hallen.html">🏟️ Hallen</a>
   <a href="sponsoren.html">🤝 Sponsoren</a>
   <a href="news.html">📰 News</a>
-  <a href="fanshop.html">🛍️ Fanshop</a>
+  <a href="fanshop.html">🛒 Fanshop</a>
 </div>
 <div class="overlay" id="overlay"></div>
 
 <section>
   <h2>Unsere Fanartikel</h2>
+  <div class="products">
+    <!-- Fantrikot -->
+    <div class="product">
+      <img src="Fantrikot1.png" alt="HSG Fantrikot">
+      <img src="Fantrikot2.png" alt="HSG Fantrikot Rückseite">
+      <h3>HSG Fantrikot</h3>
+      <p>Original HSG Fantrikot in Vereinsfarben.</p>
+      <p><strong>39,90 €</strong></p>
+      <select id="size-trikot">
+        <option value="S">Größe S</option>
+        <option value="M">Größe M</option>
+        <option value="L">Größe L</option>
+        <option value="XL">Größe XL</option>
+      </select>
+      <button onclick="addToCart('HSG Fantrikot', 39.90, document.getElementById('size-trikot').value)">In den Warenkorb</button>
+    </div>
 
-  <!-- Fantrikot -->
-  <div class="product">
-    <h2>HSG Fantrikot</h2>
-    <img src="Fantrikot1.png" alt="Fantrikot Vorderseite">
-    <img src="Fantrikot2.png" alt="Fantrikot Rückseite">
-    <p>Preis: 39,90 €</p>
-    <label for="trikot-size">Größe:</label>
-    <select id="trikot-size">
-      <option>S</option><option>M</option><option>L</option><option>XL</option>
-    </select>
-    <button onclick="addToCart('Fantrikot', 39.90, document.getElementById('trikot-size').value)">In den Warenkorb</button>
-  </div>
+    <!-- Fanshirt -->
+    <div class="product">
+      <img src="Fanshirt.png" alt="Fanshirt">
+      <h3>HSG Fanshirt</h3>
+      <p>Klassisches Shirt mit Vereinslogo.</p>
+      <p><strong>19,90 €</strong></p>
+      <select id="size-shirt">
+        <option value="S">Größe S</option>
+        <option value="M">Größe M</option>
+        <option value="L">Größe L</option>
+        <option value="XL">Größe XL</option>
+      </select>
+      <button onclick="addToCart('HSG Fanshirt', 19.90, document.getElementById('size-shirt').value)">In den Warenkorb</button>
+    </div>
 
-  <!-- Fanshirt -->
-  <div class="product">
-    <h2>Fanshirt</h2>
-    <img src="Fanshirt.png" alt="Fanshirt">
-    <p>Preis: 24,90 €</p>
-    <label for="shirt-size">Größe:</label>
-    <select id="shirt-size">
-      <option>S</option><option>M</option><option>L</option><option>XL</option>
-    </select>
-    <button onclick="addToCart('Fanshirt', 24.90, document.getElementById('shirt-size').value)">In den Warenkorb</button>
-  </div>
-
-  <!-- Kempa Gürteltasche -->
-  <div class="product">
-    <h2>Kempa Gürteltasche</h2>
-    <img src="Guerteltasche.png" alt="Kempa Gürteltasche">
-    <p>Preis: 14,90 €</p>
-    <button onclick="addToCart('Kempa Gürteltasche', 14.90)">In den Warenkorb</button>
+    <!-- Gürteltasche -->
+    <div class="product">
+      <img src="Guerteltasche.png" alt="Kempa Gürteltasche">
+      <h3>Kempa Gürteltasche</h3>
+      <p>Praktische Bauchtasche im HSG-Style.</p>
+      <p><strong>14,90 €</strong></p>
+      <button onclick="addToCart('Kempa Gürteltasche', 14.90)">In den Warenkorb</button>
+    </div>
   </div>
 </section>
 
-<!-- Warenkorb -->
-<section class="cart">
-  <h2>🛒 Warenkorb</h2>
+<section id="cart">
+  <h2>🛒 Dein Warenkorb</h2>
   <ul id="cart-items"></ul>
-  <p><strong>Gesamt: <span id="cart-total">0.00</span> €</strong></p>
+  <p><strong>Gesamt: <span id="cart-total">0,00</span> €</strong></p>
 
-  <h3>Kundendaten</h3>
-  <input type="text" id="name" placeholder="Name" required>
-  <input type="text" id="adresse" placeholder="Adresse" required>
-  <input type="text" id="telefon" placeholder="Telefonnummer" required>
-  <input type="email" id="mail" placeholder="E-Mail" required>
-
-  <label for="versand">Versandoption:</label>
-  <select id="versand">
-    <option value="abholung">Abholung</option>
-    <option value="dhl">Versand per DHL (+7,90 €)</option>
-  </select>
-
-  <button onclick="checkout()">Bestellung absenden</button>
+  <div class="order-form">
+    <h3>Deine Daten</h3>
+    <input type="text" id="name" placeholder="Name" required>
+    <input type="text" id="adresse" placeholder="Adresse" required>
+    <input type="text" id="telefon" placeholder="Telefon" required>
+    <input type="email" id="mail" placeholder="E-Mail" required>
+    <select id="versand">
+      <option value="abholung">Abholung</option>
+      <option value="dhl">Versand per DHL (+7,90 €)</option>
+    </select>
+    <button onclick="checkout()">Bestellen</button>
+  </div>
 </section>
 
 <!-- Lightbox -->
-<div id="lightbox" class="lightbox">
-  <img id="lightbox-img" src="" alt="Produktbild groß">
-</div>
+<div id="lightbox"><img id="lightbox-img" src="" alt="Zoom"></div>
 
 <script>
   const menuBtn = document.querySelector(".menu-toggle");
@@ -154,53 +145,11 @@
     cartList.innerHTML = "";
     let total = 0;
 
-    cart.forEach((item, index) => {
+    cart.forEach((item) => {
       const li = document.createElement("li");
-      li.textContent = item.name + (item.size ? " ("+item.size+")" : "") + " - " + item.price.toFixed(2) + " €";
+      li.textContent = item.name + (item.size ? " ("+item.size+")" : "") + " - " + item.price.toFixed(2).replace(".", ",") + " €";
       cartList.appendChild(li);
       total += item.price;
     });
 
-    cartTotal.textContent = total.toFixed(2);
-  }
-
-  function checkout() {
-    const name = document.getElementById("name").value;
-    const adresse = document.getElementById("adresse").value;
-    const telefon = document.getElementById("telefon").value;
-    const mail = document.getElementById("mail").value;
     const versand = document.getElementById("versand").value;
-
-    let total = parseFloat(document.getElementById("cart-total").textContent);
-    if (versand === "dhl") total += 7.90;
-
-    const orderDetails = `Bestellung von ${name}
-Adresse: ${adresse}
-Telefon: ${telefon}
-E-Mail: ${mail}
-Versand: ${versand === "dhl" ? "DHL (7,90 €)" : "Abholung"}
-Artikel:
-${cart.map(item => "- " + item.name + (item.size ? " ("+item.size+")" : "") + " - " + item.price.toFixed(2) + " €").join("\n")}
-Gesamt: ${total.toFixed(2)} €`;
-
-    window.location.href = "mailto:kaiuwe.koenig@web.de?subject=Fanshop Bestellung&body=" + encodeURIComponent(orderDetails);
-  }
-
-  // Lightbox Funktion
-  const lightbox = document.getElementById("lightbox");
-  const lightboxImg = document.getElementById("lightbox-img");
-
-  document.querySelectorAll(".product img").forEach(img => {
-    img.addEventListener("click", () => {
-      lightbox.style.display = "flex";
-      lightboxImg.src = img.src;
-    });
-  });
-
-  lightbox.addEventListener("click", () => {
-    lightbox.style.display = "none";
-    lightboxImg.src = "";
-  });
-</script>
-</body>
-</html>
