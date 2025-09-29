@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fanshop - HSG RBK</title>
+<link rel="manifest" href="manifest.json">
+<style>
+body { font-family:sans-serif; margin:0; padding:0; background:#fff; color:#000; }
+header { background:#ff00a0; color:#fff; padding:1rem; display:flex; justify-content:center; align-items:center; position:relative; }
+header h1 { margin:0; font-size:1.4rem; text-align:center; flex:1; line-height:1.4; }
+.menu-toggle { font-size:1.8rem; cursor:pointer; background:none; border:none; color:#fff; position:absolute; right:1rem; }
+
+.sidebar { position:fixed; top:0; right:-250px; width:250px; height:100%; background:rgba(0,0,0,0.8); color:#fff; transition:right 0.3s ease; padding-top:2rem; z-index:1000; }
+.sidebar.active { right:0; }
+.sidebar a { display:block; padding:1rem; color:#fff; text-decoration:none; font-weight:bold; }
+.sidebar a:hover { background:#ff00a0; }
+
+.overlay { position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); display:none; z-index:500; }
+.overlay.active { display:block; }
+
+section { padding:1rem; text-align:center; }
+
+.products { display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:1rem; }
+.product img { width:100%; height:auto; border-radius:8px; box-shadow:0 4px 10px rgba(0,0,0,0.2); cursor:pointer; }
+.product h3 { margin:0.5rem 0; }
+.product p { margin:0.25rem 0; }
+.product select, .product input { margin-top:0.5rem; width:100%; }
+
+#cart { margin:1rem auto; max-width:500px; text-align:left; padding:1rem; border:1px solid #ccc; border-radius:10px; }
+#cart ul { list-style:none; padding:0; }
+#cart li { margin:0.5rem 0; display:flex; justify-content:space-between; }
+
+.lightbox { position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); display:none; justify-content:center; align-items:center; z-index:10000; }
+.lightbox img { max-width:90%; max-height:90%; border-radius:10px; }
+
+</style>
+</head>
+<body>
+
+<header>
+  <h1>HSG RBK <br> Fanshop</h1>
+  <button class="menu-toggle">☰</button>
+</header>
+
+<div class="sidebar" id="sidebar">
+  <a href="index.html">🏠 Home</a>
+  <a href="a-team.html">👩‍👧 wA-Team</a>
+  <a href="b-team.html">👩‍👧 wB-Team</a>
+  <a href="stats.html">📊 Statistik</a>
+  <a href="hallen.html">🏟️ Hallen</a>
+  <a href="sponsoren.html">🤝 Sponsoren</a>
+  <a href="news.html">📰 News</a>
+  <a href="fanshop.html">🛒 Fanshop</a>
+</div>
+<div class="overlay" id="overlay"></div>
+
+<section>
+  <h2>Unsere Fanartikel</h2>
+  <div class="products">
+    <!-- Fantrikot -->
+    <div class="product">
+      <img src="img/Fantrikot1.png" alt="HSG Fantrikot" onclick="openLightbox(this)">
+      <img src="img/Fantrikot2.png" alt="HSG Fantrikot Rückseite" onclick="openLightbox(this)">
+      <h3>HSG Fantrikot</h3>
+      <p>Original HSG Fantrikot in Vereinsfarben.</p>
+      <p><strong>24,90 €</strong></p>
+      <select id="size-trikot">
+        <option value="S">Größe S</option>
+        <option value="M">Größe M</option>
+        <option value="L">Größe L</option>
+        <option value="XL">Größe XL</option>
+      </select>
+      <input type="number" min="1" value="1" id="qty-trikot">
+      <button onclick="addToCart('HSG Fantrikot', 24.90, document.getElementById('size-trikot').value, document.getElementById('qty-trikot').value)">In den Warenkorb</button>
+    </div>
+
+    <!-- Fanshirt -->
+    <div class="product">
+      <img src="img/Fanshirt1.png" alt="Fanshirt" onclick="openLightbox(this)">
+      <img src="img/Fanshirt2.png" alt="Fanshirt Rückseite" onclick="openLightbox(this)">
+      <h3>HSG Fanshirt</h3>
+      <p>Klassisches Shirt mit Vereinslogo.</p>
+      <p><strong>15,90 €</strong></p>
+      <select id="size-shirt">
+        <option value="S">Größe S</option>
+        <option value="M">Größe M</option>
+        <option value="L">Größe L</option>
+        <option value="XL">Größe XL</option>
+      </select>
+      <input type="number" min="1" value="1" id="qty-shirt">
+      <button onclick="addToCart('HSG Fanshirt', 15.90, document.getElementById('size-shirt').value, document.getElementById('qty-shirt').value)">In den Warenkorb</button>
+    </div>
+
+    <!-- Fansweater -->
+    <div class="product">
+      <img src="img/Sweater1.png" alt="Sweater" onclick="openLightbox(this)">
+      <img src="img/Sweater2.png" alt="Sweater Rückseite" onclick="openLightbox(this)">
+      <h3>HSG Sweater</h3>
+      <p>Klassischer Sweater mit Vereinslogo.</p>
+      <p><strong>35,90 €</strong></p>
+      <select id="size-sweater">
+        <option value="S">Größe S</option>
+        <option value="M">Größe M</option>
+        <option value="L">Größe L</option>
+        <option value="XL">Größe XL</option>
+      </select>
+      <input type="number" min="1" value="1" id="qty-sweater">
+      <button onclick="addToCart('HSG Sweater', 35.90, document.getElementById('size-sweater').value, document.getElementById('qty-sweater').value)">In den Warenkorb</button>
+    </div>
+
+    <!-- Gürteltasche -->
+    <div class="product">
+      <img src="img/Guerteltasche.png" alt="Kempa Gürteltasche" onclick="openLightbox(this)">
+      <h3>Kempa Gürteltasche</h3>
+      <p>Praktische Bauchtasche im HSG-Style.</p>
+      <p><strong>19,90 €</strong></p>
+      <input type="number" min="1" value="1" id="qty-bag">
+      <button onclick="addToCart('Kempa Gürteltasche', 19.90, '-', document.getElementById('qty-bag').value)">In den Warenkorb</button>
+    </div>
+  </div>
+</section>
+
+<section id="cart">
+  <h2>Warenkorb</h2>
+  <ul id="cart-items"></ul>
+  <p>Gesamt: <strong id="cart-total">0,00 €</strong></p>
+</section>
+
+<section>
+  <h2>Deine Daten & Versand</h2>
+  <form id="checkout-form">
+    <label>Name:<br><input type="text" id="customer-name" required></label><br><br>
+    <label>Straße & Hausnummer:<br><input type="text" id="customer-street" required></label><br><br>
+    <label>PLZ & Ort:<br><input type="text" id="customer-city" required></label><br><br>
+    <label>E-Mail:<br><input type="email" id="customer-email" required></label><br><br>
+    <label>Telefon:<br><input type="tel" id="customer-phone" required></label><br><br>
+    <label>Versand:<br>
+      <select id="shipping-method" required onchange="updateCartShipping()">
+        <option value="0">Abholung</option>
+        <option value="7.9">DHL 7,90 €</option>
+        <option value="6.5">Hermes 6,50 €</option>
+        <option value="12.9">Express 12,90 €</option>
+      </select>
+    </label>
+  </form>
+  <button onclick="submitOrder()">Bestellung abschicken</button>
+</section>
+
+<div class="lightbox" id="lightbox" onclick="closeLightbox()"><img id="lightbox-img"></div>
+
+<script>
+const menuBtn = document.querySelector(".menu-toggle");
+const sidebar = document.getElementById("sidebar");
+const overlay = document.getElementById("overlay");
+menuBtn.addEventListener("click", ()=>{ sidebar.classList.toggle("active"); overlay.classList.toggle("active"); });
+overlay.addEventListener("click", ()=>{ sidebar.classList.remove("active"); overlay.classList.remove("active"); });
+
+let cart = [];
+let shippingCost = 0;
+
+function addToCart(name, price, size, qty) {
+  qty = parseInt(qty);
+  if(qty < 1) return;
+  cart.push({name, price, size, qty});
+  renderCart();
+}
+
+function renderCart() {
+  const cartItems = document.getElementById('cart-items');
+  cartItems.innerHTML = '';
+  let total = 0;
+  cart.forEach(item => {
+    const li = document.createElement('li');
+    li.textContent = `${item.name} (${item.size}) x${item.qty} - ${(item.price*item.qty).toFixed(2).replace('.',',')} €`;
+    cartItems.appendChild(li);
+    total += item.price*item.qty;
+  });
+  total += shippingCost;
+  document.getElementById('cart-total').innerText = total.toFixed(2).replace('.',',') + ' €';
+}
+
+function updateCartShipping() {
+  const shippingSelect = document.getElementById('shipping-method');
+  shippingCost = parseFloat(shippingSelect.value);
+  renderCart();
+}
+
+function submitOrder() {
+  const name = document.getElementById('customer-name').value;
+  const street = document.getElementById('customer-street').value;
+  const city = document.getElementById('customer-city').value;
+  const email = document.getElementById('customer-email').value;
+  const phone = document.getElementById('customer-phone').value;
+
+  if(!name || !street || !city || !email || !phone){
+    alert("Bitte fülle alle Pflichtfelder aus!");
+    return;
+  }
+
+  let itemsText = cart.map(i => `${i.name} (${i.size}) x${i.qty} - ${(i.price*i.qty).toFixed(2).replace('.',',')} €`).join('\n');
+  let total = cart.reduce((sum,i)=>sum+i.price*i.qty,0) + shippingCost;
+
+  const mailBody = `
+Bestellung von: ${name}
+Adresse: ${street}, ${city}
+E-Mail: ${email}
+Telefon: ${phone}
+
+Artikel:
+${itemsText}
+
+Versand: ${shippingCost.toFixed(2).replace('.',',')} €
+Gesamt: ${total.toFixed(2).replace('.',',')} €
+`;
+
+  window.location.href = `mailto:kaiuwe.koenig@web.de?subject=Neue Fanartikel-Bestellung&body=${encodeURIComponent(mailBody)}`;
+}
+
+// Lightbox
+function openLightbox(img) {
+  document.getElementById('lightbox-img').src = img.src;
+  document.getElementById('lightbox').style.display = 'flex';
+}
+function closeLightbox() {
+  document.getElementById('lightbox').style.display = 'none';
+}
+
+</script>
+</body>
+</html>
