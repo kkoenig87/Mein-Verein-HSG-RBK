@@ -1,422 +1,226 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Fanshop - HSG Rü/Bau/Kö</title>
-  <link rel="manifest" href="manifest.json" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HSG RBK Fanshop</title>
   <style>
-    :root{
-      --brand:#ff00a0;
-      --brand-dark:#cc0080;
-      --bg:#f7f7f8;
-      --card:#fff;
-      --muted:#666;
-      --success:#1b8f3a;
+    body { font-family:sans-serif; margin:0; padding:0; background:#fff; color:#000; }
+    header { background:#ff00a0; color:#fff; padding:1rem; text-align:center; }
+
+    section { padding:1rem; }
+
+    .products { display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:1.5rem; }
+
+    .product { border:1px solid #ccc; border-radius:8px; padding:1rem; background:#fafafa; }
+    .product h3 { margin-top:0.5rem; }
+
+    /* --- Carousel --- */
+    .carousel { position:relative; overflow:hidden; }
+    .carousel-track { display:flex; transition:transform 0.3s ease; }
+    .carousel-slide { flex:0 0 100%; }
+    .carousel-slide img { width:100%; display:block; border-radius:6px; }
+    .carousel-btn { 
+      position:absolute; top:50%; transform:translateY(-50%); 
+      z-index:5; background:rgba(0,0,0,0.4); color:#fff; 
+      border:none; cursor:pointer; padding:0.5rem 0.8rem; border-radius:50%;
     }
-    *{box-sizing:border-box}
-    body{font-family:system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial;margin:0;background:var(--bg);color:#111}
-    header{background:var(--brand);color:#fff;padding:0.9rem 1rem;display:flex;align-items:center;justify-content:center;position:relative}
-    header h1{margin:0;font-size:1.05rem;font-weight:700}
-    .menu-toggle{position:absolute;right:1rem;top:0.9rem;background:none;border:0;color:#fff;font-size:1.4rem;cursor:pointer}
+    .carousel-btn.left { left:5px; }
+    .carousel-btn.right { right:5px; }
 
-    main{max-width:1100px;margin:1rem auto;padding:0 1rem}
-    .products{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1rem}
-    @media(max-width:640px){ .products{grid-template-columns:1fr} }
+    /* Warenkorb */
+    #cart { border-top:2px solid #ff00a0; margin-top:2rem; padding-top:1rem; }
+    #cart ul { list-style:none; padding:0; }
+    #cart li { margin-bottom:0.5rem; }
 
-    .product{background:var(--card);border-radius:10px;padding:0.8rem;box-shadow:0 6px 18px rgba(0,0,0,0.06);text-align:center;display:flex;flex-direction:column;justify-content:space-between}
-    .product h3{margin:0.5rem 0;color:var(--brand);font-size:1.05rem}
-    .small{font-size:0.92rem;color:var(--muted)}
-    .price{font-weight:800;margin:0.4rem 0}
-
-    /* Carousel */
-    .carousel{position:relative;display:flex;align-items:center;justify-content:center;gap:0.6rem;margin-bottom:0.6rem;min-height:130px}
-    .carousel-track{display:flex;transition:transform .28s ease;touch-action:pan-y}
-    .carousel-slide{min-width:120px;display:flex;justify-content:center;align-items:center;padding:0.25rem}
-    .carousel-slide img{max-width:120px;border-radius:8px;cursor:pointer;display:block}
-    @media(min-width:800px){ .carousel-slide img{max-width:140px} }
-    @media(max-width:420px){ .carousel-slide img{max-width:46%;} .carousel{gap:0.35rem} }
-
-    .carousel-btn{position:absolute;top:50%;transform:translateY(-50%);background:rgba(0,0,0,0.45);border:0;color:#fff;padding:6px 8px;border-radius:6px;cursor:pointer}
-    .carousel-btn.left{left:8px}
-    .carousel-btn.right{right:8px}
-    .dots{display:flex;gap:6px;justify-content:center;margin-top:6px}
-    .dot{width:8px;height:8px;border-radius:50%;background:#ddd;cursor:pointer}
-    .dot.active{background:var(--brand)}
-
-    .controls{display:flex;gap:0.5rem;justify-content:center;align-items:center;flex-wrap:wrap;margin-top:0.4rem}
-    select,input[type=number]{padding:0.45rem;border-radius:6px;border:1px solid #ddd}
-    button.btn{background:var(--brand);color:#fff;border:0;padding:0.55rem 0.85rem;border-radius:8px;cursor:pointer;font-weight:700}
-    button.btn:hover{background:var(--brand-dark)}
-    button.small-btn{padding:0.35rem 0.6rem;font-size:0.95rem}
-
-    /* cart wrap */
-    .cart-wrap{margin-top:1.25rem;display:grid;grid-template-columns:1fr 360px;gap:1rem}
-    @media(max-width:880px){ .cart-wrap{grid-template-columns:1fr} }
-
-    .cart{background:var(--card);padding:1rem;border-radius:10px;box-shadow:0 6px 18px rgba(0,0,0,0.06)}
-    .cart h2{margin-top:0;color:var(--brand)}
-    .cart-list{list-style:none;padding:0;margin:0;max-height:420px;overflow:auto}
-    .cart-item{display:flex;gap:0.6rem;align-items:center;justify-content:space-between;padding:0.5rem 0;border-bottom:1px dashed #eee}
-    .cart-item .left{flex:1}
-    .cart-item small{color:var(--muted)}
-
-    .summary{background:#fafafa;padding:0.8rem;border-radius:8px;margin-top:0.6rem}
-    .summary .line{display:flex;justify-content:space-between;padding:0.25rem 0}
-    .summary strong{font-size:1.05rem}
-
-    form.order{background:var(--card);padding:1rem;border-radius:10px;box-shadow:0 6px 18px rgba(0,0,0,0.06)}
-    form.order label{display:block;font-weight:600;margin-top:0.6rem}
-    form.order input, form.order textarea, form.order select{width:100%;padding:0.5rem;border-radius:6px;border:1px solid #ddd;margin-top:0.25rem}
-    form.order button{margin-top:0.8rem}
-
-    /* lightbox & toast */
-    .lightbox{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:2000;align-items:center;justify-content:center}
-    .lightbox img{max-width:94%;max-height:92%;border-radius:10px;box-shadow:0 8px 30px rgba(0,0,0,0.6)}
-    .toast{position:fixed;left:50%;transform:translateX(-50%);bottom:1.25rem;background:var(--success);color:#fff;padding:0.55rem 0.9rem;border-radius:8px;box-shadow:0 6px 18px rgba(0,0,0,0.18);display:none;z-index:3000;font-weight:700}
+    input, select { margin-top:0.3rem; margin-bottom:0.7rem; padding:0.4rem; width:100%; max-width:300px; }
+    button { background:#ff00a0; color:#fff; border:none; padding:0.5rem 1rem; cursor:pointer; border-radius:4px; }
+    button:hover { background:#d10085; }
   </style>
 </head>
 <body>
   <header>
-    <button class="menu-toggle" aria-label="Menu">☰</button>
-    <h1>HSG Rü/Bau/Kö — Fanshop</h1>
+    <h1>HSG Rü/Bau/Kö Fanshop</h1>
   </header>
 
-  <main>
-    <!-- PRODUCTS -->
-    <section>
-      <h2 class="small">Unsere Fanartikel</h2>
-      <div class="products" id="products">
+  <section>
+    <h2>Unsere Fanartikel</h2>
+    <div class="products">
 
-        <!-- Product 1: Fantrikot -->
-        <article class="product" data-sku="trikot">
-          <div class="carousel" data-carousel>
-            <button class="carousel-btn left" aria-label="Vorheriges">◀</button>
-            <div class="carousel-track">
-              <div class="carousel-slide"><img src="img/Fantrikot1.png" alt="Fantrikot vorne" data-full="img/Fantrikot1.png"></div>
-              <div class="carousel-slide"><img src="img/Fantrikot2.png" alt="Fantrikot hinten" data-full="img/Fantrikot2.png"></div>
-            </div>
-            <button class="carousel-btn right" aria-label="Nächstes">▶</button>
+      <!-- Fantrikot -->
+      <div class="product">
+        <div class="carousel" data-carousel>
+          <div class="carousel-track">
+            <div class="carousel-slide"><img src="img/Fantrikot1.png" alt="Fantrikot Vorderseite"></div>
+            <div class="carousel-slide"><img src="img/Fantrikot2.png" alt="Fantrikot Rückseite"></div>
           </div>
-          <div class="dots" aria-hidden="true"></div>
-
-          <h3>HSG Fantrikot</h3>
-          <p class="small">Original in Vereinsfarben</p>
-          <p class="price"><strong>24,90 €</strong></p>
-
-          <div class="controls">
-            <select id="size-trikot">
-              <option value="S">S</option><option value="M">M</option><option value="L">L</option><option value="XL">XL</option>
-            </select>
-            <input type="number" id="qty-trikot" min="1" value="1" style="width:80px">
-            <button class="btn" type="button" onclick="addToCartFromUI('trikot','HSG Fantrikot',24.90,'size-trikot','qty-trikot')">In den Warenkorb</button>
-          </div>
-        </article>
-
-        <!-- Product 2: Fanshirt -->
-        <article class="product" data-sku="fanshirt">
-          <div class="carousel" data-carousel>
-            <button class="carousel-btn left" aria-label="Vorheriges">◀</button>
-            <div class="carousel-track">
-              <div class="carousel-slide"><img src="img/Fanshirt1.png" alt="Fanshirt vorne" data-full="img/Fanshirt1.png"></div>
-              <div class="carousel-slide"><img src="img/Fanshirt2.png" alt="Fanshirt hinten" data-full="img/Fanshirt2.png"></div>
-            </div>
-            <button class="carousel-btn right" aria-label="Nächstes">▶</button>
-          </div>
-          <div class="dots" aria-hidden="true"></div>
-
-          <h3>HSG Fanshirt</h3>
-          <p class="small">Klassisches Shirt mit Vereinslogo</p>
-          <p class="price"><strong>15,90 €</strong></p>
-
-          <div class="controls">
-            <select id="size-shirt">
-              <option value="S">S</option><option value="M">M</option><option value="L">L</option><option value="XL">XL</option>
-            </select>
-            <input type="number" id="qty-shirt" min="1" value="1" style="width:80px">
-            <button class="btn" type="button" onclick="addToCartFromUI('fanshirt','HSG Fanshirt',15.90,'size-shirt','qty-shirt')">In den Warenkorb</button>
-          </div>
-        </article>
-
-        <!-- Product 3: Sweater -->
-        <article class="product" data-sku="sweater">
-          <div class="carousel" data-carousel>
-            <button class="carousel-btn left" aria-label="Vorheriges">◀</button>
-            <div class="carousel-track">
-              <div class="carousel-slide"><img src="img/Sweater1.png" alt="Sweater vorne" data-full="img/Sweater1.png"></div>
-              <div class="carousel-slide"><img src="img/Sweater2.png" alt="Sweater hinten" data-full="img/Sweater2.png"></div>
-            </div>
-            <button class="carousel-btn right" aria-label="Nächstes">▶</button>
-          </div>
-          <div class="dots" aria-hidden="true"></div>
-
-          <h3>HSG Sweater</h3>
-          <p class="small">Warmer Sweater mit Logo</p>
-          <p class="price"><strong>35,90 €</strong></p>
-
-          <div class="controls">
-            <select id="size-sweater">
-              <option value="S">S</option><option value="M">M</option><option value="L">L</option><option value="XL">XL</option>
-            </select>
-            <input type="number" id="qty-sweater" min="1" value="1" style="width:80px">
-            <button class="btn" type="button" onclick="addToCartFromUI('sweater','HSG Sweater',35.90,'size-sweater','qty-sweater')">In den Warenkorb</button>
-          </div>
-        </article>
-
-        <!-- Product 4: Gürteltasche -->
-        <article class="product" data-sku="guerteltasche">
-          <div class="carousel" data-carousel>
-            <button class="carousel-btn left" aria-label="Vorheriges">◀</button>
-            <div class="carousel-track">
-              <div class="carousel-slide"><img src="img/Guerteltasche.png" alt="Gürteltasche" data-full="img/Guerteltasche.png"></div>
-            </div>
-            <button class="carousel-btn right" aria-label="Nächstes">▶</button>
-          </div>
-          <div class="dots" aria-hidden="true"></div>
-
-          <h3>Kempa Gürteltasche</h3>
-          <p class="small">Praktische Bauchtasche im HSG-Style</p>
-          <p class="price"><strong>19,90 €</strong></p>
-
-          <div class="controls">
-            <input type="number" id="qty-guerteltasche" min="1" value="1" style="width:80px">
-            <button class="btn" type="button" onclick="addToCartFromUI('guerteltasche','Kempa Gürteltasche',19.90,null,'qty-guerteltasche')">In den Warenkorb</button>
-          </div>
-        </article>
-
-      </div>
-    </section>
-
-    <!-- CART + ORDER -->
-    <section class="cart-wrap">
-      <div class="cart">
-        <h2>🛒 Dein Warenkorb</h2>
-        <ul id="cart-list" class="cart-list"></ul>
-
-        <div class="summary" id="summary">
-          <div class="line"><span class="small">Zwischensumme</span><span id="subtotal">0,00 €</span></div>
-          <div class="line"><span class="small">Versand</span><span id="shipping-line">0,00 €</span></div>
-          <div class="line"><strong>Gesamt</strong><strong id="grand-total">0,00 €</strong></div>
+          <button class="carousel-btn left">◀</button>
+          <button class="carousel-btn right">▶</button>
         </div>
-
-        <div style="margin-top:0.6rem">
-          <label class="small">Versandoption:</label>
-          <select id="shipping-option" aria-label="Versand">
-            <option value="pickup">Abholung (kostenlos)</option>
-            <option value="dhl">Versand per DHL (+7,90 €)</option>
-          </select>
-        </div>
+        <h3>HSG Fantrikot</h3>
+        <p>Original HSG Fantrikot in Vereinsfarben.</p>
+        <p><strong>24,90 €</strong></p>
+        <select id="size-trikot">
+          <option value="S">Größe S</option>
+          <option value="M">Größe M</option>
+          <option value="L">Größe L</option>
+          <option value="XL">Größe XL</option>
+        </select>
+        <button onclick="addToCart('HSG Fantrikot', 24.90, document.getElementById('size-trikot').value)">In den Warenkorb</button>
       </div>
 
-      <form class="order" id="order-form" onsubmit="submitOrder(event)">
-        <h3>Bestelldaten</h3>
-        <label for="cust-name">Name *</label>
-        <input id="cust-name" required>
-        <label for="cust-address">Adresse *</label>
-        <textarea id="cust-address" rows="3" required></textarea>
-        <label for="cust-phone">Telefon *</label>
-        <input id="cust-phone" required>
-        <label for="cust-email">E-Mail *</label>
-        <input id="cust-email" type="email" required>
-        <small class="muted">Die Bestellung wird per E-Mail an kaiuwe.koenig@web.de gesendet.</small>
-        <button class="btn" type="submit">Bestellung abschicken</button>
-      </form>
-    </section>
+      <!-- Fanshirt -->
+      <div class="product">
+        <div class="carousel" data-carousel>
+          <div class="carousel-track">
+            <div class="carousel-slide"><img src="img/Fanshirt1.png" alt="Fanshirt Vorderseite"></div>
+            <div class="carousel-slide"><img src="img/Fanshirt2.png" alt="Fanshirt Rückseite"></div>
+          </div>
+          <button class="carousel-btn left">◀</button>
+          <button class="carousel-btn right">▶</button>
+        </div>
+        <h3>HSG Fanshirt</h3>
+        <p>Klassisches Shirt mit Vereinslogo.</p>
+        <p><strong>15,90 €</strong></p>
+        <select id="size-shirt">
+          <option value="S">Größe S</option>
+          <option value="M">Größe M</option>
+          <option value="L">Größe L</option>
+          <option value="XL">Größe XL</option>
+        </select>
+        <button onclick="addToCart('HSG Fanshirt', 15.90, document.getElementById('size-shirt').value)">In den Warenkorb</button>
+      </div>
 
-    <!-- Lightbox (hidden) -->
-    <div id="lightbox" class="lightbox" onclick="closeLightbox()"><img id="lightbox-img" src="" alt="Zoom"></div>
+      <!-- Sweater -->
+      <div class="product">
+        <div class="carousel" data-carousel>
+          <div class="carousel-track">
+            <div class="carousel-slide"><img src="img/Sweater1.png" alt="Sweater Vorderseite"></div>
+            <div class="carousel-slide"><img src="img/Sweater2.png" alt="Sweater Rückseite"></div>
+          </div>
+          <button class="carousel-btn left">◀</button>
+          <button class="carousel-btn right">▶</button>
+        </div>
+        <h3>HSG Sweater</h3>
+        <p>Klassischer Sweater mit Vereinslogo.</p>
+        <p><strong>35,90 €</strong></p>
+        <select id="size-sweater">
+          <option value="S">Größe S</option>
+          <option value="M">Größe M</option>
+          <option value="L">Größe L</option>
+          <option value="XL">Größe XL</option>
+        </select>
+        <button onclick="addToCart('HSG Sweater', 35.90, document.getElementById('size-sweater').value)">In den Warenkorb</button>
+      </div>
 
-    <!-- Toast confirmation -->
-    <div id="toast" class="toast">Artikel in den Warenkorb gelegt</div>
-  </main>
+      <!-- Gürteltasche -->
+      <div class="product">
+        <img src="img/Guerteltasche.png" alt="Kempa Gürteltasche">
+        <h3>Kempa Gürteltasche</h3>
+        <p>Praktische Bauchtasche im HSG-Style.</p>
+        <p><strong>19,90 €</strong></p>
+        <button onclick="addToCart('Kempa Gürteltasche', 19.90)">In den Warenkorb</button>
+      </div>
+    </div>
+  </section>
+
+  <section id="cart">
+    <h2>Warenkorb</h2>
+    <ul id="cart-items"></ul>
+    <p>Zwischensumme: <span id="subtotal">0,00 €</span></p>
+    <p>Versand: <span id="shipping">0,00 €</span></p>
+    <p>Rabatt: <span id="discount">0,00 €</span></p>
+    <p><strong>Gesamt: <span id="total">0,00 €</span></strong></p>
+
+    <h3>Kundendaten</h3>
+    <input type="text" id="name" placeholder="Name">
+    <input type="text" id="address" placeholder="Adresse">
+    <input type="text" id="phone" placeholder="Telefonnummer">
+    <input type="email" id="email" placeholder="E-Mail">
+
+    <h3>Versandart</h3>
+    <select id="shipping-option" onchange="updateCart()">
+      <option value="0">Abholung (0,00 €)</option>
+      <option value="7.90">DHL (7,90 €)</option>
+      <option value="6.50">Hermes (6,50 €)</option>
+      <option value="12.90">Express (12,90 €)</option>
+    </select>
+
+    <h3>Rabattcode</h3>
+    <input type="text" id="discount-code" placeholder="Code eingeben">
+    <button onclick="applyDiscount()">Einlösen</button>
+
+    <br><br>
+    <button onclick="checkout()">Bestellung abschicken</button>
+  </section>
 
   <script>
-    /* -------------------------
-       Utilities & state
-       ------------------------- */
-    function formatPriceEuro(value){ return value.toFixed(2).replace('.',',') + ' €'; }
-    const STORAGE_KEY = 'hsg_fanshop_cart_v2';
-    let cart = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
-    const SHIPPING_COST = 7.90;
+    let cart = [];
+    let discountValue = 0;
 
-    document.addEventListener('DOMContentLoaded', ()=>{
-      initCarousels();
-      attachImageLightbox();
-      renderCart();
-      document.getElementById('shipping-option').addEventListener('change', renderCart);
-    });
+    function addToCart(product, price, size="") {
+      cart.push({product, price, size});
+      updateCart();
+    }
 
-    /* -------------------------
-       Carousel (per product)
-       - lightweight: track index, prev/next, dots, touch swipe
-       ------------------------- */
+    function updateCart() {
+      const cartItems = document.getElementById("cart-items");
+      cartItems.innerHTML = "";
+      let subtotal = 0;
+
+      cart.forEach(item=>{
+        subtotal += item.price;
+        cartItems.innerHTML += `<li>${item.product} ${item.size? "(" + item.size + ")" : ""} - ${item.price.toFixed(2).replace(".",",")} €</li>`;
+      });
+
+      const shippingCost = parseFloat(document.getElementById("shipping-option").value) || 0;
+      document.getElementById("subtotal").textContent = subtotal.toFixed(2).replace(".",",") + " €";
+      document.getElementById("shipping").textContent = shippingCost.toFixed(2).replace(".",",") + " €";
+      document.getElementById("discount").textContent = discountValue.toFixed(2).replace(".",",") + " €";
+
+      const total = subtotal + shippingCost - discountValue;
+      document.getElementById("total").textContent = total.toFixed(2).replace(".",",") + " €";
+    }
+
+    function applyDiscount() {
+      const code = document.getElementById("discount-code").value.trim();
+      if(code === "HSG10") { discountValue = 10.0; }
+      else if(code === "FANS20") { discountValue = 20.0; }
+      else { discountValue = 0; }
+      updateCart();
+    }
+
+    function checkout() {
+      alert("Bestellung wird vorbereitet und per Mail versendet!");
+    }
+
+    // --- Init Carousels ---
     function initCarousels(){
-      document.querySelectorAll('[data-carousel]').forEach((carouselRoot)=>{
-        const track = carouselRoot.querySelector('.carousel-track');
-        const slides = Array.from(track.children);
-        const leftBtn = carouselRoot.querySelector('.carousel-btn.left');
-        const rightBtn = carouselRoot.querySelector('.carousel-btn.right');
-        const dotsContainer = carouselRoot.nextElementSibling; // the .dots element we placed after product
+      document.querySelectorAll('[data-carousel]').forEach(carousel=>{
+        const track = carousel.querySelector('.carousel-track');
+        const slides = track.children;
+        const prevBtn = carousel.querySelector('.carousel-btn.left');
+        const nextBtn = carousel.querySelector('.carousel-btn.right');
         let index = 0;
-        const slideWidth = slides[0]?.getBoundingClientRect().width || 120;
-
-        // create dots
-        if(dotsContainer){
-          dotsContainer.innerHTML = '';
-          slides.forEach((_,i)=> {
-            const d = document.createElement('div');
-            d.className = 'dot' + (i===0 ? ' active' : '');
-            d.addEventListener('click', ()=> { goTo(i); });
-            dotsContainer.appendChild(d);
-          });
-        }
 
         function update(){
-          const offset = slides[0].getBoundingClientRect().width * index;
-          track.style.transform = `translateX(-${offset}px)`;
-          // set active dot
-          if(dotsContainer){
-            Array.from(dotsContainer.children).forEach((dot,i)=> dot.classList.toggle('active', i===index));
-          }
+          track.style.transform = `translateX(-${index * 100}%)`;
         }
-        function prev(){ index = (index - 1 + slides.length) % slides.length; update(); }
-        function next(){ index = (index + 1) % slides.length; update(); }
-        function goTo(i){ index = i % slides.length; update(); }
 
-        leftBtn.addEventListener('click', prev);
-        rightBtn.addEventListener('click', next);
-
-        // touch support
-        let startX = null, moved = false;
-        track.addEventListener('pointerdown', (e)=>{
-          startX = e.clientX;
-          track.setPointerCapture(e.pointerId);
-        });
-        track.addEventListener('pointermove', (e)=>{
-          if(startX===null) return;
-          const dx = e.clientX - startX;
-          if(Math.abs(dx) > 30) moved = true;
-        });
-        track.addEventListener('pointerup', (e)=>{
-          if(!moved){ startX = null; moved=false; return; }
-          const dx = e.clientX - startX;
-          if(dx < -30) next(); else if(dx > 30) prev();
-          startX = null; moved=false;
+        prevBtn.addEventListener('click', ()=>{
+          index = (index - 1 + slides.length) % slides.length;
+          update();
         });
 
-        // init
+        nextBtn.addEventListener('click', ()=>{
+          index = (index + 1) % slides.length;
+          update();
+        });
+
         update();
-        // on resize recalc (small)
-        window.addEventListener('resize', update);
       });
     }
-
-    /* -------------------------
-       Add to cart & persistence
-       ------------------------- */
-    function addToCartFromUI(sku,name,price,sizeId,qtyId){
-      const size = sizeId ? document.getElementById(sizeId).value : null;
-      const qty = qtyId ? Math.max(1, parseInt(document.getElementById(qtyId).value) || 1) : 1;
-      addToCart(sku,name,price,size,qty);
-    }
-
-    function addToCart(sku,name,price,size,quantity){
-      const existing = cart.find(i => i.sku===sku && (i.size||'') === (size||''));
-      if(existing){
-        existing.quantity += quantity;
-      } else {
-        cart.push({ sku, name, price: Number(price), size: size||null, quantity: Number(quantity) });
-      }
-      saveCart();
-      renderCart();
-      showToast(`${name} wurde in den Warenkorb gelegt`);
-    }
-
-    function saveCart(){ localStorage.setItem(STORAGE_KEY, JSON.stringify(cart)); }
-    function removeItem(idx){ cart.splice(idx,1); saveCart(); renderCart(); }
-    function changeQty(idx,delta){ cart[idx].quantity = Math.max(1, cart[idx].quantity + delta); saveCart(); renderCart(); }
-    function setQty(idx,val){ cart[idx].quantity = Math.max(1, parseInt(val) || 1); saveCart(); renderCart(); }
-
-    function renderCart(){
-      const list = document.getElementById('cart-list');
-      list.innerHTML = '';
-      let subtotal = 0;
-      cart.forEach((it,idx)=>{
-        subtotal += it.price * it.quantity;
-        const li = document.createElement('li');
-        li.className = 'cart-item';
-        li.innerHTML = `
-          <div class="left">
-            <div style="font-weight:700">${it.name}${it.size ? ' — ' + it.size : ''}</div>
-            <small>${formatPriceEuro(it.price)} x ${it.quantity} = ${formatPriceEuro(it.price * it.quantity)}</small>
-          </div>
-          <div class="actions">
-            <button class="remove" onclick="removeItem(${idx})" title="Entfernen">✖</button>
-            <button class="btn small-btn" onclick="changeQty(${idx},-1)" title="Menge verringern">−</button>
-            <input style="width:56px;padding:6px;border-radius:6px;border:1px solid #ddd;text-align:center" value="${it.quantity}" oninput="setQty(${idx}, this.value)" />
-            <button class="btn small-btn" onclick="changeQty(${idx},1)" title="Menge erhöhen">+</button>
-          </div>
-        `;
-        list.appendChild(li);
-      });
-
-      const shipOpt = document.getElementById('shipping-option').value;
-      const shippingLine = (shipOpt==='dhl' && cart.length>0) ? SHIPPING_COST : 0;
-      const grand = subtotal + shippingLine;
-
-      document.getElementById('subtotal').textContent = formatPriceEuro(subtotal);
-      document.getElementById('shipping-line').textContent = formatPriceEuro(shippingLine);
-      document.getElementById('grand-total').textContent = formatPriceEuro(grand);
-    }
-
-    /* -------------------------
-       Checkout (mailto)
-       ------------------------- */
-    function submitOrder(e){
-      e.preventDefault();
-      if(cart.length === 0){ alert('Dein Warenkorb ist leer.'); return; }
-      const name = document.getElementById('cust-name').value.trim();
-      const address = document.getElementById('cust-address').value.trim();
-      const phone = document.getElementById('cust-phone').value.trim();
-      const email = document.getElementById('cust-email').value.trim();
-      if(!name || !address || !phone || !email){ alert('Bitte fülle alle Pflichtfelder aus.'); return; }
-
-      const lines = cart.map(it => `${it.quantity}x ${it.name}${it.size ? ' ('+it.size+')' : ''} — ${formatPriceEuro(it.price * it.quantity)}`);
-      const subtotal = cart.reduce((s,i)=>s + i.price * i.quantity,0);
-      const shippingLine = document.getElementById('shipping-option').value === 'dhl' ? SHIPPING_COST : 0;
-      const grand = subtotal + shippingLine;
-
-      let body = `Bestellung Fanshop HSG Rü/Bau/Kö\n\nArtikel:\n${lines.join('\n')}\n\nZwischensumme: ${formatPriceEuro(subtotal)}\nVersand: ${formatPriceEuro(shippingLine)}\nGesamt: ${formatPriceEuro(grand)}\n\nKundendaten:\nName: ${name}\nAdresse: ${address}\nTelefon: ${phone}\nE-Mail: ${email}\nVersandoption: ${document.getElementById('shipping-option').value === 'dhl' ? 'DHL (7,90 €)' : 'Abholung'}`;
-
-      const mailto = `mailto:kaiuwe.koenig@web.de?subject=Fanshop-Bestellung&body=${encodeURIComponent(body)}`;
-      window.location.href = mailto;
-    }
-
-    /* -------------------------
-       Lightbox
-       ------------------------- */
-    function attachImageLightbox(){
-      document.querySelectorAll('.product img').forEach(img=>{
-        img.addEventListener('click', (ev)=>{
-          // if the click came from a carousel control, ignore
-          const src = img.getAttribute('data-full') || img.src;
-          document.getElementById('lightbox-img').src = src;
-          document.getElementById('lightbox').style.display = 'flex';
-        });
-      });
-    }
-    function closeLightbox(){ document.getElementById('lightbox').style.display = 'none'; document.getElementById('lightbox-img').src = ''; }
-
-    /* -------------------------
-       Toast
-       ------------------------- */
-    function showToast(msg){
-      const t = document.getElementById('toast');
-      t.textContent = msg;
-      t.style.display = 'block';
-      clearTimeout(t._hide);
-      t._hide = setTimeout(()=> t.style.display = 'none', 2200);
-    }
+    document.addEventListener("DOMContentLoaded", initCarousels);
   </script>
 </body>
 </html>
