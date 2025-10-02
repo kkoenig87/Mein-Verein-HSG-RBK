@@ -67,35 +67,11 @@ form.order input, form.order textarea, form.order select{width:100%;padding:0.5r
 form.order button{margin-top:0.8rem}
 
 /* lightbox & toast */
-
-.lightbox {
-  display: none;
-  position: fixed;
-  z-index: 2000;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  background: rgba(0,0,0,0.9);
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-}
-
-.lightbox-content img {
-  max-width: 90%;
-  max-height: 80%;
-  margin: 10px;
-  border-radius: 10px;
-  object-fit: contain;
-}
-
-.lightbox .close {
-  position: absolute;
-  top: 15px; right: 25px;
-  color: #fff;
-  font-size: 35px;
-  font-weight: bold;
-  cursor: pointer;
-}
+.lightbox{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:2000;align-items:center;justify-content:center}
+.lightbox .inner{position:relative;max-width:95%;max-height:95%}
+.lightbox img{max-width:100%;max-height:100%;border-radius:10px;box-shadow:0 8px 30px rgba(0,0,0,0.6)}
+.lightbox .close{position:absolute;top:-12px;right:-12px;background:#fff;border-radius:50%;padding:6px;cursor:pointer}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:1.25rem;background:var(--success);color:#fff;padding:0.55rem 0.9rem;border-radius:8px;box-shadow:0 6px 18px rgba(0,0,0,0.18);display:none;z-index:3000;font-weight:700}
 
 /* admin */
 .admin-box{margin-top:0.8rem;background:#fff;padding:0.6rem;border-radius:8px;border:1px solid #ffe0f0}
@@ -108,14 +84,6 @@ form.order button{margin-top:0.8rem}
   <button class="menu-toggle" aria-label="Menu">☰</button>
   <h1>HSG Rü/Bau/Kö — Fanshop</h1>
 </header>
-
-<div id="lightbox" class="lightbox">
-  <span class="close" onclick="closeLightbox()">&times;</span>
-  <div class="lightbox-content">
-    <img id="lightbox-img" src="" alt="">
-    <img id="lightbox-img2" src="" alt="">
-  </div>
-</div>
 
 <main>
   <section>
@@ -276,7 +244,10 @@ form.order button{margin-top:0.8rem}
 
   <!-- Lightbox -->
   <div id="lightbox" class="lightbox" onclick="closeLightbox()">
-    <img id="lightbox-img" src="" alt="Zoom">
+    <div class="inner" onclick="event.stopPropagation()">
+      <button class="close" onclick="closeLightbox()" title="Schließen">✖</button>
+      <img id="lightbox-img" src="" alt="Zoom">
+    </div>
   </div>
 
   <div id="toast" class="toast">Artikel in den Warenkorb gelegt</div>
@@ -361,15 +332,18 @@ function initCarousels(){
 }
 
 /* ================ LIGHTBOX ================ */
-function openLightbox(img1, img2="") {
-  document.getElementById("lightbox-img").src = img1;
-  document.getElementById("lightbox-img2").src = img2 || "";
-  document.getElementById("lightbox-img2").style.display = img2 ? "block" : "none";
-  document.getElementById("lightbox").style.display = "flex";
+function attachImageLightbox(){
+  document.querySelectorAll('.product img').forEach(img => {
+    img.addEventListener('click', ()=> {
+      const src = img.getAttribute('data-full') || img.src;
+      document.getElementById('lightbox-img').src = src;
+      document.getElementById('lightbox').style.display = 'flex';
+    });
+  });
 }
-
-function closeLightbox() {
-  document.getElementById("lightbox").style.display = "none";
+function closeLightbox(){
+  document.getElementById('lightbox').style.display = 'none';
+  document.getElementById('lightbox-img').src = '';
 }
 
 /* ================ CART ================ */
@@ -453,7 +427,7 @@ function loginAdmin(){
 }
 function generateDiscountCode(){
   const code = randomCode(12);
-  const value = 12.00; // fixed 5 EUR per request
+  const value = 5.00; // fixed 5 EUR per request
   codes.push({ code, value });
   saveCodes();
   populateAdminCodesList();
