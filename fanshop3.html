@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HSG Fanshop</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f4f4f4;
+    }
+
+    h2 {
+      text-align: center;
+      margin: 20px 0;
+    }
+
+    .products {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      padding: 20px;
+    }
+
+    .product {
+      background: #fff;
+      padding: 15px;
+      border-radius: 10px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+
+    .product img {
+      width: 100%;
+      max-height: 250px;
+      object-fit: contain;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+
+    .cart {
+      background: #fff;
+      padding: 20px;
+      margin: 20px;
+      border-radius: 10px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+
+    /* Lightbox (angepasst!) */
+    .lightbox {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      padding-top: 60px;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background-color: rgba(0,0,0,0.9);
+      text-align: center;
+    }
+
+    .lightbox img {
+      max-width: 90%;      /* skaliert Bild passend */
+      max-height: 90%;
+      width: auto;
+      height: auto;
+      object-fit: contain; /* kein Abschneiden */
+      cursor: zoom-out;
+      border-radius: 10px;
+    }
+
+    .lightbox:target {
+      display: block;
+    }
+
+    /* Rabattcode-Bereich */
+    .admin-panel {
+      display: none;
+      margin: 20px;
+      padding: 15px;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      background: #fffbe6;
+    }
+
+    .admin-panel input {
+      margin: 5px;
+    }
+
+    .cart-summary {
+      margin-top: 15px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <h2>Unsere Fanartikel</h2>
+  <div class="products">
+    <!-- Fantrikot -->
+    <div class="product">
+      <a href="#trikot1"><img src="img/Fantrikot1.png" alt="HSG Fantrikot"></a>
+      <div id="trikot1" class="lightbox">
+        <a href="#"><img src="img/Fantrikot1.png" alt="HSG Fantrikot"></a>
+        <a href="#"><img src="img/Fantrikot2.png" alt="HSG Fantrikot Rückseite"></a>
+      </div>
+      <h3>HSG Fantrikot</h3>
+      <p>Original HSG Fantrikot in Vereinsfarben.</p>
+      <p><strong>24,90 €</strong></p>
+      <select id="size-trikot">
+        <option value="S">Größe S</option>
+        <option value="M">Größe M</option>
+        <option value="L">Größe L</option>
+        <option value="XL">Größe XL</option>
+      </select>
+      <button onclick="addToCart('HSG Fantrikot', 24.90, document.getElementById('size-trikot').value)">In den Warenkorb</button>
+    </div>
+
+    <!-- Fanshirt -->
+    <div class="product">
+      <a href="#shirt1"><img src="img/Fanshirt1.png" alt="Fanshirt"></a>
+      <div id="shirt1" class="lightbox">
+        <a href="#"><img src="img/Fanshirt1.png" alt="Fanshirt"></a>
+        <a href="#"><img src="img/Fanshirt2.png" alt="Fanshirt Rückseite"></a>
+      </div>
+      <h3>HSG Fanshirt</h3>
+      <p>Klassisches Shirt mit Vereinslogo.</p>
+      <p><strong>15,90 €</strong></p>
+      <select id="size-shirt">
+        <option value="S">Größe S</option>
+        <option value="M">Größe M</option>
+        <option value="L">Größe L</option>
+        <option value="XL">Größe XL</option>
+      </select>
+      <button onclick="addToCart('HSG Fanshirt', 15.90, document.getElementById('size-shirt').value)">In den Warenkorb</button>
+    </div>
+
+    <!-- Fansweater -->
+    <div class="product">
+      <a href="#sweater1"><img src="img/Sweater1.png" alt="Sweater"></a>
+      <div id="sweater1" class="lightbox">
+        <a href="#"><img src="img/Sweater1.png" alt="Sweater"></a>
+        <a href="#"><img src="img/Sweater2.png" alt="Sweater Rückseite"></a>
+      </div>
+      <h3>HSG Sweater</h3>
+      <p>Klassischer Sweater mit Vereinslogo.</p>
+      <p><strong>35,90 €</strong></p>
+      <select id="size-sweater">
+        <option value="S">Größe S</option>
+        <option value="M">Größe M</option>
+        <option value="L">Größe L</option>
+        <option value="XL">Größe XL</option>
+      </select>
+      <button onclick="addToCart('HSG Sweater', 35.90, document.getElementById('size-sweater').value)">In den Warenkorb</button>
+    </div>
+
+    <!-- Gürteltasche -->
+    <div class="product">
+      <a href="#guertel1"><img src="img/Guerteltasche.png" alt="Kempa Gürteltasche"></a>
+      <div id="guertel1" class="lightbox">
+        <a href="#"><img src="img/Guerteltasche.png" alt="Kempa Gürteltasche"></a>
+      </div>
+      <h3>Kempa Gürteltasche</h3>
+      <p>Praktische Bauchtasche im HSG-Style.</p>
+      <p><strong>19,90 €</strong></p>
+      <button onclick="addToCart('Kempa Gürteltasche', 19.90)">In den Warenkorb</button>
+    </div>
+  </div>
+
+  <div class="cart">
+    <h3>🛒 Warenkorb</h3>
+    <ul id="cart-items"></ul>
+    <div class="cart-summary">
+      Versand: <span id="shipping">0,00 €</span><br>
+      Rabatt: <span id="discount">0,00 €</span><br>
+      <strong>Gesamt: <span id="total">0,00 €</span></strong>
+    </div>
+
+    <h4>Versandoptionen</h4>
+    <select id="shipping-method" onchange="updateCart()">
+      <option value="0">Abholung (0,00 €)</option>
+      <option value="7.90">DHL (7,90 €)</option>
+      <option value="6.50">Hermes (6,50 €)</option>
+      <option value="12.90">Express (12,90 €)</option>
+    </select>
+
+    <h4>Rabattcode</h4>
+    <input type="text" id="coupon" placeholder="Code eingeben">
+    <button onclick="applyCoupon()">Einlösen</button>
+  </div>
+
+  <div class="admin-panel" id="admin-panel">
+    <h3>Admin: Rabattcode anlegen</h3>
+    <input type="text" id="newCode" placeholder="Code">
+    <input type="number" id="newDiscount" placeholder="Rabatt in €">
+    <button onclick="addCoupon()">Speichern</button>
+  </div>
+
+  <script>
+    let cart = [];
+    let coupons = { "HSG10": 10, "WELCOME5": 5 };
+    let discountValue = 0;
+
+    function addToCart(product, price, size = "") {
+      cart.push({ product, price, size });
+      updateCart();
+    }
+
+    function updateCart() {
+      const cartList = document.getElementById("cart-items");
+      cartList.innerHTML = "";
+      let subtotal = 0;
+      cart.forEach(item => {
+        subtotal += item.price;
+        const li = document.createElement("li");
+        li.textContent = `${item.product} ${item.size} - ${item.price.toFixed(2)} €`;
+        cartList.appendChild(li);
+      });
+
+      const shipping = parseFloat(document.getElementById("shipping-method").value);
+      document.getElementById("shipping").textContent = shipping.toFixed(2) + " €";
+      document.getElementById("discount").textContent = discountValue.toFixed(2) + " €";
+      const total = subtotal + shipping - discountValue;
+      document.getElementById("total").textContent = total.toFixed(2) + " €";
+    }
+
+    function applyCoupon() {
+      const code = document.getElementById("coupon").value.trim();
+      if (coupons[code]) {
+        discountValue = coupons[code];
+        alert("Rabattcode akzeptiert: -" + discountValue + " €");
+      } else {
+        discountValue = 0;
+        alert("Ungültiger Code");
+      }
+      updateCart();
+    }
+
+    function addCoupon() {
+      const code = document.getElementById("newCode").value.trim();
+      const value = parseFloat(document.getElementById("newDiscount").value);
+      if (code && value > 0) {
+        coupons[code] = value;
+        alert("Rabattcode hinzugefügt!");
+      }
+    }
+
+    // Passwortschutz Admin
+    const pwd = prompt("Admin-Passwort eingeben (oder leer lassen, wenn Kunde):");
+    if (pwd === "hsgadmin1906") {
+      document.getElementById("admin-panel").style.display = "block";
+    }
+  </script>
+</body>
+</html>
