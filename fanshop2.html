@@ -333,17 +333,21 @@ function initCarousels(){
 
 /* ================ LIGHTBOX ================ */
 function attachImageLightbox(){
-  document.querySelectorAll('.product img').forEach(img => {
-    img.addEventListener('click', ()=> {
+  document.querySelectorAll('.product img').forEach(img=>{
+    img.addEventListener('click', ()=>{
       const src = img.getAttribute('data-full') || img.src;
-      document.getElementById('lightbox-img').src = src;
+      const lightboxImg = document.getElementById('lightbox-img');
+      lightboxImg.src = src;
       document.getElementById('lightbox').style.display = 'flex';
     });
   });
 }
+
 function closeLightbox(){
-  document.getElementById('lightbox').style.display = 'none';
-  document.getElementById('lightbox-img').src = '';
+  const lightbox = document.getElementById('lightbox');
+  const lightboxImg = document.getElementById('lightbox-img');
+  lightbox.style.display = 'none';
+  lightboxImg.src = '';
 }
 
 /* ================ CART ================ */
