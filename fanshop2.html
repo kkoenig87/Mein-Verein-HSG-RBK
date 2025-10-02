@@ -483,29 +483,6 @@ function showToast(msg){
   clearTimeout(t._hide);
   t._hide = setTimeout(()=> t.style.display = 'none', 2400);
 }
-  /* ===== Lightbox-Anpassung ===== */
-.lightbox {
-  display: none;
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.85);
-  z-index: 2000;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 1rem; /* etwas Abstand zum Rand, damit Bild nicht direkt an Rand klebt */
-}
-
-.lightbox img {
-  max-width: 90vw;    /* Bild darf max 90% der Fensterbreite sein */
-  max-height: 90vh;   /* Bild darf max 90% der Fensterhöhe sein */
-  width: auto;
-  height: auto;
-  border-radius: 10px; /* optional, wie gehabt */
-  box-shadow: 0 8px 30px rgba(0,0,0,0.6); /* optional */
-  cursor: zoom-out;
-  object-fit: contain; /* wichtig: Bild bleibt vollständig sichtbar, nicht beschnitten */
-}
 </script>
 </body>
 </html>
