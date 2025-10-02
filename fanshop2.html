@@ -455,7 +455,7 @@ function loginAdmin(){
 }
 function generateDiscountCode(){
   const code = randomCode(12);
-  const value = 5.00; // fixed 5 EUR per request
+  const value = 12.00; // fixed 5 EUR per request
   codes.push({ code, value });
   saveCodes();
   populateAdminCodesList();
