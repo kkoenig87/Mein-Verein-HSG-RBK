@@ -202,7 +202,78 @@
 <body>
   <header>
     <h1>HSG Rü/Bau/Kö — Fanshop</h1>
+  <button class="menu-toggle">☰</button>
   </header>
+
+<div class="sidebar" id="sidebar">
+  <a href="index.html">🏠 Home</a>
+  <a href="a-team.html">👩‍👧 wA-Team</a>
+  <a href="b-team.html">👩‍👧 wB-Team</a>
+  <a href="stats.html">📊 Statistik</a>
+  <a href="hallen.html">🏟️ Hallen</a>
+  <a href="sponsoren.html">🤝 Sponsoren</a>
+  <a href="news.html">📰 News</a>
+  <a href="fanshop.html">🛒 Fanshop</a>
+</div>
+<div class="overlay" id="overlay"></div>
+
+  <section>
+    <h2>Mädels, willkommen in <b>eurer</b> eigenen Vereins-App!</h2>
+    <p>Hier findet ihr Infos zu unseren Mannschaften, aktuellen Spielen und Veranstaltungen.</p>
+  </section>
+
+  <section class="hero">
+    <img src="Mannschaft.png" alt="Mannschaftsfoto HSG RBK" class="team-photo">
+  </section>
+
+  <script>
+  if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.register("sw.js")
+      .then(() => console.log("✅ Service Worker registriert"))
+      .catch(err => console.error("❌ Service Worker Fehler:", err));
+  }
+  </script>
+  
+  <script>
+  const menuBtn = document.querySelector(".menu-toggle");
+  const sidebar = document.getElementById("sidebar");
+  const overlay = document.getElementById("overlay");
+
+  menuBtn.addEventListener("click", () => {
+    sidebar.classList.toggle("active");
+    overlay.classList.toggle("active");
+  });
+
+  overlay.addEventListener("click", () => {
+    sidebar.classList.remove("active");
+    overlay.classList.remove("active");
+  });
+</script>
+<script>
+if ("serviceWorker" in navigator && "PushManager" in window) {
+  navigator.serviceWorker.register("/service-worker.js")
+    .then(reg => console.log("Service Worker registriert", reg));
+
+  async function subscribeUser() {
+    const reg = await navigator.serviceWorker.ready;
+    const subscription = await reg.pushManager.subscribe({
+      userVisibleOnly: true,
+      applicationServerKey: "BAQc0wAaqIdZzFXjAKVPNXdFU_NllJAmJADLlutUJw7SwP9i2mYqylvdm8rQ6LrugfZ9nDgcstE2oycI3oHscnM"
+    });
+
+    // Subscription an den Render Push-Server senden
+    await fetch("https://hsg-rbk-push.onrender.com/subscribe", {
+      method: "POST",
+      body: JSON.stringify(subscription),
+      headers: { "Content-Type": "application/json" }
+    });
+
+    console.log("Push-Subscription erfolgreich:", subscription);
+  }
+
+  subscribeUser();
+}
+</script>
 
   <main>
     <!-- PRODUCTS -->
