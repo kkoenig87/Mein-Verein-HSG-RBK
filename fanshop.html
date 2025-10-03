@@ -421,7 +421,7 @@ if(!discountCodes){
     "WELCOME-10": { type:"percent", value:10 },
     "FREI-5EUR": { type:"amount", value:5 }
   };
-  localStorage.setItem(STORAGE_CODES, JSON.stringify(discountCodes));
+  sessionStorage.setItem('hsg_applied_discount', JSON.stringify(appliedDiscount));
 }
 let appliedDiscount = null; // {type, value, code}
 
@@ -584,7 +584,7 @@ function applyDiscountCode(){
     showToast(`Code ${raw} angewendet`);
   } else {
     appliedDiscount = null;
-    localStorage.removeItem('hsg_applied_discount');
+    sessionStorage.removeItem('hsg_applied_discount');
     showToast('Ungültiger Code');
   }
   renderCart();
@@ -690,7 +690,7 @@ window.addEventListener('DOMContentLoaded', ()=>{
   initCarousels();
   attachLightbox();
   // restore applied discount if any
-  const savedApplied = JSON.parse(localStorage.getItem('hsg_applied_discount') || 'null');
+  const savedApplied = JSON.parse(sessionStorage.getItem('hsg_applied_discount') || 'null');
   if(savedApplied) appliedDiscount = savedApplied;
   document.getElementById('shipping-option').addEventListener('change', renderCart);
   renderCart();
