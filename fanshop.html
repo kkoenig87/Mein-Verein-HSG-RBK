@@ -229,6 +229,7 @@
 ------------------------- */
 const STORAGE_CART = 'hsg_fanshop_cart_v_final';
 const STORAGE_CODES = 'hsg_fanshop_codes_v_final';
+const ADMIN_PASSWORD = "hsg2025"; // hier eigenes Passwort setzen
 let cart = JSON.parse(localStorage.getItem(STORAGE_CART) || '[]');
 let discountCodes = JSON.parse(localStorage.getItem(STORAGE_CODES) || 'null');
 if(!discountCodes){
@@ -417,7 +418,12 @@ function generateCodeString(len = 12){
   return code;
 }
 function createRandomCode(){
-  // quick UI: ask admin which type/value
+  const pwd = prompt("Bitte Admin-Passwort eingeben:");
+  if(pwd !== ADMIN_PASSWORD){
+    alert("Falsches Passwort.");
+    return;
+  }
+
   const type = prompt("Typ des Codes: 'percent' oder 'amount' oder 'shipping'","percent");
   if(!type) return;
   let value = 0;
@@ -429,9 +435,12 @@ function createRandomCode(){
   const newCode = generateCodeString(12);
   discountCodes[newCode] = { type, value };
   localStorage.setItem(STORAGE_CODES, JSON.stringify(discountCodes));
-  // copy to clipboard if possible + alert
-  try{ navigator.clipboard.writeText(newCode); alert(`Neuer Rabattcode erzeugt und kopiert:\n${newCode}`); }
-  catch(e){ alert(`Neuer Rabattcode erzeugt:\n${newCode}`); }
+  try{ 
+    navigator.clipboard.writeText(newCode); 
+    alert(`Neuer Rabattcode erzeugt und kopiert:\n${newCode}`); 
+  } catch(e){ 
+    alert(`Neuer Rabattcode erzeugt:\n${newCode}`); 
+  }
 }
 
 /* -------------------------
