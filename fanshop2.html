@@ -22,13 +22,47 @@ main{max-width:1100px;margin:1rem auto;padding:0 1rem}
 .product h3{margin:0.5rem 0;color:var(--brand);font-size:1.05rem}
 .small{font-size:0.92rem;color:var(--muted)}
 .price{font-weight:800;margin:0.4rem 0}
+  
+/* Carousel fix for mobile */
+.carousel {
+  position: relative;
+  display: block;
+  margin-bottom: 0.6rem;
+  overflow: hidden;
+  border-radius: 8px;
+  background: #fff;
+  padding: 0.6rem;
+  max-width: 100%;       /* NEU: verhindert, dass das Carousel breiter wird als der Screen */
+}
 
-/* Carousel / preview */
-.carousel{position:relative;display:block;margin-bottom:0.6rem;overflow:hidden;border-radius:8px;background:#fff;padding:0.6rem}
-.carousel-track{display:flex;transition:transform .28s ease;will-change:transform}
-.carousel-slide{flex:0 0 100%;display:flex;justify-content:center;align-items:center;padding:0}
-.carousel-slide img{max-width:100%;max-height:200px;object-fit:contain;border-radius:8px;cursor:pointer;display:block}
-@media(min-width:800px){ .carousel-slide img{max-height:240px} }
+.carousel-track {
+  display: flex;
+  transition: transform .28s ease;
+  will-change: transform;
+  width: 100%;           /* NEU: Track an Container binden */
+}
+
+.carousel-slide {
+  flex: 0 0 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0;
+  max-width: 100%;       /* NEU: kein Überstehen mehr */
+}
+
+.carousel-slide img {
+  max-width: 100%;
+  max-height: 200px;
+  object-fit: contain;
+  border-radius: 8px;
+  cursor: pointer;
+  display: block;
+}
+@media(min-width:800px){
+  .carousel-slide img{ max-height:240px }
+}
+
 
 /* small thumbnails hidden (we keep single preview but slider uses all images) */
 .carousel-btn{position:absolute;top:50%;transform:translateY(-50%);background:rgba(0,0,0,0.45);border:0;color:#fff;padding:6px 8px;border-radius:6px;cursor:pointer;z-index:5}
