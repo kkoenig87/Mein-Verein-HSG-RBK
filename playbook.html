@@ -195,43 +195,30 @@
 
     function savePlays(){ localStorage.setItem(STORAGE_KEY, JSON.stringify(plays)); }
 
-    async function addPlay(e){
-      e.preventDefault();
-      const title = document.getElementById("play-title").value.trim();
-      const desc = document.getElementById("play-desc").value.trim();
-      const cat = document.getElementById("play-cat").value;
-      const pos = document.getElementById("play-pos").value;
-      const srcType = document.getElementById("play-srcType").value;
-      const src = document.getElementById("play-src").value.trim();
-      if(!title||!src){ alert("Bitte Titel und Videoquelle angeben!"); return; }
-      const play={title,desc,cat,pos,srcType,src};
+async function addPlay(e){
+  e.preventDefault();
+  const title = document.getElementById("play-title").value.trim();
+  const desc = document.getElementById("play-desc").value.trim();
+  const cat = document.getElementById("play-cat").value;
+  const pos = document.getElementById("play-pos").value;
+  const srcType = document.getElementById("play-srcType").value;
+  const src = document.getElementById("play-src").value.trim();
+  if(!title||!src){ alert("Bitte Titel und Videoquelle angeben!"); return; }
 
-      try {
-        const res = await fetch(API_URL, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ play }) // server erwartet { play }
-        });
-        if (!res.ok) {
-          throw new Error('Speichern fehlgeschlagen: ' + res.status);
-        }
-        const data = await res.json();
-        // server liefert optional updated plays
-        if (data && Array.isArray(data.plays)) {
-          plays = data.plays;
-        } else {
-          // fallback - lade neu
-          const reload = await fetch(API_URL);
-          plays = await reload.json();
-        }
-        savePlays();
-        renderPlays();
-        e.target.reset();
-      } catch (err) {
-        console.error('Fehler beim Speichern', err);
-        alert('Fehler beim Speichern des Spielzugs. Schau in die Konsole.');
-      }
-    }
+  const play={title,desc,cat,pos,srcType,src};
+
+  const res = await fetch('/api/plays', {
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({ play })
+  });
+  const data = await res.json();
+  if(data.success){
+    plays = data.plays;
+    renderPlays();
+    e.target.reset();
+  } else alert("Fehler beim Speichern!");
+}
 
     function renderPlays(){
       const container=document.getElementById("plays");
@@ -261,25 +248,15 @@
       return `https://www.youtube.com/embed/${id}`; 
     }
 
-    async function deletePlay(idx){ 
-      if(!confirm("Diesen Spielzug wirklich löschen?")) return;
-      try {
-        const res = await fetch(`${API_URL}/${idx}`, { method: 'DELETE' });
-        if (!res.ok) throw new Error('Löschen fehlgeschlagen: ' + res.status);
-        const data = await res.json();
-        if (data && Array.isArray(data.plays)) plays = data.plays;
-        else {
-          // fallback reload
-          const reload = await fetch(API_URL);
-          plays = await reload.json();
-        }
-        savePlays();
-        renderPlays();
-      } catch (err) {
-        console.error('Fehler beim Löschen', err);
-        alert('Fehler beim Löschen des Spielzugs. Schau in die Konsole.');
-      }
-    }
+async function deletePlay(idx){ 
+  if(!confirm("Diesen Spielzug wirklich löschen?")) return;
+  const res = await fetch(`/api/plays/${idx}`, { method:'DELETE' });
+  const data = await res.json();
+  if(data.success){
+    plays = data.plays;
+    renderPlays();
+  } else alert("Fehler beim Löschen!");
+}
   </script>
 </body>
 </html>
