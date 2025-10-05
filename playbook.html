@@ -6,22 +6,19 @@
   <title>🏐 Playbook – HSG Rü/Bau/Kö</title>
   <link rel="manifest" href="manifest.json" />
   <style>
-    /* === Basis-App-Styles aus deiner index.html === */
+    /* === Basis-App-Styles === */
     body { font-family: sans-serif; margin:0; padding:0; background:#ffffff; color:#000; }
-    nav { display:flex; justify-content:center; gap:1rem; background:#000; padding:0.5rem; }
-    nav a { color:#fff; text-decoration:none; font-weight:bold; padding:0.5rem 1rem; border-radius:5px; transition: background 0.3s; }
-    nav a:hover { background:#ff00a0; color:#fff; }
     header { background:#ff00a0; color:#fff; padding:1rem; display:flex; justify-content:center; align-items:center; position:relative; }
     header h1 { margin:0; font-size:1.4rem; text-align:center; line-height:1.4; flex:1; }
     .menu-toggle { font-size:1.8rem; cursor:pointer; background:none; border:none; color:#fff; position:absolute; right:1rem; }
     .sidebar { position:fixed; top:0; right:-250px; width:250px; height:100%; background:rgba(0,0,0,0.9); color:#fff; transition:right 0.3s ease; padding-top:2rem; z-index:1000; }
     .sidebar.active { right:0; }
     .sidebar a { display:block; padding:1rem; color:#fff; text-decoration:none; font-weight:bold; }
-    .sidebar a:hover { background:#ff00a0; }
+    .sidebar a:hover { background:#cc0080; }
     .overlay { position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); display:none; z-index:500; }
     .overlay.active { display:block; }
 
-    /* === Playbook-spezifische Styles === */
+    /* === Playbook-Styles === */
     main { max-width:1000px; margin:1rem auto; padding:0 1rem; }
     .plays { display:grid; grid-template-columns:repeat(auto-fit, minmax(280px,1fr)); gap:1rem; }
     .play { background:#fff; border-radius:10px; box-shadow:0 6px 18px rgba(0,0,0,0.06); padding:0.8rem; }
@@ -30,14 +27,15 @@
     .play video, .play iframe { width:100%; border-radius:8px; margin-top:0.4rem; background:#000; aspect-ratio:16/9; }
     .admin-panel { background:#fff; padding:1rem; border-radius:10px; box-shadow:0 6px 18px rgba(0,0,0,0.06); margin-bottom:1rem; }
     .admin-panel h2 { margin-top:0; color:#cc0080; }
-    .login-screen { display:flex; justify-content:center; align-items:center; height:100vh; background:#fff; flex-direction:column; gap:1rem; text-align:center; }
+    .login-screen { display:flex; justify-content:center; align-items:center; height:100vh; background:#fff; flex-direction:column; gap:1rem; text-align:center; z-index:2000; position:fixed; top:0; left:0; width:100%; }
     .login-screen input { padding:0.5rem; border:1px solid #ccc; border-radius:6px; width:220px; text-align:center; }
     button { background:#ff00a0; color:#fff; border:0; border-radius:6px; padding:0.45rem 0.7rem; cursor:pointer; }
     button:hover { background:#cc0080; }
+    .hidden { display:none !important; }
   </style>
 </head>
 <body>
-  <!-- Header & Sidebar übernehmen -->
+  <!-- Header & Sidebar -->
   <header>
     <h1>HSG Rü/Bau/Kö – Digitales Playbook</h1>
     <button class="menu-toggle">☰</button>
@@ -55,16 +53,18 @@
   </div>
   <div class="overlay" id="overlay"></div>
 
-  <!-- === Content Bereich === -->
+  <!-- LOGIN -->
   <div id="login" class="login-screen">
     <h2>🔒 HSG Playbook Login</h2>
     <input type="password" id="pw" placeholder="Passwort eingeben">
-    <button onclick="login()">Login</button>
+    <button id="loginBtn">Login</button>
     <p style="font-size:0.9rem;color:#666;">Nur für Teammitglieder und Coaches</p>
   </div>
 
+  <!-- CONTENT -->
   <div id="content" class="hidden">
     <main>
+      <!-- Admin -->
       <section id="admin-section" class="admin-panel hidden">
         <h2>Coach Verwaltungsbereich</h2>
         <form id="addPlayForm" onsubmit="addPlay(event)">
@@ -88,6 +88,7 @@
         </form>
       </section>
 
+      <!-- Übersicht -->
       <section>
         <h2>📖 Spielzüge</h2>
         <div id="plays" class="plays"></div>
@@ -96,7 +97,7 @@
   </div>
 
   <script>
-    // Menü Toggle
+    // Sidebar Toggle
     const menuBtn = document.querySelector(".menu-toggle");
     const sidebar = document.getElementById("sidebar");
     const overlay = document.getElementById("overlay");
@@ -107,18 +108,20 @@
     const PLAYER_PW = "hsg2025!";
     const ADMIN_PW = "coach2025!";
     let isAdmin = false;
-
     const STORAGE_KEY = "hsg_playbook_v1";
     let plays = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
-
-    const API_URL = '/api/plays'; // für Render-Server
+    const API_URL = '/playbook/api/plays'; // <-- auf Render prüfen!
 
     function login() {
       const input = document.getElementById("pw").value.trim();
-      if(input === PLAYER_PW){ isAdmin = false; startApp(); }
-      else if(input === ADMIN_PW){ isAdmin = true; startApp(); }
+      if(input === PLAYER_PW){ isAdmin=false; startApp(); }
+      else if(input === ADMIN_PW){ isAdmin=true; startApp(); }
       else alert("Falsches Passwort!");
     }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      document.getElementById('loginBtn').addEventListener('click', login);
+    });
 
     function startApp() {
       document.getElementById("login").classList.add("hidden");
@@ -136,23 +139,21 @@
       const cat = document.getElementById("play-cat").value;
       const srcType = document.getElementById("play-srcType").value;
       const src = document.getElementById("play-src").value.trim();
-      if(!title || !src){ alert("Bitte Titel und Videoquelle angeben!"); return; }
-      const play = {title, desc, cat, srcType, src};
+      if(!title||!src){ alert("Bitte Titel und Videoquelle angeben!"); return; }
+      const play={title,desc,cat,srcType,src};
       plays.push(play);
       savePlays();
       renderPlays();
       e.target.reset();
-
-      // optional: auf API speichern
-      fetch(API_URL, { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({play}) });
+      fetch(API_URL, {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({play})});
     }
 
     function renderPlays(){
       const container = document.getElementById("plays");
-      container.innerHTML = "";
-      if(plays.length === 0){ container.innerHTML = "<p style='color:#666'>Noch keine Spielzüge vorhanden.</p>"; return; }
-      plays.forEach((p, idx)=>{
-        const div = document.createElement("div");
+      container.innerHTML="";
+      if(plays.length===0){ container.innerHTML="<p style='color:#666'>Noch keine Spielzüge vorhanden.</p>"; return; }
+      plays.forEach((p,idx)=>{
+        const div=document.createElement("div");
         div.className="play";
         div.innerHTML=`
           <h3>${p.title}</h3>
@@ -165,9 +166,9 @@
       });
     }
 
-    function convertToEmbed(url){ 
+    function convertToEmbed(url){
       if(!url.includes("youtube")) return url;
-      const id = url.split("v=")[1]?.split("&")[0];
+      const id=url.split("v=")[1]?.split("&")[0];
       return `https://www.youtube.com/embed/${id}`;
     }
 
@@ -176,14 +177,14 @@
       plays.splice(idx,1);
       savePlays();
       renderPlays();
-      fetch(`${API_URL}/${idx}`, {method:'DELETE'});
+      fetch(`${API_URL}/${idx}`,{method:'DELETE'});
     }
 
-    // initial API-Laden
+    // optional: API laden
     fetch(API_URL)
       .then(res=>res.json())
-      .then(data=>{ if(data && Array.isArray(data)) plays=data; renderPlays(); })
-      .catch(err=>console.error("Fehler beim Laden der Spielzüge", err));
+      .then(data=>{ if(Array.isArray(data)) { plays=data; renderPlays(); }})
+      .catch(err=>console.error("Fehler beim Laden der Spielzüge",err));
   </script>
 </body>
 </html>
