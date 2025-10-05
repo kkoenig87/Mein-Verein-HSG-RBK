@@ -66,4 +66,36 @@ app.post('/api/plays', (req, res) => {
     let plays = JSON.parse(fs.readFileSync(playsFile, 'utf8'));
     if (play) plays.push(play);
     fs.writeFileSync(playsFile, JSON.stringify(plays, null, 2), 'utf8');
-    res.json({ success: tru
+    res.json({ success: true, plays });
+  } catch (err) {
+    console.error('Fehler beim Speichern:', err);
+    res.status(500).json({ error: 'Fehler beim Speichern' });
+  }
+});
+
+// Spielzug löschen
+app.delete('/api/plays/:id', (req, res) => {
+  try {
+    ensurePlaysFile();
+    const id = parseInt(req.params.id);
+    let plays = JSON.parse(fs.readFileSync(playsFile, 'utf8'));
+    if (!isNaN(id) && id >= 0 && id < plays.length) plays.splice(id, 1);
+    fs.writeFileSync(playsFile, JSON.stringify(plays, null, 2), 'utf8');
+    res.json({ success: true, plays });
+  } catch (err) {
+    console.error('Fehler beim Löschen:', err);
+    res.status(500).json({ error: 'Fehler beim Löschen' });
+  }
+});
+
+// --- ROUTING ---
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'index.html'));
+});
+
+app.get('/playbook', (req, res) => {
+  res.sendFile(path.join(__dirname, 'playbook.html'));
+});
+
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => console.log(`✅ Server läuft auf Port ${PORT}`));
