@@ -166,13 +166,28 @@ function startApp() {
 
 async function loadPlays() {
   try {
-    const res = await fetch(API_URL);
-    if (!res.ok) throw new Error('Network response not ok');
-    plays = await res.json();
-    renderPlays();
+    const response = await fetch(API_URL);
+    const plays = await response.json();
+    return plays;
   } catch (err) {
-    console.error(err);
-    alert("Fehler beim Laden der Spielzüge");
+    console.error('Fehler beim Laden der Spielzüge:', err);
+    alert('Fehler beim Laden der Spielzüge');
+    return [];
+  }
+}
+
+async function savePlay(play) {
+  try {
+    const response = await fetch(API_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ play })
+    });
+    const data = await response.json();
+    return data;
+  } catch (err) {
+    console.error('Fehler beim Speichern:', err);
+    alert('Fehler beim Speichern des Spielzugs');
   }
 }
 
@@ -208,24 +223,14 @@ async function addPlay(e) {
   }
 }
 
-async function deletePlay(idx) {
-  if (!confirm("Diesen Spielzug wirklich löschen?")) return;
+async function deletePlayOnServer(id) {
   try {
-    const res = await fetch(`${API_URL}/${idx}`, {
-      method: 'DELETE',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ password: ADMIN_PW })
-    });
-    const data = await res.json();
-    if (data.success) {
-      plays = data.plays || [];
-      renderPlays();
-    } else {
-      alert(data.error || 'Fehler beim Löschen');
-    }
+    const response = await fetch(`${API_URL}/${id}`, { method: 'DELETE' });
+    const data = await response.json();
+    return data;
   } catch (err) {
-    console.error(err);
-    alert('Fehler beim Löschen');
+    console.error('Fehler beim Löschen:', err);
+    alert('Fehler beim Löschen des Spielzugs');
   }
 }
 
