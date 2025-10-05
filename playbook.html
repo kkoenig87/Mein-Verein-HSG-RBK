@@ -25,8 +25,34 @@
     .play h3 { margin:0.4rem 0; color:#cc0080; }
     .play p { color:#666; font-size:0.9rem; }
     .play video, .play iframe { width:100%; border-radius:8px; margin-top:0.4rem; background:#000; aspect-ratio:16/9; }
-    .admin-panel { background:#fff; padding:1rem; border-radius:10px; box-shadow:0 6px 18px rgba(0,0,0,0.06); margin-bottom:1rem; }
-    .admin-panel h2 { margin-top:0; color:#cc0080; }
+    
+/* Adminbereich */
+.admin-panel form {
+  display: flex;
+  flex-direction: column; /* Alles untereinander */
+  gap: 0.5rem;            /* Abstand zwischen Feldern */
+}
+
+.admin-panel label {
+  font-weight: 600;
+  margin-top: 0.5rem;
+}
+
+.admin-panel input,
+.admin-panel textarea,
+.admin-panel select {
+  width: 100%;
+  padding: 0.45rem;
+  border-radius: 6px;
+  border: 1px solid #ddd;
+  margin-top: 0.25rem;
+}
+
+.admin-panel button {
+  margin-top: 0.5rem;
+  align-self: flex-start; /* Button linksbündig */
+}
+    
     .login-screen { display:flex; justify-content:center; align-items:center; height:100vh; background:#fff; flex-direction:column; gap:1rem; text-align:center; z-index:2000; position:fixed; top:0; left:0; width:100%; }
     .login-screen input { padding:0.5rem; border:1px solid #ccc; border-radius:6px; width:220px; text-align:center; }
     button { background:#ff00a0; color:#fff; border:0; border-radius:6px; padding:0.45rem 0.7rem; cursor:pointer; }
