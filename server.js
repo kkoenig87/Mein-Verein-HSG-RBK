@@ -8,7 +8,7 @@ const app = express();
 app.use(bodyParser.json());
 app.use(express.static(__dirname));
 
-// --- WEBPUSH CONFIG ---
+// === WEB PUSH (unverändert) ===
 const subscriptions = [];
 webpush.setVapidDetails(
   'mailto:123derkai@web.de',
@@ -24,45 +24,73 @@ app.post('/subscribe', (req, res) => {
 
 app.post('/send-notification', (req, res) => {
   const payload = JSON.stringify(req.body);
-  subscriptions.forEach(sub => webpush.sendNotification(sub, payload).catch(console.error));
+  subscriptions.forEach(sub =>
+    webpush.sendNotification(sub, payload).catch(console.error)
+  );
   res.status(200).json({ message: 'Push gesendet!' });
 });
 
-// --- SPIELZUG API ---
+// === PLAYBOOK API ===
 const apiDir = path.join(__dirname, 'api');
 const playsFile = path.join(apiDir, 'plays.json');
 
-function ensurePlaysFile() {
+function ensureFile() {
   if (!fs.existsSync(apiDir)) fs.mkdirSync(apiDir);
   if (!fs.existsSync(playsFile)) fs.writeFileSync(playsFile, '[]', 'utf8');
 }
 
-// GET
+// GET alle Spielzüge
 app.get('/api/plays', (req, res) => {
-  ensurePlaysFile();
+  ensureFile();
   try {
     const data = JSON.parse(fs.readFileSync(playsFile, 'utf8'));
     res.json(data);
   } catch (err) {
-    console.error('Fehler beim Lesen:', err);
-    res.status(500).json({ error: 'Fehler beim Laden der Spielzüge' });
+    console.error(err);
+    res.status(500).json({ error: 'Fehler beim Laden' });
   }
 });
 
-// POST
+// POST neuen Spielzug
 app.post('/api/plays', (req, res) => {
-  ensurePlaysFile();
+  ensureFile();
   try {
     const newPlay = req.body.play;
-    const data = JSON.parse(fs.readFileSync(playsFile, 'utf8'));
-    data.push(newPlay);
-    fs.writeFileSync(playsFile, JSON.stringify(data, null, 2), 'utf8');
-    res.json({ success: true, plays: data });
+    const plays = JSON.parse(fs.readFileSync(playsFile, 'utf8'));
+    plays.push(newPlay);
+    fs.writeFileSync(playsFile, JSON.stringify(plays, null, 2), 'utf8');
+    console.log('Neuer Spielzug gespeichert:', newPlay.title);
+    res.json({ success: true, plays });
   } catch (err) {
-    console.error('Fehler beim Speichern:', err);
+    console.error(err);
     res.status(500).json({ error: 'Fehler beim Speichern' });
   }
 });
 
-// DELETE
-app.delete('/api/plays/:id', (
+// DELETE Spielzug per Index
+app.delete('/api/plays/:id', (req, res) => {
+  ensureFile();
+  try {
+    const id = parseInt(req.params.id);
+    const plays = JSON.parse(fs.readFileSync(playsFile, 'utf8'));
+    if (id >= 0 && id < plays.length) {
+      const removed = plays.splice(id, 1);
+      console.log('Gelöschter Spielzug:', removed[0]?.title);
+      fs.writeFileSync(playsFile, JSON.stringify(plays, null, 2), 'utf8');
+      res.json({ success: true, plays });
+    } else {
+      res.status(404).json({ error: 'Index ungültig' });
+    }
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Fehler beim Löschen' });
+  }
+});
+
+// Root auf playbook.html leiten
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'playbook.html'));
+});
+
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => console.log(`✅ Server läuft auf Port ${PORT}`));
