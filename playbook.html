@@ -3,259 +3,283 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>HSG RBK Playbook</title>
-  <link rel="stylesheet" href="style.css" />
+  <title>🏐 Playbook – HSG Rü/Bau/Kö</title>
+  <link rel="manifest" href="manifest.json" />
   <style>
-    body {
-      font-family: 'Arial', sans-serif;
-      margin: 0;
-      background: #f4f4f4;
-    }
+    /* === Basis-App-Styles === */
+    body { font-family: sans-serif; margin:0; padding:0; background:#ffffff; color:#000; }
+    header { background:#ff00a0; color:#fff; padding:1rem; display:flex; justify-content:center; align-items:center; position:relative; }
+    header h1 { margin:0; font-size:1.4rem; text-align:center; line-height:1.4; flex:1; }
+    .menu-toggle { font-size:1.8rem; cursor:pointer; background:none; border:none; color:#fff; position:absolute; right:1rem; }
+    .sidebar { position:fixed; top:0; right:-250px; width:250px; height:100%; background:rgba(0,0,0,0.9); color:#fff; transition:right 0.3s ease; padding-top:2rem; z-index:1000; }
+    .sidebar.active { right:0; }
+    .sidebar a { display:block; padding:1rem; color:#fff; text-decoration:none; font-weight:bold; }
+    .sidebar a:hover { background:#cc0080; }
+    .overlay { position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); display:none; z-index:500; }
+    .overlay.active { display:block; }
 
-    header {
-      background-color: #b00020;
-      color: white;
-      padding: 15px;
-      text-align: center;
-      font-size: 20px;
-      font-weight: bold;
-    }
+    /* === Playbook-Styles === */
+    main { max-width:1000px; margin:1rem auto; padding:0 1rem; }
+    .plays { display:grid; grid-template-columns:repeat(auto-fit, minmax(280px,1fr)); gap:1rem; }
+    .play { background:#fff; border-radius:10px; box-shadow:0 6px 18px rgba(0,0,0,0.06); padding:0.8rem; }
+    .play h3 { margin:0.4rem 0; color:#cc0080; }
+    .play p { color:#666; font-size:0.9rem; }
+    .play video, .play iframe { width:100%; border-radius:8px; margin-top:0.4rem; background:#000; aspect-ratio:16/9; }
 
-    main {
-      padding: 20px;
-      max-width: 900px;
-      margin: 0 auto;
-    }
+    /* Adminbereich */
+    .admin-panel { background:#fff; padding:1rem; border-radius:10px; box-shadow:0 6px 18px rgba(0,0,0,0.06); margin-bottom:1rem; }
+    .admin-panel h2 { margin-top:0; color:#cc0080; }
+    .admin-panel form { display:flex; flex-direction:column; gap:0.5rem; }
+    .admin-panel label { font-weight:600; margin-top:0.5rem; }
+    .admin-panel input, .admin-panel textarea, .admin-panel select { width:100%; padding:0.45rem; border-radius:6px; border:1px solid #ddd; margin-top:0.25rem; }
+    .admin-panel button { margin-top:0.5rem; align-self:flex-start; }
 
-    h2 {
-      color: #b00020;
-      margin-top: 30px;
-    }
+    /* Login */
+    .login-screen { display:flex; justify-content:center; align-items:center; height:100vh; background:#fff; flex-direction:column; gap:1rem; text-align:center; z-index:2000; position:fixed; top:0; left:0; width:100%; }
+    .login-screen input { padding:0.5rem; border:1px solid #ccc; border-radius:6px; width:220px; text-align:center; }
+    button { background:#ff00a0; color:#fff; border:0; border-radius:6px; padding:0.45rem 0.7rem; cursor:pointer; }
+    button:hover { background:#cc0080; }
 
-    .filters {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-      margin-bottom: 15px;
-    }
+    /* Filter */
+    #filters { margin-bottom:1rem; }
+    #filters select { margin-bottom:0.5rem; }
 
-    select, input {
-      padding: 8px;
-      border-radius: 5px;
-      border: 1px solid #ccc;
-      font-size: 14px;
-    }
-
-    .play {
-      background: white;
-      padding: 15px;
-      border-radius: 10px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-      margin-bottom: 15px;
-    }
-
-    .play h3 {
-      margin-top: 0;
-      color: #333;
-    }
-
-    iframe {
-      width: 100%;
-      height: 250px;
-      border: none;
-      border-radius: 10px;
-    }
-
-    .admin-section {
-      margin-top: 40px;
-      background: #fff;
-      padding: 15px;
-      border-radius: 10px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    }
-
-    .admin-section input, .admin-section select, .admin-section textarea, .admin-section button {
-      display: block;
-      width: 100%;
-      margin-bottom: 10px;
-      padding: 8px;
-      border-radius: 6px;
-      border: 1px solid #ccc;
-    }
-
-    .admin-section button {
-      background: #b00020;
-      color: white;
-      font-weight: bold;
-      cursor: pointer;
-      transition: background 0.3s;
-    }
-
-    .admin-section button:hover {
-      background: #7a0016;
-    }
-
-    footer {
-      text-align: center;
-      padding: 20px;
-      background: #222;
-      color: white;
-      margin-top: 40px;
-    }
-
-    .hidden {
-      display: none;
-    }
+    .hidden { display:none !important; }
   </style>
 </head>
 <body>
-  <header>HSG RBK Playbook</header>
+  <!-- Header & Sidebar -->
+  <header>
+    <h1>HSG Rü/Bau/Kö – Playbook</h1>
+    <button class="menu-toggle">☰</button>
+  </header>
+  <div class="sidebar" id="sidebar">
+    <a href="index.html">🏠 Home</a>
+    <a href="a-team.html">👩‍👧 wA-Team</a>
+    <a href="b-team.html">👩‍👧 wB-Team</a>
+    <a href="stats.html">📊 Statistik</a>
+    <a href="hallen.html">🏟️ Hallen</a>
+    <a href="sponsoren.html">🤝 Sponsoren</a>
+    <a href="news.html">📰 News</a>
+    <a href="fanshop.html">🛒 Fanshop</a>
+    <a href="playbook.html">🏐 Playbook</a>
+  </div>
+  <div class="overlay" id="overlay"></div>
 
-  <main>
-    <div class="filters">
-      <select id="categoryFilter">
-        <option value="">Kategorie (alle)</option>
-        <option value="Angriff">Angriff</option>
-        <option value="Abwehr">Abwehr</option>
-        <option value="Umschalten">Umschalten</option>
-      </select>
+  <!-- LOGIN -->
+  <div id="login" class="login-screen">
+    <h2>🔒 HSG Playbook Login</h2>
+    <input type="password" id="pw" placeholder="Passwort eingeben">
+    <button id="loginBtn">Login</button>
+    <p style="font-size:0.9rem;color:#666;">Nur für Teammitglieder und Coaches</p>
+  </div>
 
-      <select id="positionFilter">
-        <option value="">Position (alle)</option>
-        <option value="Rückraum">Rückraum</option>
-        <option value="Außen">Außen</option>
-        <option value="Kreis">Kreis</option>
-        <option value="Tor">Tor</option>
-      </select>
+  <!-- CONTENT -->
+  <div id="content" class="hidden">
+    <main>
+      <!-- Adminbereich -->
+      <section id="admin-section" class="admin-panel hidden">
+        <h2>Coach Verwaltungsbereich</h2>
+        <form id="addPlayForm" onsubmit="addPlay(event)">
+          <label>Titel des Spielzugs</label>
+          <input id="play-title" required>
+          <label>Beschreibung</label>
+          <textarea id="play-desc" rows="2" required></textarea>
+          <label>Kategorie</label>
+          <select id="play-cat">
+            <option>Angriff</option>
+            <option>Abwehr</option>
+            <option>Standard</option>
+          </select>
+          <label>Position</label>
+          <select id="play-pos">
+            <option>Außen</option>
+            <option>Halbe</option>
+            <option>Kreis</option>
+            <option>Rückraum</option>
+          </select>
+          <label>Videoquelle</label>
+          <select id="play-srcType">
+            <option value="youtube">YouTube-Link</option>
+            <option value="mp4">MP4-Datei</option>
+          </select>
+          <input id="play-src" placeholder="YouTube-URL oder Pfad zur MP4">
+          <button type="submit">➕ Spielzug speichern</button>
+        </form>
+      </section>
 
-      <input type="text" id="searchInput" placeholder="Suche nach Titel...">
-    </div>
+      <!-- Filter -->
+      <section id="filters" class="admin-panel">
+        <h2>Filter Spielzüge</h2>
+        <label>Kategorie:</label>
+        <select id="filter-cat" onchange="renderPlays()">
+          <option value="">Alle</option>
+          <option>Angriff</option>
+          <option>Abwehr</option>
+          <option>Überzahl</option>
+          <option>Unterzahl</option>
+        </select>
+        <label>Position:</label>
+        <select id="filter-pos" onchange="renderPlays()">
+          <option value="">Alle</option>
+          <option>Außen</option>
+          <option>Halbe</option>
+          <option>Kreis</option>
+          <option>Rückraum</option>
+        </select>
+      </section>
 
-    <div id="playsContainer"></div>
-
-    <div class="admin-section hidden" id="adminSection">
-      <h2>Admin-Konsole</h2>
-      <input type="text" id="titleInput" placeholder="Titel">
-      <textarea id="descInput" placeholder="Beschreibung"></textarea>
-      <input type="text" id="youtubeInput" placeholder="YouTube-Link (z. B. https://www.youtube.com/watch?v=XXXX)">
-      <select id="categoryInput">
-        <option value="">Kategorie wählen</option>
-        <option value="Angriff">Angriff</option>
-        <option value="Abwehr">Abwehr</option>
-        <option value="Umschalten">Umschalten</option>
-      </select>
-      <select id="positionInput">
-        <option value="">Position wählen</option>
-        <option value="Rückraum">Rückraum</option>
-        <option value="Außen">Außen</option>
-        <option value="Kreis">Kreis</option>
-        <option value="Tor">Tor</option>
-      </select>
-      <button id="savePlay">💾 Spielzug speichern</button>
-    </div>
-  </main>
-
-  <footer>© 2025 HSG RBK</footer>
+      <!-- Playbook Übersicht -->
+      <section>
+        <h2>📖 Spielzüge</h2>
+        <div id="plays" class="plays"></div>
+      </section>
+    </main>
+  </div>
 
   <script>
+    // Sidebar Toggle
+    const menuBtn = document.querySelector(".menu-toggle");
+    const sidebar = document.getElementById("sidebar");
+    const overlay = document.getElementById("overlay");
+    menuBtn.addEventListener("click", () => { sidebar.classList.toggle("active"); overlay.classList.toggle("active"); });
+    overlay.addEventListener("click", () => { sidebar.classList.remove("active"); overlay.classList.remove("active"); });
+
+    // Login
+    const PLAYER_PW = "hsg2025!";
+    const ADMIN_PW = "coach2025!";
+    let isAdmin = false;
+    const STORAGE_KEY = "hsg_playbook_v1";
+    // Fallback: localStorage keeps offline copies; server is source of truth
+    let plays = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
     const API_URL = '/api/plays';
-    const adminPassword = 'flames2025'; // 🔐 Beispielpasswort
 
-    const playsContainer = document.getElementById('playsContainer');
-    const adminSection = document.getElementById('adminSection');
-    const savePlayBtn = document.getElementById('savePlay');
+    function login() {
+      const input = document.getElementById("pw").value.trim();
+      if(input === PLAYER_PW){ isAdmin=false; startApp(); }
+      else if(input === ADMIN_PW){ isAdmin=true; startApp(); }
+      else alert("Falsches Passwort!");
+    }
 
-    const filters = {
-      category: document.getElementById('categoryFilter'),
-      position: document.getElementById('positionFilter'),
-      search: document.getElementById('searchInput')
-    };
+    document.addEventListener('DOMContentLoaded', () => {
+      document.getElementById('loginBtn').addEventListener('click', login);
 
-    let plays = [];
+      // Lade vom Server (robust)
+      fetch(API_URL).then(res => {
+        if (!res.ok) throw new Error('Network response not ok: ' + res.status);
+        return res.json();
+      })
+      .then(data => {
+        if (Array.isArray(data)) {
+          plays = data;
+          // update local copy
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(plays));
+          renderPlays();
+        } else {
+          renderPlays(); // fallback
+        }
+      })
+      .catch(err => {
+        console.error("Fehler beim Laden der Spielzüge", err);
+        // Zeige lokale Kopie, falls vorhanden
+        renderPlays();
+      });
+    });
 
-    async function loadPlays() {
+    function startApp() {
+      document.getElementById("login").classList.add("hidden");
+      document.getElementById("content").classList.remove("hidden");
+      if(isAdmin) document.getElementById("admin-section").classList.remove("hidden");
+      renderPlays();
+    }
+
+    function savePlays(){ localStorage.setItem(STORAGE_KEY, JSON.stringify(plays)); }
+
+    async function addPlay(e){
+      e.preventDefault();
+      const title = document.getElementById("play-title").value.trim();
+      const desc = document.getElementById("play-desc").value.trim();
+      const cat = document.getElementById("play-cat").value;
+      const pos = document.getElementById("play-pos").value;
+      const srcType = document.getElementById("play-srcType").value;
+      const src = document.getElementById("play-src").value.trim();
+      if(!title||!src){ alert("Bitte Titel und Videoquelle angeben!"); return; }
+      const play={title,desc,cat,pos,srcType,src};
+
       try {
-        const response = await fetch(API_URL);
-        plays = await response.json();
+        const res = await fetch(API_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ play }) // server erwartet { play }
+        });
+        if (!res.ok) {
+          throw new Error('Speichern fehlgeschlagen: ' + res.status);
+        }
+        const data = await res.json();
+        // server liefert optional updated plays
+        if (data && Array.isArray(data.plays)) {
+          plays = data.plays;
+        } else {
+          // fallback - lade neu
+          const reload = await fetch(API_URL);
+          plays = await reload.json();
+        }
+        savePlays();
+        renderPlays();
+        e.target.reset();
+      } catch (err) {
+        console.error('Fehler beim Speichern', err);
+        alert('Fehler beim Speichern des Spielzugs. Schau in die Konsole.');
+      }
+    }
+
+    function renderPlays(){
+      const container=document.getElementById("plays");
+      container.innerHTML="";
+      const catFilter=document.getElementById("filter-cat").value;
+      const posFilter=document.getElementById("filter-pos").value;
+      const filtered=plays.filter(p=> (catFilter===""||p.cat===catFilter) && (posFilter===""||p.pos===posFilter) );
+      if(filtered.length===0){ container.innerHTML="<p style='color:#666'>Keine Spielzüge gefunden.</p>"; return; }
+      filtered.forEach((p,idx)=>{
+        const div=document.createElement("div");
+        div.className="play";
+        div.innerHTML=`
+          <h3>${p.title}</h3>
+          <p><strong>Kategorie:</strong> ${p.cat}</p>
+          <p><strong>Position:</strong> ${p.pos || "-"}</p>
+          <p>${p.desc}</p>
+          ${p.srcType==="youtube"? `<iframe src="${convertToEmbed(p.src)}" allowfullscreen></iframe>` : `<video controls src="${p.src}"></video>`}
+          ${isAdmin? `<div class="play-actions"><button onclick="deletePlay(${idx})">🗑️ Löschen</button></div>` : ""}
+        `;
+        container.appendChild(div);
+      });
+    }
+
+    function convertToEmbed(url){ 
+      if(!url.includes("youtube")) return url; 
+      const id=url.split("v=")[1]?.split("&")[0]; 
+      return `https://www.youtube.com/embed/${id}`; 
+    }
+
+    async function deletePlay(idx){ 
+      if(!confirm("Diesen Spielzug wirklich löschen?")) return;
+      try {
+        const res = await fetch(`${API_URL}/${idx}`, { method: 'DELETE' });
+        if (!res.ok) throw new Error('Löschen fehlgeschlagen: ' + res.status);
+        const data = await res.json();
+        if (data && Array.isArray(data.plays)) plays = data.plays;
+        else {
+          // fallback reload
+          const reload = await fetch(API_URL);
+          plays = await reload.json();
+        }
+        savePlays();
         renderPlays();
       } catch (err) {
-        console.error('Fehler beim Laden:', err);
-        playsContainer.innerHTML = '<p>⚠️ Fehler beim Laden der Spielzüge.</p>';
+        console.error('Fehler beim Löschen', err);
+        alert('Fehler beim Löschen des Spielzugs. Schau in die Konsole.');
       }
     }
-
-    function renderPlays() {
-      const filtered = plays.filter(p => {
-        const matchesCategory = !filters.category.value || p.category === filters.category.value;
-        const matchesPosition = !filters.position.value || p.position === filters.position.value;
-        const matchesSearch = !filters.search.value || p.title.toLowerCase().includes(filters.search.value.toLowerCase());
-        return matchesCategory && matchesPosition && matchesSearch;
-      });
-
-      playsContainer.innerHTML = filtered.map((p, i) => `
-        <div class="play">
-          <h3>${p.title}</h3>
-          <p>${p.desc || ''}</p>
-          ${p.youtube ? `<iframe src="https://www.youtube.com/embed/${extractYouTubeId(p.youtube)}" allowfullscreen></iframe>` : ''}
-          <small><b>${p.category || '–'}</b> | ${p.position || '–'}</small>
-          ${isAdmin ? `<button onclick="deletePlay(${i})" style="margin-top:10px;background:#444;">🗑️ Löschen</button>` : ''}
-        </div>
-      `).join('');
-    }
-
-    function extractYouTubeId(url) {
-      const match = url.match(/(?:v=|youtu\.be\/)([a-zA-Z0-9_-]+)/);
-      return match ? match[1] : '';
-    }
-
-    async function savePlay() {
-      const newPlay = {
-        title: document.getElementById('titleInput').value,
-        desc: document.getElementById('descInput').value,
-        youtube: document.getElementById('youtubeInput').value,
-        category: document.getElementById('categoryInput').value,
-        position: document.getElementById('positionInput').value
-      };
-
-      await fetch(API_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ play: newPlay })
-      });
-
-      await loadPlays();
-      clearInputs();
-    }
-
-    function clearInputs() {
-      document.getElementById('titleInput').value = '';
-      document.getElementById('descInput').value = '';
-      document.getElementById('youtubeInput').value = '';
-      document.getElementById('categoryInput').value = '';
-      document.getElementById('positionInput').value = '';
-    }
-
-    async function deletePlay(id) {
-      await fetch(`${API_URL}/${id}`, { method: 'DELETE' });
-      await loadPlays();
-    }
-
-    let isAdmin = false;
-
-    window.addEventListener('load', () => {
-      loadPlays();
-
-      const pw = prompt("🔑 Admin-Login (optional):");
-      if (pw === adminPassword) {
-        adminSection.classList.remove('hidden');
-        isAdmin = true;
-      }
-
-      filters.category.addEventListener('change', renderPlays);
-      filters.position.addEventListener('change', renderPlays);
-      filters.search.addEventListener('input', renderPlays);
-      savePlayBtn.addEventListener('click', savePlay);
-    });
   </script>
 </body>
 </html>
