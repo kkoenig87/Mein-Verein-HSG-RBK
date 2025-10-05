@@ -50,7 +50,7 @@
 <body>
   <!-- Header & Sidebar -->
   <header>
-    <h1>HSG Rü/Bau/Kö – Digitales Playbook</h1>
+    <h1>HSG Rü/Bau/Kö – Playbook</h1>
     <button class="menu-toggle">☰</button>
   </header>
   <div class="sidebar" id="sidebar">
@@ -93,10 +93,10 @@
           </select>
           <label>Position</label>
           <select id="play-pos">
-            <option>Rückraum</option>
             <option>Außen</option>
-            <option>Mittelblock</option>
-            <option>Libero</option>
+            <option>Halbe</option>
+            <option>Kreis</option>
+            <option>Rückraum</option>
           </select>
           <label>Videoquelle</label>
           <select id="play-srcType">
@@ -116,15 +116,16 @@
           <option value="">Alle</option>
           <option>Angriff</option>
           <option>Abwehr</option>
-          <option>Standard</option>
+          <option>Überzahl</option>
+          <option>Unterzahl</option>
         </select>
         <label>Position:</label>
         <select id="filter-pos" onchange="renderPlays()">
           <option value="">Alle</option>
-          <option>Rückraum</option>
           <option>Außen</option>
-          <option>Mittelblock</option>
-          <option>Libero</option>
+          <option>Halbe</option>
+          <option>Kreis</option>
+          <option>Rückraum</option>
         </select>
       </section>
 
