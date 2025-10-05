@@ -1,47 +1,69 @@
-const express = require("express");
-const fs = require("fs");
-const path = require("path");
+const express = require('express');
+const bodyParser = require('body-parser');
+const webpush = require('web-push');
+const fs = require('fs');
+const path = require('path');
+
 const app = express();
+app.use(bodyParser.json());
 
-const PORT = process.env.PORT || 3000;
+// --- Push Notifications ---
+const subscriptions = [];
+webpush.setVapidDetails(
+  'mailto:123derkai@web.de',
+  'BAQc0wAaqIdZzFXjAKVPNXdFU_NllJAmJADLlutUJw7SwP9i2mYqylvdm8rQ6LrugfZ9nDgcstE2oycI3oHscnM',
+  '9LfQ1GaUiQI9dqd7utJkrIbXrf1gonnWfblyccp25vs'
+);
+app.post('/subscribe', (req, res) => { subscriptions.push(req.body); res.status(201).json({}); });
+app.post('/send-notification', (req, res) => {
+  const { title, body } = req.body;
+  subscriptions.forEach(sub => webpush.sendNotification(sub, JSON.stringify({ title, body })).catch(console.error));
+  res.json({ message: 'Push gesendet!' });
+});
 
-// Dateien lesen/schreiben erlauben
-app.use(express.json());
+// --- API für Playbook ---
+const apiDir = path.join(__dirname, 'api');
+const playsFile = path.join(apiDir, 'plays.json');
 
-// Statische Dateien (Frontend)
-app.use(express.static(__dirname));
+function ensurePlaysFile() {
+  if (!fs.existsSync(apiDir)) fs.mkdirSync(apiDir);
+  if (!fs.existsSync(playsFile)) fs.writeFileSync(playsFile, '[]', 'utf8');
+}
 
-// Pfad zur JSON-Datei
-const playsFile = path.join(__dirname, "api", "plays.json");
-
-// Spielzüge laden
-app.get("/api/plays", (req, res) => {
+// GET alle Spielzüge
+app.get('/api/plays', (req, res) => {
   try {
-    if (!fs.existsSync(playsFile)) {
-      fs.writeFileSync(playsFile, "[]");
-    }
-    const data = fs.readFileSync(playsFile, "utf8");
+    ensurePlaysFile();
+    const data = fs.readFileSync(playsFile, 'utf8');
     res.json(JSON.parse(data));
   } catch (err) {
-    console.error("Fehler beim Laden:", err);
-    res.status(500).json({ error: "Fehler beim Laden der Spielzüge" });
+    console.error(err);
+    res.status(500).json({ error: 'Fehler beim Laden der Spielzüge' });
   }
 });
 
-// Spielzüge speichern (vom Admin)
-app.post("/api/plays", (req, res) => {
+// POST neuen Spielzug hinzufügen
+app.post('/api/plays', (req, res) => {
   try {
-    fs.writeFileSync(playsFile, JSON.stringify(req.body, null, 2));
-    res.json({ success: true });
+    ensurePlaysFile();
+    const body = req.body;
+    let current = JSON.parse(fs.readFileSync(playsFile, 'utf8'));
+    if (body.play) current.push(body.play);
+    fs.writeFileSync(playsFile, JSON.stringify(current, null, 2), 'utf8');
+    res.json({ success: true, plays: current });
   } catch (err) {
-    console.error("Fehler beim Speichern:", err);
-    res.status(500).json({ error: "Fehler beim Speichern der Spielzüge" });
+    console.error(err);
+    res.status(500).json({ error: 'Fehler beim Speichern' });
   }
 });
 
-// Standardseite
-app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "playbook.html"));
+// Statische Auslieferung
+app.use(express.static(__dirname));
+
+// Root → playbook.html
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'playbook.html'));
 });
 
-app.listen(PORT, () => console.log(`✅ Server läuft auf Port ${PORT}`));
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => console.log(`Server läuft auf Port ${PORT}`));
