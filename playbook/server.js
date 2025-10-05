@@ -1,44 +1,47 @@
-const express = require('express');
-const fs = require('fs');
-const path = require('path');
-const bodyParser = require('body-parser');
-
+const express = require("express");
+const fs = require("fs");
+const path = require("path");
 const app = express();
+
 const PORT = process.env.PORT || 3000;
-const ADMIN_PW = process.env.ADMIN_PASSWORD || 'coach2025!';
 
-app.use(bodyParser.json());
-app.use('/api', express.static(path.join(__dirname, 'api')));
-app.get('/', (req,res)=>res.sendFile(path.join(__dirname,'playbook.html')));
-app.get('/playbook.html',(req,res)=>res.sendFile(path.join(__dirname,'playbook.html')));
+// Dateien lesen/schreiben erlauben
+app.use(express.json());
 
-const playsFile = path.join(__dirname,'api','plays.json');
-if(!fs.existsSync(playsFile)) fs.writeFileSync(playsFile,'[]');
+// Statische Dateien (Frontend)
+app.use(express.static(__dirname));
 
-// API
-app.get('/api/plays',(req,res)=>{
-  const plays = JSON.parse(fs.readFileSync(playsFile));
-  res.json(plays);
+// Pfad zur JSON-Datei
+const playsFile = path.join(__dirname, "api", "plays.json");
+
+// Spielzüge laden
+app.get("/api/plays", (req, res) => {
+  try {
+    if (!fs.existsSync(playsFile)) {
+      fs.writeFileSync(playsFile, "[]");
+    }
+    const data = fs.readFileSync(playsFile, "utf8");
+    res.json(JSON.parse(data));
+  } catch (err) {
+    console.error("Fehler beim Laden:", err);
+    res.status(500).json({ error: "Fehler beim Laden der Spielzüge" });
+  }
 });
 
-app.post('/api/plays',(req,res)=>{
-  const { password, title, desc, cat, srcType, src } = req.body;
-  if(password!==ADMIN_PW) return res.status(401).json({error:'Unauthorized'});
-  const plays = JSON.parse(fs.readFileSync(playsFile));
-  plays.push({ title, desc, cat, srcType, src });
-  fs.writeFileSync(playsFile,JSON.stringify(plays,null,2));
-  res.json({success:true});
+// Spielzüge speichern (vom Admin)
+app.post("/api/plays", (req, res) => {
+  try {
+    fs.writeFileSync(playsFile, JSON.stringify(req.body, null, 2));
+    res.json({ success: true });
+  } catch (err) {
+    console.error("Fehler beim Speichern:", err);
+    res.status(500).json({ error: "Fehler beim Speichern der Spielzüge" });
+  }
 });
 
-app.delete('/api/plays/:id',(req,res)=>{
-  const { password } = req.body;
-  if(password!==ADMIN_PW) return res.status(401).json({error:'Unauthorized'});
-  const id = parseInt(req.params.id);
-  const plays = JSON.parse(fs.readFileSync(playsFile));
-  if(id<0||id>=plays.length) return res.status(400).json({error:'Invalid ID'});
-  plays.splice(id,1);
-  fs.writeFileSync(playsFile,JSON.stringify(plays,null,2));
-  res.json({success:true});
+// Standardseite
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "playbook.html"));
 });
 
-app.listen(PORT,()=>console.log(`Server läuft auf Port ${PORT}`));
+app.listen(PORT, () => console.log(`✅ Server läuft auf Port ${PORT}`));
