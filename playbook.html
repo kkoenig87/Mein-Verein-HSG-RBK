@@ -151,7 +151,7 @@
     let isAdmin = false;
     const STORAGE_KEY = "hsg_playbook_v1";
     let plays = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
-    const API_URL = '/playbook/api/plays';
+    const API_URL = '/api/plays';
 
     function login() {
       const input = document.getElementById("pw").value.trim();
