@@ -6,20 +6,33 @@ const webpush = require('web-push');
 
 const app = express();
 app.use(bodyParser.json());
-app.use(express.static(__dirname));
 
-// --- PUSH NOTIFICATIONS ---
+// --- WEBPUSH CONFIG ---
 const subscriptions = [];
 webpush.setVapidDetails(
   'mailto:123derkai@web.de',
   'BAQc0wAaqIdZzFXjAKVPNXdFU_NllJAmJADLlutUJw7SwP9i2mYqylvdm8rQ6LrugfZ9nDgcstE2oycI3oHscnM',
   '9LfQ1GaUiQI9dqd7utJkrIbXrf1gonnWfblyccp25vs'
 );
-app.post('/subscribe', (req, res) => { subscriptions.push(req.body); res.status(201).json({}); });
+
+// Subscription speichern
+app.post('/subscribe', (req, res) => {
+  const subscription = req.body;
+  subscriptions.push(subscription);
+  console.log('Neue Subscription:', subscription);
+  res.status(201).json({});
+});
+
+// Push senden
 app.post('/send-notification', (req, res) => {
   const { title, body } = req.body;
-  subscriptions.forEach(sub => webpush.sendNotification(sub, JSON.stringify({ title, body })).catch(console.error));
-  res.json({ message: 'Push gesendet!' });
+  const payload = JSON.stringify({ title, body });
+
+  subscriptions.forEach(sub => {
+    webpush.sendNotification(sub, payload).catch(err => console.error(err));
+  });
+
+  res.status(200).json({ message: 'Push gesendet!' });
 });
 
 // --- SPIELZUG API ---
@@ -31,7 +44,7 @@ function ensurePlaysFile() {
   if (!fs.existsSync(playsFile)) fs.writeFileSync(playsFile, '[]', 'utf8');
 }
 
-// GET alle Spielzüge
+// API: GET alle Spielzüge
 app.get('/api/plays', (req, res) => {
   try {
     ensurePlaysFile();
@@ -43,7 +56,7 @@ app.get('/api/plays', (req, res) => {
   }
 });
 
-// POST neuen Spielzug hinzufügen
+// API: POST neuen Spielzug hinzufügen
 app.post('/api/plays', (req, res) => {
   try {
     ensurePlaysFile();
@@ -58,7 +71,7 @@ app.post('/api/plays', (req, res) => {
   }
 });
 
-// DELETE Spielzug per Index
+// API: DELETE Spielzug per Index
 app.delete('/api/plays/:id', (req, res) => {
   try {
     ensurePlaysFile();
@@ -73,10 +86,13 @@ app.delete('/api/plays/:id', (req, res) => {
   }
 });
 
+// --- STATIC FILES ---
+app.use(express.static(__dirname));
+
 // Root → playbook.html
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'playbook.html'));
 });
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`✅ Server läuft auf Port ${PORT}`));
+app.listen(PORT, () => console.log(`Server läuft auf Port ${PORT}`));
