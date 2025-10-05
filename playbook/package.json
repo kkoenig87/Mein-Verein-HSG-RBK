@@ -1,12 +1,12 @@
 {
   "name": "hsg-playbook",
   "version": "1.0.0",
+  "description": "Digitales Playbook für HSG Rü/Bau/Kö",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
   },
   "dependencies": {
-    "express": "^4.18.2",
-    "body-parser": "^1.20.2"
+    "express": "^4.18.2"
   }
 }
