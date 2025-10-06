@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hallen - HSG Rü/Bau/Kö</title>
+  <link rel="manifest" href="manifest.json" />
+  <style>
+    body { font-family: sans-serif; margin:0; padding:0; background:#ffffff; color:#000000; }
+    
+    header {
+      background:#ff00a0; color:#fff; padding:1rem;
+      display:flex; justify-content:center; align-items:center; position:relative;
+    }
+    header h1 { margin:0; font-size:1.3rem; text-align:center; flex:1; line-height:1.3; }
+    .menu-toggle { font-size:1.8rem; cursor:pointer; background:none; border:none; color:#fff; position:absolute; right:1rem; }
+
+    nav, section { text-align:center; }
+
+    .sidebar { position:fixed; top:0; right:-250px; width:250px; height:100%; background:rgba(0,0,0,0.8); color:#fff; transition:right 0.3s ease; padding-top:2rem; z-index:1000; }
+    .sidebar.active { right:0; }
+    .sidebar a { display:block; padding:1rem; color:#fff; text-decoration:none; font-weight:bold; }
+    .sidebar a:hover { background:#ff00a0; }
+
+    .overlay { position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); display:none; z-index:500; }
+    .overlay.active { display:block; }
+
+    section { padding:1rem; max-width:700px; margin:1rem auto; text-align:left; }
+
+    h2 { color:#ff00a0; text-align:center; margin-bottom:0.5rem; }
+    h3 { margin:0.5rem 0; font-size:1rem; color:#000; }
+
+    .halle {
+      background:#ffffff; 
+      padding:0.8rem; 
+      margin:0.5rem 0; 
+      border-radius:10px; 
+      box-shadow:0 4px 12px rgba(0,0,0,0.2);
+    }
+
+    .halle a { color:#ff00a0; text-decoration:none; font-weight:bold; margin-right:0.5rem; }
+    .halle a:hover { text-decoration:underline; }
+
+    @media (max-width:500px) {
+      section { padding:0.5rem; }
+      header h1 { font-size:1.1rem; line-height:1.2; }
+      .halle { font-size:0.9rem; }
+    }
+    /* Leaflet Karte */
+    #hallen-map {
+      height: 400px;           /* Höhe der Karte */
+      width: 100%;
+      margin: 1rem 0;
+      border-radius: 10px;
+      box-shadow:0 4px 12px rgba(0,0,0,0.2);
+    }
+    
+  </style>
+</head>
+<body>
+<header>
+  <h1>Hallen - HSG Rü/Bau/Kö</h1>
+  <button class="menu-toggle">☰</button>
+</header>
+
+<div class="sidebar" id="sidebar">
+  <a href="index.html">🏠 Home</a>
+  <a href="a-team.html">👩‍👧 wA-Team</a>
+  <a href="b-team.html">👩‍👧 wB-Team</a>
+  <a href="stats.html">📊 Statistik</a>
+  <a href="hallen.html">🏟️ Hallen</a>
+  <a href="sponsoren.html">🤝 Sponsoren</a>
+  <a href="news.html">📰 News</a>
+  <a href="fanshop.html">🛒 Fanshop</a>
+  <a href="playbook.html">🏐 Playbook</a>
+</div>
+<div class="overlay" id="overlay"></div>
+
+<section>
+  <h2>wA-Hallen</h2>
+  <div class="halle">
+    <h3>Günther-Kreisel-Halle (Auswärts)</h3>
+    <p>Odenwaldring 3-5, 64380 Roßdorf</p>
+    <a href="https://maps.apple.com/?q=Odenwaldring+3-5+64380+Roßdorf" target="_blank">Apple Maps</a>
+    <a href="https://www.google.com/maps/search/?api=1&query=Odenwaldring+3-5+64380+Roßdorf" target="_blank">Google Maps</a>
+  </div>
+  <div class="halle">
+    <h3>Martin-Niemöller-Gesamtschule Goddelau (Auswärts)</h3>
+    <p>Freiherr-vom-Stein-Str. 5, 64560 Riedstadt</p>
+    <a href="https://maps.apple.com/?q=Freiherr-vom-Stein-Stra%C3%9Fe+5+64560+Riedstadt" target="_blank">Apple Maps</a>
+    <a href="https://www.google.com/maps/search/?api=1&query=Freiherr-vom-Stein-Stra%C3%9Fe+5+64560+Riedstadt" target="_blank">Google Maps</a>
+  </div>
+  <div class="halle">
+    <h3>Gerhart-Hauptmann-Schule (Heim)</h3>
+    <p>Im Reis 51, 65428 Königstädten</p>
+    <a href="https://maps.apple.com/?q=Im+Reis+51+65428+Königstädten" target="_blank">Apple Maps</a>
+    <a href="https://www.google.com/maps/search/?api=1&query=Im+Reis+51+65428+Königstädten" target="_blank">Google Maps</a>
+  </div>
+  <div class="halle">
+    <h3>Sporthalle Bauschheim (Heim)</h3>
+    <p>Am Weinfaß 83, 65428 Bauschheim</p>
+    <a href="https://maps.apple.com/?q=Am+Weinfa%C3%9F+83+65428+Bauschheim" target="_blank">Apple Maps</a>
+    <a href="https://www.google.com/maps/search/?api=1&query=Am+Weinfa%C3%9F+83+65428+Bauschheim" target="_blank">Google Maps</a>
+  </div>
+  <div class="halle">
+    <h3>Lichtenberg-Schule Bessungen (Auswärts)</h3>
+    <p>Ludwighöhstraße 105, 64285 Darmstadt</p>
+    <a href="https://maps.apple.com/?q=Ludwigh%C3%B6hstra%C3%9Fe+105+64285+Darmstadt" target="_blank">Apple Maps</a>
+    <a href="https://www.google.com/maps/search/?api=1&query=Ludwigh%C3%B6hstra%C3%9Fe+105+64285+Darmstadt" target="_blank">Google Maps</a>
+  </div>
+  <div class="halle">
+    <h3>Schulzentrum Fürth im Odenwald (Auswärts)</h3>
+    <p>Schulstraße, 64658 Fürth im Odenwald</p>
+    <a href="https://maps.apple.com/?q=Schulstra%C3%9Fe+64658+F%C3%BCrth+im+Odenwald" target="_blank">Apple Maps</a>
+    <a href="https://www.google.com/maps/search/?api=1&query=Schulstra%C3%9Fe+64658+F%C3%BCrth+im+Odenwald" target="_blank">Google Maps</a>
+  </div>
+  <div class="halle">
+    <h3>Sporthalle Büttelborn (Auswärts)</h3>
+    <p>Georgenstraße, 64572 Büttelborn</p>
+    <a href="https://maps.apple.com/?q=Georgenstra%C3%9Fe+64572+B%C3%BCttelborn" target="_blank">Apple Maps</a>
+    <a href="https://www.google.com/maps/search/?api=1&query=Georgenstra%C3%9Fe+64572+B%C3%BCttelborn" target="_blank">Google Maps</a>
+  </div>
+</section>
+
+<section>
+  <h2>wB-Hallen</h2>
+  <div class="halle">
+    <h3>Gerhart-Hauptmann-Schule (Heim)</h3>
+    <p>Im Reis 51, 65428 Königstädten</p>
+    <a href="https://maps.apple.com/?q=Im+Reis+51+65428+K%C3%B6nigst%C3%A4dten" target="_blank">Apple Maps</a>
+    <a href="https://www.google.com/maps/search/?api=1&query=Im+Reis+51+65428+K%C3%B6nigst%C3%A4dten" target="_blank">Google Maps</a>
+  </div>
+  <div class="halle">
+    <h3>Sporthalle Bauschheim (Heim)</h3>
+    <p>Am Weinfaß 83, 65428 Bauschheim</p>
+    <a href="https://maps.apple.com/?q=Am+Weinfa%C3%9F+83+65428+Bauschheim" target="_blank">Apple Maps</a>
+    <a href="https://www.google.com/maps/search/?api=1&query=Am+Weinfa%C3%9F+83+65428+Bauschheim" target="_blank">Google Maps</a>
+  </div>
+  <div class="halle">
+    <h3>Melibokushalle Zwingenberg (Auswärts)</h3>
+    <p>Melibokusstraße, 64673 Zwingenberg</p>
+    <a href="https://maps.apple.com/?q=Melibokusstra%C3%9Fe+64673+Zwingenberg" target="_blank">Apple Maps</a>
+    <a href="https://www.google.com/maps/search/?api=1&query=Melibokusstra%C3%9Fe+64673+Zwingenberg" target="_blank">Google Maps</a>
+  </div>
+  <div class="halle">
+    <h3>Lichtenberg-Schule Bessungen (Auswärts)</h3>
+    <p>Ludwighöhstraße 105, 64285 Darmstadt</p>
+    <a href="https://maps.apple.com/?q=Ludwigh%C3%B6hstra%C3%9Fe+105+64285+Darmstadt" target="_blank">Apple Maps</a>
+    <a href="https://www.google.com/maps/search/?api=1&query=Ludwigh%C3%B6hstra%C3%9Fe+105+64285+Darmstadt" target="_blank">Google Maps</a>
+  </div>
+  <div class="halle">
+    <h3>Schulzentrum Fürth im Odenwald (Auswärts)</h3>
+    <p>Schulstraße, 64658 Fürth im Odenwald</p>
+    <a href="https://maps.apple.com/?q=Schulstra%C3%9Fe+64658+F%C3%BCrth+im+Odenwald" target="_blank">Apple Maps</a>
+    <a href="https://www.google.com/maps/search/?api=1&query=Schulstra%C3%9Fe+64658+F%C3%BCrth+im+Odenwald" target="_blank">Google Maps</a>
+  </div>
+  <div class="halle">
+    <h3>Großsporthalle Pfungstadt (Auswärts)</h3>
+    <p>Mühlstraße, 64319 Pfungstadt</p>
+    <a href="https://maps.apple.com/?q=M%C3%BChlstra%C3%9Fe+64319+Pfungstadt" target="_blank">Apple Maps</a>
+    <a href="https://www.google.com/maps/search/?api=1&query=M%C3%BChlstra%C3%9Fe+64319+Pfungstadt" target="_blank">Google Maps</a>
+  </div>
+  <div class="halle">
+    <h3>Melibokusschule Alsbach (Auswärts)</h3>
+    <p>Bahnhofstraße 45, 64665 Alsbach</p>
+    <a href="https://maps.apple.com/?q=Bahnhofstra%C3%9Fe+45+64665+Alsbach" target="_blank">Apple Maps</a>
+    <a href="https://www.google.com/maps/search/?api=1&query=Bahnhofstra%C3%9Fe+45+64665+Alsbach" target="_blank">Google Maps</a>
+  </div>
+  <div class="halle">
+    <h3>Sporthalle Mörfelden-Walldorf (Auswärts)</h3>
+    <p>Okrifteler Straße 29-31, 64546 Mörfelden-Walldorf</p>
+    <a href="https://maps.apple.com/?q=Okrifteler+Stra%C3%9Fe+29-31+64546+M%C3%B6rfelden-Walldorf" target="_blank">Apple Maps</a>
+    <a href="https://www.google.com/maps/search/?api=1&query=Okrifteler+Stra%C3%9Fe+29-31+64546+M%C3%B6rfelden-Walldorf" target="_blank">Google Maps</a>
+  </div>
+  <div class="halle">
+    <h3>Schulzentrum Büttelborn (Auswärts)</h3>
+    <p>Georgenstraße, 64572 Büttelborn</p>
+    <a href="https://maps.apple.com/?q=Georgenstra%C3%9Fe+64572+B%C3%BCttelborn" target="_blank">Apple Maps</a>
+    <a href="https://www.google.com/maps/search/?api=1&query=Georgenstra%C3%9Fe+64572+B%C3%BCttelborn" target="_blank">Google Maps</a>
+  </div>
+  <div class="halle">
+    <h3>Mehrzweckhalle Erbach (Auswärts)</h3>
+    <p>Ortsstraße, 64646 Heppenheim</p>
+    <a href="https://maps.apple.com/?q=Ortsstra%C3%9Fe+64646+Heppenheim" target="_blank">Apple Maps</a>
+    <a href="https://www.google.com/maps/search/?api=1&query=Ortsstra%C3%9Fe+64646+Heppenheim" target="_blank">Google Maps</a>
+  </div>
+</section>
+<section>
+  <h2>Alle Hallen auf der Karte</h2>
+  <div id="hallen-map"></div>
+</section>
+
+<script>
+  const menuBtn = document.querySelector(".menu-toggle");
+  const sidebar = document.getElementById("sidebar");
+  const overlay = document.getElementById("overlay");
+
+  menuBtn.addEventListener("click", () => {
+    sidebar.classList.toggle("active");
+    overlay.classList.toggle("active");
+  });
+
+  overlay.addEventListener("click", () => {
+    sidebar.classList.remove("active");
+    overlay.classList.remove("active");
+  });
+</script>
+  
+  <!-- Leaflet.js CSS und JS -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+<script>
+  const hallen = [
+    {name: "Günther-Kreisel-Halle", lat: 49.8605, lon: 8.7548},
+    {name: "Fritz-Strauch-Halle Crumstadt", lat: 49.8157, lon: 8.5077},
+    {name: "Gerhart-Hauptmann-Schule", lat: 49.9642, lon: 8.4578},
+    {name: "Sporthalle Bauschheim", lat: 49.9631, lon: 8.3727},
+    {name: "Lichtenberg-Schule Bessungen", lat: 49.8510, lon: 8.6506},
+    {name: "Schulzentrum Fürth im Odenwald", lat: 49.6465, lon: 8.7821},
+    {name: "Melibokushalle Zwingenberg", lat: 49.7218, lon: 8.6111},
+    {name: "Großsporthalle Pfungstadt", lat: 49.8019, lon: 8.6075},
+    {name: "Melibokusschule Alsbach", lat: 49.7402, lon: 8.6157},
+    {name: "Sporthalle Mörfelden-Walldorf", lat: 50.0071, lon: 8.5680},
+    {name: "Mehrzweckhalle Erbach", lat: 49.6377, lon: 8.6636}
+  ];
+
+  const map = L.map('hallen-map').setView([49.9, 8.6], 10); // zentrale Position
+
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; OpenStreetMap contributors'
+  }).addTo(map);
+
+  hallen.forEach(h => {
+    L.marker([h.lat, h.lon]).addTo(map)
+      .bindPopup(`<strong>${h.name}</strong>`);
+  });
+</script>
+</body>
+</html>

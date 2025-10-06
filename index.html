@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>#NIEOHNEMEINTEAM</title>
+  <link rel="manifest" href="manifest.json" />
+  <style>
+    body { 
+      font-family: sans-serif; 
+      margin:0; 
+      padding:0; 
+      background:#ffffff; 
+      color:#000000; 
+    }
+
+    nav {
+      display:flex;
+      justify-content:center;
+      gap:1rem;
+      background:#000000; /* Schwarz */
+      padding:0.5rem;
+    }
+
+    nav a {
+      color:#ffffff; 
+      text-decoration:none;
+      font-weight:bold;
+      padding:0.5rem 1rem;
+      border-radius:5px;
+      transition: background 0.3s;
+    }
+
+    nav a:hover {
+      background:#ff00a0; 
+      color:#ffffff;
+    }
+
+    section {
+      padding:1rem;
+      text-align:center;
+    }
+
+    header {
+      background:#ff00a0; 
+      color:#fff; 
+      padding:1rem;
+      display:flex; 
+      justify-content:center;   /* Mitte */
+      align-items:center;
+      position:relative;        /* erlaubt absolute Positionierung vom Button */
+    }
+    
+    header h1 {
+  margin: 0;
+  font-size: 1.4rem;   /* Standardgröße für normale Displays */
+  text-align: center;
+  line-height: 1.4;
+  flex: 1;
+}
+
+/* Für schmale iPhones im Hochformat */
+@media (max-width: 400px) {
+  header h1 {
+    font-size: 1.1rem;
+    line-height: 1.3;
+  }
+}
+
+/* Für Querformat oder sehr kleine Bildschirme */
+@media (max-width: 320px) {
+  header h1 {
+    font-size: 1rem;
+    line-height: 1.2;
+  }
+}
+    
+    /* Burger-Icon fixieren */
+    .menu-toggle {
+      font-size:1.8rem;
+      cursor:pointer;
+      background:none;
+      border:none;
+      color:#fff;
+      position:absolute; 
+      right:1rem;               /* am rechten Rand fixiert */
+    }
+
+    /* Sidebar */
+    .sidebar {
+      position:fixed;
+      top:0; right:-250px;
+      width:250px; height:100%;
+      background:rgba(0,0,0,0.8)
+      color:#fff;
+      transition:right 0.3s ease;
+      padding-top:2rem;
+      z-index:1000;
+    }
+    .sidebar.active { right:0; }
+
+    .sidebar a {
+      display:block;
+      padding:1rem;
+      color:#fff;
+      text-decoration:none;
+      font-weight:bold;
+    }
+    .sidebar a:hover {
+      background:#ff00a0;
+    }
+
+    /* Overlay */
+    .overlay {
+      position:fixed;
+      top:0; left:0;
+      width:100%; height:100%;
+      background:rgba(0,0,0,0.5);
+      display:none;
+      z-index:500;
+    }
+    .overlay.active { display:block; }
+
+    .hero {
+      text-align:center;
+      margin:1rem 0;
+    }
+
+    .team-photo {
+      max-width:90%;   /* skaliert Bild auf 90% der Bildschirmbreite */
+      height:auto;     /* behält Seitenverhältnis bei */
+      border-radius:10px;  /* abgerundete Ecken (optional) */
+      box-shadow:0 4px 12px rgba(0,0,0,0.2); /* leichter Schatten */
+    }
+    
+  </style>
+</head>
+<body>
+  <!-- In-App Notification Container -->
+<div id="inAppNotification" style="
+  display:none;
+  position: fixed;
+  top: 1rem;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #ff00a0;
+  color: white;
+  padding: 1rem 1.5rem;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+  z-index: 10000;
+  font-weight: bold;
+  text-align: center;
+  max-width: 90%;
+">
+  <!-- Nachricht wird hier dynamisch eingefügt -->
+</div>
+  
+<header>
+  <h1>
+    HSG Rü/Bau/Kö <br>
+    wA & wB <br>
+    BOL Saison 2025/26
+  </h1>
+  <button class="menu-toggle">☰</button>
+</header>
+
+<div class="sidebar" id="sidebar">
+  <a href="https://mein-verein-hsg-rbk-1.onrender.com/index.html">🏠 Home</a>
+  <a href="https://mein-verein-hsg-rbk-1.onrender.com/a-team.html">👩‍👧 wA-Team</a>
+  <a href="https://mein-verein-hsg-rbk-1.onrender.com/b-team.html">👩‍👧 wB-Team</a>
+  <a href="https://mein-verein-hsg-rbk-1.onrender.com/stats.html">📊 Statistik</a>
+  <a href="https://mein-verein-hsg-rbk-1.onrender.com/hallen.html">🏟️ Hallen</a>
+  <a href="https://mein-verein-hsg-rbk-1.onrender.com/sponsoren.html">🤝 Sponsoren</a>
+  <a href="https://mein-verein-hsg-rbk-1.onrender.com/news.html">📰 News</a>
+  <a href="https://mein-verein-hsg-rbk-1.onrender.com/fanshop.html">🛒 Fanshop</a>
+  <a href="https://hsg-playbook-render.onrender.com/playbook.html">🏐 Playbook</a>
+</div>
+<div class="overlay" id="overlay"></div>
+
+  <section>
+    <h2>Mädels, willkommen in <b>eurer</b> eigenen Vereins-App!</h2>
+    <p>Hier findet ihr Infos zu unseren Mannschaften, aktuellen Spielen und Veranstaltungen.</p>
+  </section>
+
+  <section class="hero">
+    <img src="Mannschaft.png" alt="Mannschaftsfoto HSG RBK" class="team-photo">
+  </section>
+
+  <script>
+  if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.register("sw.js")
+      .then(() => console.log("✅ Service Worker registriert"))
+      .catch(err => console.error("❌ Service Worker Fehler:", err));
+  }
+  </script>
+  
+  <script>
+  const menuBtn = document.querySelector(".menu-toggle");
+  const sidebar = document.getElementById("sidebar");
+  const overlay = document.getElementById("overlay");
+
+  menuBtn.addEventListener("click", () => {
+    sidebar.classList.toggle("active");
+    overlay.classList.toggle("active");
+  });
+
+  overlay.addEventListener("click", () => {
+    sidebar.classList.remove("active");
+    overlay.classList.remove("active");
+  });
+</script>
+<script>
+if ("serviceWorker" in navigator && "PushManager" in window) {
+  navigator.serviceWorker.register("/service-worker.js")
+    .then(reg => console.log("Service Worker registriert", reg));
+
+  async function subscribeUser() {
+    const reg = await navigator.serviceWorker.ready;
+    const subscription = await reg.pushManager.subscribe({
+      userVisibleOnly: true,
+      applicationServerKey: "BAQc0wAaqIdZzFXjAKVPNXdFU_NllJAmJADLlutUJw7SwP9i2mYqylvdm8rQ6LrugfZ9nDgcstE2oycI3oHscnM"
+    });
+
+    // Subscription an den Render Push-Server senden
+    await fetch("https://hsg-rbk-push.onrender.com/subscribe", {
+      method: "POST",
+      body: JSON.stringify(subscription),
+      headers: { "Content-Type": "application/json" }
+    });
+
+    console.log("Push-Subscription erfolgreich:", subscription);
+  }
+
+  subscribeUser();
+}
+</script>
+<script>
+function showInAppNotification(title, body, duration = 5000) {
+  const container = document.getElementById('inAppNotification');
+  container.innerHTML = `<strong>${title}</strong><br>${body}`;
+  container.style.display = 'block';
+
+  // Automatisch nach 'duration' ms ausblenden
+  setTimeout(() => {
+    container.style.display = 'none';
+  }, duration);
+}
+
+// Beispiel-Test: Nachricht beim Laden
+document.addEventListener('DOMContentLoaded', () => {
+  showInAppNotification(
+    "📢 Nächste Spiele:",
+    "Sa. 26.10. 15:00 Uhr: HSG Riedstadt vs. wA"
+  );
+});
+</script>
+</body>
+</html>

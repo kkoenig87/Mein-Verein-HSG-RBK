@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ranglisten & Statistik - HSG RBK</title>
+  <link rel="manifest" href="manifest.json" />
+  <style>
+    body { font-family:sans-serif; margin:0; padding:0; background:#ffffff; color:#000000; }
+    header { background:#ff00a0; color:#fff; padding:1rem; display:flex; justify-content:center; align-items:center; position:relative; }
+    header h1 { margin:0; font-size:1.4rem; text-align:center; flex:1; line-height:1.4; }
+    .menu-toggle { font-size:1.8rem; cursor:pointer; background:none; border:none; color:#fff; position:absolute; right:1rem; }
+
+    nav, section { text-align:center; }
+    .sidebar { position:fixed; top:0; right:-250px; width:250px; height:100%; background:rgba(0,0,0,0.8); color:#fff; transition:right 0.3s ease; padding-top:2rem; z-index:1000; }
+    .sidebar.active { right:0; }
+    .sidebar a { display:block; padding:1rem; color:#fff; text-decoration:none; font-weight:bold; }
+    .sidebar a:hover { background:#ff00a0; }
+
+    .overlay { position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); display:none; z-index:500; }
+    .overlay.active { display:block; }
+
+    section { padding:1rem; }
+    .stat-table { width:95%; margin:1rem auto; border-collapse:collapse; }
+    .stat-table th, .stat-table td { border:1px solid #ccc; padding:0.5rem; text-align:center; }
+    .stat-table th { background:#ff00a0; color:#fff; }
+    .stat-table tr:nth-child(even) { background:#f9f9f9; }
+
+    @media(max-width:480px){
+      .stat-table th, .stat-table td { font-size:0.85rem; padding:0.3rem; }
+    }
+  </style>
+</head>
+<body>
+<header>
+  <h1>HSG Rü/Bau/Kö <br> Ranglisten & Statistik</h1>
+  <button class="menu-toggle">☰</button>
+</header>
+
+<div class="sidebar" id="sidebar">
+  <a href="index.html">🏠 Home</a>
+  <a href="a-team.html">👩‍👧 wA-Team</a>
+  <a href="b-team.html">👩‍👧 wB-Team</a>
+  <a href="stats.html">📊 Statistik</a>
+  <a href="hallen.html">🏟️ Hallen</a>
+  <a href="sponsoren.html">🤝 Sponsoren</a>
+  <a href="news.html">📰 News</a>
+  <a href="fanshop.html">🛒 Fanshop</a>
+  <a href="playbook.html">🏐 Playbook</a>
+</div>
+<div class="overlay" id="overlay"></div>
+
+<section>
+  <h2>Teamstatistiken Saison 2025/26</h2>
+  <table class="stat-table">
+    <thead>
+      <tr>
+        <th>Spielerin</th>
+        <th>Tore</th>
+        <th>Assists</th>
+        <th>Paraden</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>Rania A.</td><td>17</td><td>1</td><td></td></tr>
+      <tr><td>Maya B.</td><td>1</td><td></td><td></td></tr>
+      <tr><td>Sofia B.</td><td>4</td><td></td><td></td></tr>
+      <tr><td>Alina C.</td><td>5</td><td></td><td></td></tr>
+      <tr><td>Livia E.</td><td>0</td><td></td><td></td></tr>
+      <tr><td>Saskia G.</td><td>1</td><td></td><td></td></tr>
+      <tr><td>Alisa H.</td><td>0</td><td></td><td></td></tr>
+      <tr><td>Tamara K.</td><td>2</td><td></td><td></td></tr>
+      <tr><td>Lucie L.</td><td>0</td><td></td><td></td></tr>
+      <tr><td>Miriam L.</td><td></td><td></td><td>24</td></tr>
+      <tr><td>Sophia S.</td><td>4</td><td>1</td><td></td></tr>
+      <tr><td>Christina S.</td><td>1</td><td></td><td></td></tr>
+      <tr><td>Laelia U.</td><td>2</td><td></td><td></td></tr>
+      <tr><td>Emma B.</td><td>2</td><td>1</td><td></td></tr>
+      <tr><td>Mara P.</td><td>3</td><td></td><td></td></tr>
+      <tr><td>Ida D.</td><td>3</td><td></td><td></td></tr>
+      <tr><td>Leana R.</td><td>7</td><td></td><td></td></tr>
+      
+    </tbody>
+  </table>
+</section>
+
+<script>
+  const menuBtn = document.querySelector(".menu-toggle");
+  const sidebar = document.getElementById("sidebar");
+  const overlay = document.getElementById("overlay");
+  menuBtn.addEventListener("click", ()=>{ sidebar.classList.toggle("active"); overlay.classList.toggle("active"); });
+  overlay.addEventListener("click", ()=>{ sidebar.classList.remove("active"); overlay.classList.remove("active"); });
+</script>
+</body>
+</html>

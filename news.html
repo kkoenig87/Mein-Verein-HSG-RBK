@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>News - HSG Rü/Bau/Kö</title>
+  <link rel="manifest" href="manifest.json" />
+  <style>
+    body { font-family: sans-serif; margin:0; padding:0; background:#ffffff; color:#000000; }
+
+    header {
+      background:#ff00a0; color:#fff; padding:1rem; display:flex; justify-content:center; align-items:center; position:relative;
+    }
+    header h1 { margin:0; font-size:1.2rem; text-align:center; flex:1; line-height:1.3; }
+    .menu-toggle { font-size:1.8rem; cursor:pointer; background:none; border:none; color:#fff; position:absolute; right:1rem; }
+
+    .sidebar { position:fixed; top:0; right:-250px; width:250px; height:100%; background:rgba(0,0,0,0.8); color:#fff; transition:right 0.3s ease; padding-top:2rem; z-index:1000; }
+    .sidebar.active { right:0; }
+    .sidebar a { display:block; padding:1rem; color:#fff; text-decoration:none; font-weight:bold; }
+    .sidebar a:hover { background:#ff00a0; }
+
+    .overlay { position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); display:none; z-index:500; }
+    .overlay.active { display:block; }
+
+    section { padding:1rem; text-align:center; }
+
+    .news-item {
+      border-radius:10px;
+      box-shadow:0 4px 12px rgba(0,0,0,0.2);
+      background:#ffffff;
+      margin:1rem;
+      padding:1rem;
+      text-align:left;
+    }
+    .news-item h3 { color:#ff00a0; margin-top:0; }
+  </style>
+</head>
+<body>
+<header>
+  <h1>HSG Rü/Bau/Kö <br> News <br> Saison 2025/26</h1>
+  <button class="menu-toggle">☰</button>
+</header>
+
+<div class="sidebar" id="sidebar">
+  <a href="index.html">🏠 Home</a>
+  <a href="a-team.html">👩‍👧 wA-Team</a>
+  <a href="b-team.html">👩‍👧 wB-Team</a>
+  <a href="stats.html">📊 Statistik</a>
+  <a href="hallen.html">🏟️ Hallen</a>
+  <a href="sponsoren.html">🤝 Sponsoren</a>
+  <a href="news.html">📰 News</a>
+  <a href="fanshop.html">🛒 Fanshop</a>
+  <a href="playbook.html">🏐 Playbook</a>
+</div>
+<div class="overlay" id="overlay"></div>
+
+<section>
+  <h2>Neuigkeiten</h2>
+  <p>Hier findet ihr alle aktuellen News für die Saison 2025/26.</p>
+</section>
+
+<section class="news-item">
+  <h3>✌🏻Punkte - starke Teamleistung der wB</h3>
+  <p>DMit einer extrem kämpferischen Teamleistung und tollem Zusammenhalt besiegte unsere wB heute die Mädels des TSV Pfungstadt mit 2️⃣5️⃣:2️⃣3️⃣.<br> 
+    Ein echtes Ausrufezeichen zum Saisonstart!</p>
+</section>
+
+<section class="news-item">
+  <h3>❌ Niederlage</h3>
+  <p>Die wA hat beim ersten Spiel der Saison 2025/26 leider eine bittere Niederlage gegen die JSG Roßdorf/Reinheim mit 3️⃣7️⃣:2️⃣6️⃣ hinnehmen müssen.<br>
+  Jetzt heißt es im Training noch eine Schippe drauflegen und am 26.10. fegen wir die HSG Riedstadt aus der Halle!</p>
+</section>
+
+<script>
+  const menuBtn = document.querySelector(".menu-toggle");
+  const sidebar = document.getElementById("sidebar");
+  const overlay = document.getElementById("overlay");
+
+  menuBtn.addEventListener("click", () => {
+    sidebar.classList.toggle("active");
+    overlay.classList.toggle("active");
+  });
+
+  overlay.addEventListener("click", () => {
+    sidebar.classList.remove("active");
+    overlay.classList.remove("active");
+  });
+</script>
+</body>
+</html>
